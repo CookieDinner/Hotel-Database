@@ -1,0 +1,30 @@
+.root{
+    -fx-background-color: #EFF0F1;
+}
+
+#sidebar{
+    -fx-background-color: #E1E2E3;
+    -fx-padding: 75 0 0 0;
+}
+
+.button{
+    -fx-min-width: 300px;
+    -fx-min-height: 75px;
+    -fx-background-color: none;
+    -fx-font-size: 30px;
+    -fx-text-fill: #5B5B5B;
+}
+
+.button:hover{
+    -fx-background-color: #D0D1D2;
+    -fx-cursor: hand;
+}
+
+#clicked_button{
+    -fx-text-fill: #2D2D2D;
+}
+
+#date_label{
+    -fx-font-size: 40px;
+    -fx-text-fill: #2D2D2D;
+}

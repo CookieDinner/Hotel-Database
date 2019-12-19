@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="main.java.controller.main_page"
+            prefHeight="400.0" prefWidth="600.0">
+    <stylesheets>
+        <URL value="@../style/main_page.css"/>
+    </stylesheets>
+
+    <left>
+        <VBox id="sidebar">
+            <Button id="clicked_button">Strona Główna</Button>
+            <Button>Konferencje</Button>
+            <Button>Rezerwacje</Button>
+            <Button>Zamówienia</Button>
+            <Button>Dostawy</Button>
+            <Button>Magazyn</Button>
+            <Button>Pracownicy</Button>
+            <Button>Dania</Button>
+        </VBox>
+    </left>
+
+</BorderPane>
