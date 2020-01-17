@@ -7,12 +7,51 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="main.java.controller.konferencje"
-            stylesheets="@../style/style.css">
+            stylesheets="@../style/style.css"
+            styleClass="mainView">
+    <top>
+        <VBox>
+            <HBox styleClass="topHBox">
+                <ImageView styleClass="plus" fitWidth="60" preserveRatio="true"><Image url="@../images/plus.png"/></ImageView>
+                <TextField promptText="Szukaj" styleClass="search"/>
+            </HBox>
+            <Label styleClass="title">Konferencje</Label>
+        </VBox>
+    </top>
 
     <center>
-        <Label>Konferencje</Label>
+        <VBox>
+            <HBox style="-fx-padding: 0 0 5 20">
+                <Label styleClass="tag" style="-fx-padding: 0 300 0 0;">Nazwa</Label>
+                <Label styleClass="tag" style="-fx-padding: 0 100 0 0;">Data</Label>
+                <Label styleClass="tag" style="-fx-padding: 0 50 0 0;">Liczba osób</Label>
+                <Label styleClass="tag" style="-fx-padding: 0 0 0 0;">Hala konferencyjna</Label>
+            </HBox>
+            <ScrollPane style="-fx-border-width: 0; -fx-max-height: 550px; -fx-background-color: none;" hbarPolicy="NEVER">
+                <VBox style="-fx-spacing: 10px;">
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                    <Button styleClass="field"/>
+                </VBox>
+            </ScrollPane>
+        </VBox>
     </center>
+
 </BorderPane>
