@@ -6,13 +6,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.java.controller.konferencje"
+            fx:controller="main.java.controller.Rezerwacje"
+            fx:id="borderPane"
             stylesheets="@../style/style.css">
 
     <center>
-        <Label>Konferencje</Label>
+        <Label>Rezerwacje</Label>
     </center>
+
 </BorderPane>

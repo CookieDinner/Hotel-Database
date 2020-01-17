@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../style/style.css"
+            fx:controller="main.java.controller.Controller">
+    <left>
+        <VBox id="sidebar">
+            <Button onAction="#changeToMain" fx:id="mainPage">Strona Główna</Button>
+            <Button onAction="#changeToKonferencje" fx:id="konferencje">Konferencje</Button>
+            <Button onAction="#changeToRezerwacje" fx:id="rezerwacje">Rezerwacje</Button>
+            <Button onAction="#changeToZamowiania" fx:id="zamowienia">Zamówienia</Button>
+            <Button onAction="#changeToDostawy" fx:id="dostawy">Dostawy</Button>
+            <Button onAction="#changeToMagazyn" fx:id="magazyn">Magazyn</Button>
+            <Button onAction="#changeToPracownicy" fx:id="pracownicy">Pracownicy</Button>
+            <Button onAction="#changeToDania" fx:id="dania">Dania</Button>
+        </VBox>
+    </left>
+    <center>
+        <Pane fx:id="mainView"/>
+    </center>
+
+</BorderPane>

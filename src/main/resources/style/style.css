@@ -20,7 +20,7 @@
     -fx-cursor: hand;
 }
 
-#clicked_button{
+.clicked_button{
     -fx-text-fill: #2D2D2D;
 }
 

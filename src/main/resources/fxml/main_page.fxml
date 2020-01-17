@@ -10,23 +10,11 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="main.java.controller.main_page"
-            prefHeight="400.0" prefWidth="600.0"
-            fx:id="borderPane">
-    <stylesheets>
-        <URL value="@../style/main_page.css"/>
-    </stylesheets>
+            fx:id="borderPane"
+            stylesheets="@../style/style.css">
 
-    <left>
-        <VBox id="sidebar">
-            <Button id="clicked_button">Strona Główna</Button>
-            <Button onAction="#changeToKonferencje">Konferencje</Button>
-            <Button onAction="#changeToRezerwacje">Rezerwacje</Button>
-            <Button onAction="#changeToZamowiania">Zamówienia</Button>
-            <Button onAction="#changeToDostawy">Dostawy</Button>
-            <Button onAction="#changeToMagazyn">Magazyn</Button>
-            <Button onAction="#changeToPracownicy">Pracownicy</Button>
-            <Button onAction="#changeToDania">Dania</Button>
-        </VBox>
-    </left>
+    <center>
+        <Label>Main Page</Label>
+    </center>
 
 </BorderPane>
