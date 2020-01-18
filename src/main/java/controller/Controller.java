@@ -10,14 +10,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.java.Main;
+import java.sql.*;
 
 import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller {
     @FXML
     public Pane mainView;
     @FXML
     public Button mainPage, konferencje, rezerwacje, zamowienia, dostawy, magazyn, pracownicy, dania;
+    private Connection con = null;
 
     @FXML
     public void changeToMain(){
@@ -29,38 +34,42 @@ public class Controller {
     }
     @FXML
     public void changeToKonferencje(){
-        changeScene(new Konferencje(this));
+        changeScene(new Konferencje(this, con));
         currentButton(konferencje);
     }
     @FXML
     public void changeToRezerwacje(){
-        changeScene(new Rezerwacje(this));
+        changeScene(new Rezerwacje(this, con));
         currentButton(rezerwacje);
     }
     @FXML
     public void changeToZamowiania(){
-        changeScene(new Zamowienia(this));
+        changeScene(new Zamowienia(this, con));
         currentButton(zamowienia);
     }
     @FXML
     public void changeToDostawy(){
-        changeScene(new Dostawy(this));
+        changeScene(new Dostawy(this, con));
         currentButton(dostawy);
     }
     @FXML
     public void changeToMagazyn(){
-        changeScene(new Magazyn(this));
+        changeScene(new Magazyn(this, con));
         currentButton(magazyn);
     }
     @FXML
     public void changeToPracownicy(){
-        changeScene(new Pracownicy(this));
+        changeScene(new Pracownicy(this, con));
         currentButton(pracownicy);
     }
     @FXML
     public void changeToDania(){
-        changeScene(new Dania(this));
+        changeScene(new Dania(this, con));
         currentButton(dania);
+    }
+    @FXML
+    public void addKonferencje(){
+        System.out.println("test");
     }
 
     private void currentButton(Button button){
@@ -93,6 +102,18 @@ public class Controller {
 
     @FXML
     public void initialize(){
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "inf136826");
+        connectionProps.put("password", "blieberry420");
+        try {
+            con = DriverManager.getConnection("jdbc:oracle:thin:@admlab2.cs.put.poznan.pl:1521/"+
+                    "dblab02_students.cs.put.poznan.pl", connectionProps);
+            System.out.println("Połączono z bazą danych");
+        } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE,
+                    "nie udało się połączyć z bazą danych", ex);
+            System.exit(-1);
+        }
         changeToMain();
     }
 
