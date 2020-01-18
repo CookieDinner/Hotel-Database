@@ -6,32 +6,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.java.controller.konferencje"
             stylesheets="@../style/style.css"
             styleClass="mainView">
     <top>
         <VBox>
             <HBox styleClass="topHBox">
-                <ImageView styleClass="plus" fitWidth="60" preserveRatio="true"><Image url="@../images/plus.png"/></ImageView>
-                <TextField promptText="Szukaj" styleClass="search"/>
+                <ImageView styleClass="plus" fitWidth="60" preserveRatio="true" onMouseClicked="#plus"><Image url="@../images/plus.png"/></ImageView>
+                <TextField promptText="Szukaj" styleClass="search" onKeyReleased="#search" fx:id="searchField"/>
             </HBox>
-            <Label styleClass="title">Konferencje</Label>
+            <Label styleClass="title" fx:id="title"/>
         </VBox>
     </top>
 
     <center>
         <VBox>
-            <HBox style="-fx-padding: 0 0 5 20">
-                <Label styleClass="tag" style="-fx-padding: 0 300 0 0;">Nazwa</Label>
-                <Label styleClass="tag" style="-fx-padding: 0 100 0 0;">Data</Label>
-                <Label styleClass="tag" style="-fx-padding: 0 50 0 0;">Liczba osób</Label>
-                <Label styleClass="tag" style="-fx-padding: 0 0 0 0;">Hala konferencyjna</Label>
-            </HBox>
+            <HBox style="-fx-padding: 0 0 5 20" fx:id="tagsHBox"/>
             <ScrollPane style="-fx-border-width: 0; -fx-max-height: 550px; -fx-background-color: none;" hbarPolicy="NEVER">
                 <VBox style="-fx-spacing: 10px;">
                     <Button styleClass="field"/>

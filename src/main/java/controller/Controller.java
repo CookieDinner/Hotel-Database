@@ -21,42 +21,45 @@ public class Controller {
 
     @FXML
     public void changeToMain(){
-        changeScene("main_page.fxml");
+        mainView.getChildren().clear();
+        try{
+            mainView.getChildren().add(FXMLLoader.load(Main.class.getResource("../resources/fxml/main_page.fxml")));
+        }catch (IOException ignored){}
         currentButton(mainPage);
     }
     @FXML
     public void changeToKonferencje(){
-        changeScene("konferencje.fxml");
+        changeScene(new Konferencje(this));
         currentButton(konferencje);
     }
     @FXML
     public void changeToRezerwacje(){
-        changeScene("rezerwacje.fxml");
+        changeScene(new Rezerwacje(this));
         currentButton(rezerwacje);
     }
     @FXML
     public void changeToZamowiania(){
-        changeScene("zamowienia.fxml");
+        changeScene(new Zamowienia(this));
         currentButton(zamowienia);
     }
     @FXML
     public void changeToDostawy(){
-        changeScene("dostawy.fxml");
+        changeScene(new Dostawy(this));
         currentButton(dostawy);
     }
     @FXML
     public void changeToMagazyn(){
-        changeScene("magazyn.fxml");
+        changeScene(new Magazyn(this));
         currentButton(magazyn);
     }
     @FXML
     public void changeToPracownicy(){
-        changeScene("pracownicy.fxml");
+        changeScene(new Pracownicy(this));
         currentButton(pracownicy);
     }
     @FXML
     public void changeToDania(){
-        changeScene("dania.fxml");
+        changeScene(new Dania(this));
         currentButton(dania);
     }
 
@@ -72,10 +75,17 @@ public class Controller {
         button.getStyleClass().add("clicked_button");
     }
 
-    private void changeScene(String fxml){
+    private void changeScene(Object controller){
+        changeScene("main_view.fxml", controller);
+    }
+
+    public void changeScene(String fxml, Object controller){
         mainView.getChildren().clear();
         try {
-            mainView.getChildren().add(FXMLLoader.load(Main.class.getResource("../resources/fxml/"+fxml)));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("../resources/fxml/"+fxml));
+            loader.setController(controller);
+            Parent root = loader.load();
+            mainView.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,8 +93,7 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        changeScene("main_page.fxml");
-        currentButton(mainPage);
+        changeToMain();
     }
 
 }

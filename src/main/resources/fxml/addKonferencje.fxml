@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../style/style.css">
+    <top>
+        <Button/>
+    </top>
+    <center>
+        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Nazwa:</Label>
+                <TextField styleClass="addTextField"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Data:</Label>
+                <DatePicker styleClass="addDate"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Liczba osób:</Label>
+                <TextField styleClass="addTextField"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Hala:</Label>
+                <ComboBox promptText="Wybierz"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Pracownicy:</Label>
+                <ComboBox promptText="Wybierz"/>
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox style="-fx-padding: 100 0 0 550">
+            <Button styleClass="addButton">Dodaj</Button>
+        </HBox>
+
+    </bottom>
+</BorderPane>

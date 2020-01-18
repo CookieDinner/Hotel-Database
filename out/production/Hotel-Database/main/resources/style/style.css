@@ -76,6 +76,75 @@
     -fx-border-color: none;
 }
 
+.typeLabel{
+    -fx-min-width: 300px;
+    -fx-font-size: 24px;
+    -fx-text-fill: #5b5b5b;
+}
+
+.combo-box{
+    -fx-min-width: 300px;
+    -fx-min-height: 50px;
+    -fx-background-color: #d2d2d2;
+    -fx-prompt-text-fill: #5b5b5b;
+    -fx-text-fill: #5b5b5b;
+    -fx-font-size: 18px;
+}
+
+.combo-box:hover, .addButton:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #c1c1c1;
+}
+
+.addTextField{
+    -fx-min-width: 300px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.addDate{
+    -fx-min-width: 300px;
+    -fx-min-height: 50px;
+}
+
+.addDate .text-field{
+    -fx-background-color: #EFF0F1;
+    -fx-border-width: 1 0 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.addDate .arrow-button{
+    -fx-background-color: #EFF0F1;
+    -fx-border-width: 1 1 1 0;
+    -fx-border-color: #8c8c8c;
+    -fx-min-width: 50px;
+    -fx-font-size: 18px;
+}
+
+.addDate .arrow-button:hover{
+    -fx-background-color: #dee0e0;
+    -fx-cursor: hand;
+}
+
+.addDate .button{
+    -fx-min-width: 50px;
+}
+
+.addButton{
+    -fx-min-width: 250px;
+    -fx-min-height: 50px;
+    -fx-background-color: #d2d2d2;
+}
+
+
+
+
+
+
+
+
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track{
     -fx-background-color :transparent;
