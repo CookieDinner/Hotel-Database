@@ -1,18 +1,30 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.sql.*;
 
 public class Dostawy implements MainView{
     @FXML
     public Label title;
     @FXML
     public HBox tagsHBox;
-    private Controller controller;
+    @FXML
+    public VBox fillableRows;
 
-    public Dostawy(Controller controller){
+    private Controller controller;
+    private Connection con;
+    private Statement stmt = null;
+    private ResultSet rs = null;
+
+    public Dostawy(Controller controller, Connection con){
         this.controller = controller;
+        this.con = con;
     }
 
     @Override
@@ -37,6 +49,25 @@ public class Dostawy implements MainView{
         cena.setStyle("-fx-padding: 0 0 0 0;");
         cena.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(dostawca, skladnik, data, cena);
+
+        try {
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM hotel_dostawcy");
+
+            int i = 0;
+            while(rs.next()){
+                String vNazwa = rs.getString("nazwa");
+                Node current = new Button(vNazwa);
+                fillableRows.getChildren().add(current);
+                current.getStyleClass().add("field");
+                current.getStyleClass().add("tag");
+                i++;
+            }
+            rs.close();
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override

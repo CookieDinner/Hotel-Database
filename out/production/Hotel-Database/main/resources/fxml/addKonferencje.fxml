@@ -16,29 +16,29 @@
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Nazwa:</Label>
-                <TextField styleClass="addTextField"/>
+                <TextField styleClass="addTextField" fx:id="enazwa"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Data:</Label>
-                <DatePicker styleClass="addDate"/>
+                <DatePicker styleClass="addDate" fx:id="edata"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Liczba osób:</Label>
-                <TextField styleClass="addTextField"/>
+                <TextField styleClass="addTextField" fx:id="eliczba_osob"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Hala:</Label>
-                <ComboBox promptText="Wybierz"/>
+                <ComboBox promptText="Wybierz" fx:id="ehala"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Pracownicy:</Label>
-                <ComboBox promptText="Wybierz"/>
+                <ComboBox promptText="Wybierz" fx:id="epracownicy"/>
             </HBox>
         </VBox>
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addKonferencje">Dodaj</Button>
         </HBox>
 
     </bottom>

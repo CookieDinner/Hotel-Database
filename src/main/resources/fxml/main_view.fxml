@@ -26,23 +26,23 @@
         <VBox>
             <HBox style="-fx-padding: 0 0 5 20" fx:id="tagsHBox"/>
             <ScrollPane style="-fx-border-width: 0; -fx-max-height: 550px; -fx-background-color: none;" hbarPolicy="NEVER">
-                <VBox style="-fx-spacing: 10px;">
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                    <Button styleClass="field"/>
-                </VBox>
+                <VBox style="-fx-spacing: 10px;" fx:id="fillableRows"/>
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                    <Button styleClass="field"/>-->
+<!--                </VBox>-->
             </ScrollPane>
         </VBox>
     </center>

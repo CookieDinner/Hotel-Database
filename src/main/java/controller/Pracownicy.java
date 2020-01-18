@@ -1,18 +1,30 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+
+import java.sql.*;
 
 public class Pracownicy implements MainView{
     @FXML
     public Label title;
     @FXML
     public HBox tagsHBox;
-    private Controller controller;
+    @FXML
+    public VBox fillableRows;
 
-    public Pracownicy(Controller controller){
+    private Controller controller;
+    private Connection con;
+    private Statement stmt = null;
+    private ResultSet rs = null;
+
+    public Pracownicy(Controller controller, Connection con){
         this.controller = controller;
+        this.con = con;
     }
 
     @Override
@@ -40,6 +52,24 @@ public class Pracownicy implements MainView{
         data.setStyle("-fx-padding: 0 0 0 0;");
         data.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(imie, nazwisko, etat, placa, data);
+        try {
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM hotel_pracownicy");
+
+            int i = 0;
+            while(rs.next()){
+                String vNazwisko = rs.getString("nazwisko");
+                Node current = new Button(vNazwisko);
+                fillableRows.getChildren().add(current);
+                current.getStyleClass().add("field");
+                current.getStyleClass().add("tag");
+                i++;
+            }
+            rs.close();
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -49,6 +79,6 @@ public class Pracownicy implements MainView{
 
     @Override
     public void moreInfo() {
-
+        System.out.println("test");
     }
 }
