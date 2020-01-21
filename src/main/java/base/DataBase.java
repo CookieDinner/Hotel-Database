@@ -2,9 +2,7 @@ package main.java.base;
 
 import main.java.controller.Controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +22,19 @@ public class DataBase {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE,
                     "nie udało się połączyć z bazą danych", ex);
             System.exit(-1);
+        }
+    }
+
+    public void addKonferencje(String nazwa, Date data, int lOsob){
+        try {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO hotel_konferencje (nazwa, data_konferencji, liczba_osob, hala_konferencyjna) VALUES (?,?,?,1)");
+            stmt.setString(1, nazwa);
+            stmt.setDate(2, data);
+            stmt.setInt(3, lOsob);
+            stmt.executeUpdate();
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
         }
     }
 

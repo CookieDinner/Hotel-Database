@@ -23,7 +23,7 @@ public class Konferencje extends MainView{
 
     @Override
     public void plus() {
-        controller.changeScene("addKonferencje.fxml", new AddController(dataBase.getCon()));
+        controller.changeScene("addKonferencje.fxml", new AddController(dataBase));
     }
 
     @FXML
