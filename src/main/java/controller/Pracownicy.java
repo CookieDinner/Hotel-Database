@@ -6,10 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
+import main.java.base.DataBase;
 
 import java.sql.*;
 
-public class Pracownicy implements MainView{
+public class Pracownicy extends MainView{
     @FXML
     public Label title;
     @FXML
@@ -17,14 +18,11 @@ public class Pracownicy implements MainView{
     @FXML
     public VBox fillableRows;
 
-    private Controller controller;
-    private Connection con;
     private Statement stmt = null;
     private ResultSet rs = null;
 
-    public Pracownicy(Controller controller, Connection con){
-        this.controller = controller;
-        this.con = con;
+    public Pracownicy(Controller controller, DataBase dataBase){
+        super(controller, dataBase);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class Pracownicy implements MainView{
         data.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(imie, nazwisko, etat, placa, data);
         try {
-            stmt = con.createStatement();
+            stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_pracownicy");
 
             int i = 0;

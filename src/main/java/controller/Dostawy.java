@@ -6,10 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.java.base.DataBase;
 
 import java.sql.*;
 
-public class Dostawy implements MainView{
+public class Dostawy extends MainView{
     @FXML
     public Label title;
     @FXML
@@ -17,14 +18,11 @@ public class Dostawy implements MainView{
     @FXML
     public VBox fillableRows;
 
-    private Controller controller;
-    private Connection con;
     private Statement stmt = null;
     private ResultSet rs = null;
 
-    public Dostawy(Controller controller, Connection con){
-        this.controller = controller;
-        this.con = con;
+    public Dostawy(Controller controller, DataBase dataBase){
+        super(controller, dataBase);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class Dostawy implements MainView{
         tagsHBox.getChildren().addAll(dostawca, skladnik, data, cena);
 
         try {
-            stmt = con.createStatement();
+            stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_dostawcy");
 
             int i = 0;

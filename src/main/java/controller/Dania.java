@@ -6,10 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.java.base.DataBase;
 
 import java.sql.*;
 
-public class Dania implements MainView{
+public class Dania extends MainView{
     @FXML
     public Label title;
     @FXML
@@ -17,15 +18,12 @@ public class Dania implements MainView{
     @FXML
     public VBox fillableRows;
 
-    private Controller controller;
-    private Connection con;
     private Statement stmt = null;
     private ResultSet rs = null;
 
 
-    public Dania(Controller controller, Connection con){
-        this.controller = controller;
-        this.con = con;
+    public Dania(Controller controller, DataBase dataBase){
+        super(controller, dataBase);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class Dania implements MainView{
         tagsHBox.getChildren().addAll(nazwa, cena, dostepnosc);
 
         try {
-            stmt = con.createStatement();
+            stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_dania");
 
             int i = 0;

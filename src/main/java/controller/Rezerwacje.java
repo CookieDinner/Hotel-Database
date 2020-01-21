@@ -6,10 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import main.java.base.DataBase;
 
 import java.sql.*;
 
-public class Rezerwacje implements MainView{
+public class Rezerwacje extends MainView{
     @FXML
     public Label title;
     @FXML
@@ -17,14 +18,11 @@ public class Rezerwacje implements MainView{
     @FXML
     public VBox fillableRows;
 
-    private Controller controller;
-    private Connection con;
     private Statement stmt = null;
     private ResultSet rs = null;
 
-    public Rezerwacje(Controller controller, Connection con){
-        this.controller = controller;
-        this.con = con;
+    public Rezerwacje(Controller controller, DataBase dataBase){
+        super(controller, dataBase);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class Rezerwacje implements MainView{
         tagsHBox.getChildren().addAll(imie, nazwisko, pokoj, dataZameldowania, dataWymeldowania);
 
         try {
-            stmt = con.createStatement();
+            stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_rezerwacje");
 
             int i = 0;
