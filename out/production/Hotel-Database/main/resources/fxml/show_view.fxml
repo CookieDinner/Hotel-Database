@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../style/style.css">
+    <top>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </top>
+    <center>
+        <VBox>
+            <Label fx:id="titleLabel" styleClass="title"/>
+            <Label fx:id="dateLabel" styleClass="date"/>
+        </VBox>
+
+    </center>
+</BorderPane>

@@ -50,7 +50,8 @@ public class Konferencje extends MainView{
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
-                Node current = new Button(vNazwa);
+                Button current = new Button(vNazwa);
+                current.setOnAction(e->moreInfo());
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
@@ -70,6 +71,6 @@ public class Konferencje extends MainView{
 
     @Override
     public void moreInfo() {
-
+        controller.changeScene("show_view.fxml", new ShowKonf("Coroczny zjazd miłośników koni", "13.01.2020", this, controller));
     }
 }

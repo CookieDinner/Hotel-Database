@@ -54,7 +54,7 @@
 }
 
 .title{
-    -fx-text-fill: #5b5b5b;
+    -fx-text-fill: #2d2d2d;
     -fx-font-size: 36px;
     -fx-padding: 10px;
 }
@@ -138,8 +138,20 @@
     -fx-background-color: #d2d2d2;
 }
 
+.returnButton{
+    -fx-max-width: 30px;
+    -fx-min-width: 30px;
+}
 
+.returnButton:hover{
+    -fx-background-color: none;
+}
 
+.date{
+    -fx-font-size: 24px;
+    -fx-text-fill: #5B5B5B;
+    -fx-padding: 10px;
+}
 
 
 
