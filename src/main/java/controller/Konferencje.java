@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Konferencje extends MainView{
 
@@ -50,8 +51,22 @@ public class Konferencje extends MainView{
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
-                Button current = new Button(vNazwa);
-                current.setOnAction(e->moreInfo());
+                Date vData = rs.getDate("data_konferencji");
+                String vLOsob = rs.getString("liczba_osob");
+                String vHala = rs.getString("hala_konferencyjna");
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label nazwaL = new Label(vNazwa);
+                nazwaL.setPrefWidth(350);
+                Label dataL = new Label(vData.toString());
+                dataL.setPrefWidth(200);
+                Label personCount = new Label(vLOsob);
+                personCount.setPrefWidth(190);
+                Label halaKonf = new Label(vHala);
+                aggregate.getChildren().addAll(nazwaL, dataL, personCount, halaKonf);
+                current.setGraphic(aggregate);
+                String id_konf = rs.getString("id_konferencji");
+                current.setOnAction(e->moreInfo(id_konf));
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
@@ -69,8 +84,8 @@ public class Konferencje extends MainView{
         System.out.println(searchField.getText());
     }
 
-    @Override
-    public void moreInfo() {
-        controller.changeScene("show_view.fxml", new ShowKonf("Coroczny zjazd miłośników koni", "13.01.2020", this, controller));
+    public void moreInfo(String id_konf) {
+        ArrayList<String> info = dataBase.getWholeKonferencja(id_konf);
+        controller.changeScene("show_view.fxml", new ShowKonf(info.get(0), info.get(1), info.get(2), info.get(3), this, controller));
     }
 }

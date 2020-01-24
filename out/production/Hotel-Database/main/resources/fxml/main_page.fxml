@@ -11,7 +11,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="main.java.controller.main_page"
             fx:id="borderPane"
-            stylesheets="@../style/style.css">
+            stylesheets="@../style/style.css"
+            prefWidth="950">
 
     <center>
         <Label>Main Page</Label>

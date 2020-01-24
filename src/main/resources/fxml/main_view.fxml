@@ -11,7 +11,8 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../style/style.css"
-            styleClass="mainView">
+            styleClass="mainView"
+            prefWidth="950">
     <top>
         <VBox>
             <HBox styleClass="topHBox">

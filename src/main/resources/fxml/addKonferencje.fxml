@@ -8,7 +8,8 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            stylesheets="@../style/style.css">
+            stylesheets="@../style/style.css"
+            prefWidth="950">
     <top>
         <Button/>
     </top>

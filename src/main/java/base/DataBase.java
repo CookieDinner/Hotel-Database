@@ -3,6 +3,7 @@ package main.java.base;
 import main.java.controller.Controller;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,23 @@ public class DataBase {
         }catch(SQLException ex){
             ex.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getWholeKonferencja(String id_konf){
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_konferencje WHERE ID_KONFERENCJI = "+id_konf);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            result.add(rs.getString("nazwa"));
+            result.add(rs.getDate("data_konferencji").toString());
+            result.add(rs.getString("liczba_osob"));
+            result.add(rs.getString("hala_konferencyjna"));
+            stmt.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     public Connection getCon(){ return con; }
