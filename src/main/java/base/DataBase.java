@@ -39,6 +39,16 @@ public class DataBase {
         }
     }
 
+    public void deleteKonferencje(String id_konf){
+        try {
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM hotel_konferencje WHERE ID_KONFERENCJI = "+id_konf);
+            stmt.executeQuery();
+            stmt.close();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
     public ArrayList<String> getWholeKonferencja(String id_konf){
         ArrayList<String> result = new ArrayList<>();
         try {
@@ -54,6 +64,21 @@ public class DataBase {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    public ArrayList<String> getSomePracownicy(){
+        ArrayList<String> pracownicy = new ArrayList<>();
+        try{
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_pracownicy");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                pracownicy.add(rs.getString("nazwisko"));
+            }
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return pracownicy;
     }
 
     public Connection getCon(){ return con; }

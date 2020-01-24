@@ -1,5 +1,7 @@
 package main.java.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -26,12 +28,28 @@ public class AddController {
     ComboBox epracownicy;
 
     private DataBase dataBase;
+    private Konferencje konferencje;
+    private Controller controller;
 
-    public AddController(DataBase dataBase){
+    public AddController(DataBase dataBase, Konferencje konferencje, Controller controller){
         this.dataBase = dataBase;
+        this.konferencje = konferencje;
+        this.controller = controller;
     }
     @FXML
     public void addKonferencje(){
         dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()));
+    }
+
+    @FXML
+    private void returnTo(){
+        controller.changeScene("main_view.fxml", konferencje);
+    }
+
+    @FXML
+    private void initialize(){
+        ObservableList<String> observPracownicy = FXCollections.observableArrayList();
+        observPracownicy.addAll(konferencje.dataBase.getSomePracownicy());
+        epracownicy.setItems(observPracownicy);
     }
 }

@@ -6,12 +6,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../style/style.css"
-            prefWidth="950">
+            prefWidth="950"
+            style="-fx-padding: 0 20 0 20;">
     <top>
-        <Button/>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </top>
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">

@@ -3,36 +3,35 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
+import java.util.ArrayList;
+
 public class ShowKonf {
     @FXML
     private Label titleLabel;
-    private String title;
     @FXML
     private Label dateLabel;
-    private String  date;
     @FXML
     private Label personCount;
     @FXML
     private Label whichHala;
     private Konferencje konferencje;
     private Controller controller;
-    private String liczbaOsob, hala;
+    private String id_konf;
 
-    public ShowKonf(String title, String date, String liczbaOsob, String hala, Konferencje konferencje, Controller controller){
-        this.title = title;
-        this.date = date;
+    public ShowKonf(String id_konf, Konferencje konferencje, Controller controller){
+        this.id_konf = id_konf;
         this.konferencje = konferencje;
         this.controller = controller;
-        this.liczbaOsob = liczbaOsob;
-        this.hala = hala;
+
     }
 
     @FXML
     public void initialize(){
-        titleLabel.setText(title);
-        dateLabel.setText(date);
-        personCount.setText(liczbaOsob);
-        whichHala.setText(hala);
+        ArrayList<String> arr = konferencje.dataBase.getWholeKonferencja(id_konf);
+        titleLabel.setText(arr.get(0));
+        dateLabel.setText(arr.get(1));
+        personCount.setText(arr.get(2));
+        whichHala.setText(arr.get(3));
     }
 
     @FXML
@@ -42,7 +41,7 @@ public class ShowKonf {
 
     @FXML
     private void delete(){
-        System.out.println("Delete this!");  // TODO: Delete Event
+        konferencje.dataBase.deleteKonferencje(id_konf);
         returnTo();
     }
 }
