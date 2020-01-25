@@ -46,6 +46,5 @@
         <HBox style="-fx-padding: 100 0 0 550">
             <Button styleClass="addButton" onAction="#addKonferencje">Dodaj</Button>
         </HBox>
-
     </bottom>
 </BorderPane>

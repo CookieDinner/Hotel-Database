@@ -18,4 +18,8 @@ public class AddDania {
     private void returnTo(){
         controller.changeScene("main_view.fxml", dania);
     }
+    @FXML
+    private void addDania(){
+
+    }
 }

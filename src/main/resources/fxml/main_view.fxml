@@ -14,7 +14,7 @@
     <top>
         <VBox>
             <HBox styleClass="topHBox">
-                <ImageView styleClass="plus" fitWidth="60" preserveRatio="true" onMouseClicked="#plus"><Image url="@../images/plus.png"/></ImageView>
+                <ImageView styleClass="plus" fitHeight="60" fitWidth="60" preserveRatio="true" onMouseClicked="#plus" fx:id="plusButton"><Image url="@../images/plus.png"/></ImageView>
                 <TextField promptText="Szukaj" styleClass="search" onKeyReleased="#search" fx:id="searchField"/>
             </HBox>
             <Label styleClass="title" fx:id="title"/>

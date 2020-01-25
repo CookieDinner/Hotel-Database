@@ -82,6 +82,12 @@
     -fx-text-fill: #5b5b5b;
 }
 
+.typeLabelSmall{
+    -fx-min-width: 210px;
+    -fx-font-size: 24px;
+    -fx-text-fill: #5b5b5b;
+}
+
 .combo-box{
     -fx-min-width: 300px;
     -fx-min-height: 50px;
@@ -104,6 +110,14 @@
     -fx-border-color: #8c8c8c;
 }
 
+.addTextFieldSmall{
+    -fx-min-width: 150px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
 .addTextWithButton{
     -fx-min-width: 250px;
     -fx-min-height: 50px;
@@ -112,8 +126,26 @@
     -fx-border-color: #8c8c8c;
 }
 
+.addTextWithButtonSmall{
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
 .non-writable{
     -fx-min-width: 250px;
+    -fx-min-height: 50px;
+    -fx-background-color: #d2d2d2;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.non-writableSmall{
+    -fx-min-width: 120px;
+    -fx-max-width: 120px;
     -fx-min-height: 50px;
     -fx-background-color: #d2d2d2;
     -fx-border-width: 1 1 1 1;
@@ -129,13 +161,19 @@
     -fx-min-height: 50px;
 }
 
-.addDate .text-field{
+.addDateSmall{
+    -fx-min-width: 170px;
+    -fx-max-width: 170px;
+    -fx-min-height: 50px;
+}
+
+.addDate .text-field, .addDateSmall .text-field{
     -fx-background-color: #EFF0F1;
     -fx-border-width: 1 0 1 1;
     -fx-border-color: #8c8c8c;
 }
 
-.addDate .arrow-button{
+.addDate .arrow-button, .addDateSmall .arrow-button{
     -fx-background-color: #EFF0F1;
     -fx-border-width: 1 1 1 0;
     -fx-border-color: #8c8c8c;
@@ -143,12 +181,12 @@
     -fx-font-size: 18px;
 }
 
-.addDate .arrow-button:hover{
+.addDate .arrow-button:hover, .addDateSmall .arrow-button:hover{
     -fx-background-color: #dee0e0;
     -fx-cursor: hand;
 }
 
-.addDate .button{
+.addDate .button, .addDateSmall .button{
     -fx-min-width: 50px;
 }
 

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../style/style.css"
-            style="-fx-padding: 0 20 0 20;"
-            prefWidth="950">
+            style="-fx-padding: 0 20 20 20;"
+            prefWidth="950" prefHeight="750">
     <top>
         <BorderPane>
             <left>

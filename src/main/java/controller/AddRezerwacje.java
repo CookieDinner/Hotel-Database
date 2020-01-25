@@ -9,6 +9,8 @@ public class AddRezerwacje {
     private boolean rabat = false;
     @FXML
     private TextField rabatTextField;
+    @FXML
+    private TextField peselTextField;
     public AddRezerwacje(Controller controller, Rezerwacje rezerwacje){
         this.controller = controller;
         this.rezerwacje = rezerwacje;
@@ -38,6 +40,10 @@ public class AddRezerwacje {
     @FXML
     private void addRezerwacje(){
 
+    }
+    @FXML
+    private void addKlient(){
+        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, peselTextField.getText(), "addRezerwacje.fxml"));
     }
 
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
@@ -19,6 +20,8 @@ public class Magazyn extends MainView{
     public HBox tagsHBox;
     @FXML
     public VBox fillableRows;
+    @FXML
+    private ImageView plusButton;
 
     private Statement stmt = null;
     private ResultSet rs = null;
@@ -27,13 +30,9 @@ public class Magazyn extends MainView{
         super(controller, dataBase);
     }
 
-    @Override
-    public void plus() {
-        controller.changeScene("addMagazyn.fxml", new AddMagazyn(controller, this));
-    }
-
     @FXML
     public void initialize(){
+        plusButton.setImage(null);
         title.setText("Magazyn");
         Label skladnik = new Label("Składnik");
         Label ilosc = new Label("Ilość");

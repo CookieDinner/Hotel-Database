@@ -18,4 +18,8 @@ public class AddDostawy {
     private void returnTo(){
         controller.changeScene("main_view.fxml", dostawy);
     }
+    @FXML
+    private void addDostawy(){
+
+    }
 }

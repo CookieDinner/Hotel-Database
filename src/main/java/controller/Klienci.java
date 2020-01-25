@@ -11,7 +11,7 @@ public class Klienci extends MainView {
     }
     @Override
     public void plus() {
-        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this));
+        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, "", "main_view.fxml"));
     }
 
     @FXML
