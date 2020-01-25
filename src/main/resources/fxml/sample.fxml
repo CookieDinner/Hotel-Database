@@ -13,7 +13,7 @@
             <Button onAction="#changeToKonferencje" fx:id="konferencje">Konferencje</Button>
             <Button onAction="#changeToRezerwacje" fx:id="rezerwacje">Rezerwacje</Button>
             <Button onAction="#changeToZamowiania" fx:id="zamowienia">Zamówienia</Button>
-            <Button onAction="#changeToDostawy" fx:id="dostawy">Dostawy</Button>
+            <Button onAction="#changeToDostawcy" fx:id="dostawcy">Dostawcy</Button>
             <Button onAction="#changeToMagazyn" fx:id="magazyn">Magazyn</Button>
             <Button onAction="#changeToKlienci" fx:id="klienci">Klienci</Button>
             <Button onAction="#changeToPracownicy" fx:id="pracownicy">Pracownicy</Button>

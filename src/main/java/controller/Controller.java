@@ -14,7 +14,7 @@ public class Controller {
     @FXML
     public Pane mainView;
     @FXML
-    public Button konferencje, rezerwacje, zamowienia, dostawy, magazyn, klienci, pracownicy, dania, hale, pokoje;
+    public Button konferencje, rezerwacje, zamowienia, dostawcy, magazyn, klienci, pracownicy, dania, hale, pokoje;
     private DataBase dataBase;
 
     public Controller(){
@@ -38,9 +38,9 @@ public class Controller {
         currentButton(zamowienia);
     }
     @FXML
-    public void changeToDostawy(){
-        changeScene(new Dostawy(this, dataBase));
-        currentButton(dostawy);
+    public void changeToDostawcy(){
+        changeScene(new Dostawcy(this, dataBase));
+        currentButton(dostawcy);
     }
     @FXML
     public void changeToMagazyn(){
@@ -83,7 +83,7 @@ public class Controller {
         while(konferencje.getStyleClass().remove("clicked_button"));
         while(rezerwacje.getStyleClass().remove("clicked_button"));
         while(zamowienia.getStyleClass().remove("clicked_button"));
-        while(dostawy.getStyleClass().remove("clicked_button"));
+        while(dostawcy.getStyleClass().remove("clicked_button"));
         while(magazyn.getStyleClass().remove("clicked_button"));
         while(klienci.getStyleClass().remove("clicked_button"));
         while(pracownicy.getStyleClass().remove("clicked_button"));
