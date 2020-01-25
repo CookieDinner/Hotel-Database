@@ -8,7 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Zamowienia extends MainView{
     @FXML
@@ -27,7 +29,7 @@ public class Zamowienia extends MainView{
 
     @Override
     public void plus() {
-        System.out.println("plus");
+        controller.changeScene("addZamowienia.fxml", new AddZamowienia(controller, this));
     }
 
     @FXML

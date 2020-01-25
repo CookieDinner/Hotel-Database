@@ -4,7 +4,7 @@
 
 #sidebar{
     -fx-background-color: #E1E2E3;
-    -fx-padding: 75 0 0 0;
+    -fx-padding: 40 0 0 0;
 }
 
 .button{
@@ -104,6 +104,26 @@
     -fx-border-color: #8c8c8c;
 }
 
+.addTextWithButton{
+    -fx-min-width: 250px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.non-writable{
+    -fx-min-width: 250px;
+    -fx-min-height: 50px;
+    -fx-background-color: #d2d2d2;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.non-writable:hover{
+    -fx-cursor: normal;
+}
+
 .addDate{
     -fx-min-width: 300px;
     -fx-min-height: 50px;
@@ -170,6 +190,19 @@
     -fx-min-height: 40px;
     -fx-max-height: 40px;
     -fx-background-color: #e1e2e3;
+}
+
+.check .box{
+    -fx-background-color: none;
+    -fx-border-width: 1 1 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.check{
+    -fx-min-width: 50px;
+    -fx-max-width: 50px;
+    -fx-min-height: 50px;
+    -fx-max-height: 50px;
 }
 
 

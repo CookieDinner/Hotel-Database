@@ -11,8 +11,8 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../style/style.css"
-            prefWidth="950"
-            style="-fx-padding: 0 20 0 20;">
+            prefWidth="950" prefHeight="750"
+            style="-fx-padding: 0 20 20 20;">
     <top>
         <Button styleClass="returnButton" onAction="#returnTo">
             <graphic>

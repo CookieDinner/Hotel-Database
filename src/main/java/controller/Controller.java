@@ -3,27 +3,18 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import main.java.Main;
 import main.java.base.DataBase;
 
-import java.sql.*;
-
 import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Controller {
     @FXML
     public Pane mainView;
     @FXML
-    public Button mainPage, konferencje, rezerwacje, zamowienia, dostawy, magazyn, pracownicy, dania;
+    public Button mainPage, konferencje, rezerwacje, zamowienia, dostawy, magazyn, klienci, pracownicy, dania;
     private DataBase dataBase;
 
     public Controller(){
@@ -65,6 +56,11 @@ public class Controller {
         currentButton(magazyn);
     }
     @FXML
+    private void changeToKlienci(){
+        changeScene(new Klienci(this, dataBase));
+        currentButton(klienci);
+    }
+    @FXML
     public void changeToPracownicy(){
         changeScene(new Pracownicy(this, dataBase));
         currentButton(pracownicy);
@@ -86,6 +82,7 @@ public class Controller {
         while(zamowienia.getStyleClass().remove("clicked_button"));
         while(dostawy.getStyleClass().remove("clicked_button"));
         while(magazyn.getStyleClass().remove("clicked_button"));
+        while(klienci.getStyleClass().remove("clicked_button"));
         while(pracownicy.getStyleClass().remove("clicked_button"));
         while(dania.getStyleClass().remove("clicked_button"));
         button.getStyleClass().add("clicked_button");

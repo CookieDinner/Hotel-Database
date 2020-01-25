@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             stylesheets="@../style/style.css"
@@ -18,6 +16,7 @@
             <Button onAction="#changeToZamowiania" fx:id="zamowienia">Zamówienia</Button>
             <Button onAction="#changeToDostawy" fx:id="dostawy">Dostawy</Button>
             <Button onAction="#changeToMagazyn" fx:id="magazyn">Magazyn</Button>
+            <Button onAction="#changeToKlienci" fx:id="klienci">Klienci</Button>
             <Button onAction="#changeToPracownicy" fx:id="pracownicy">Pracownicy</Button>
             <Button onAction="#changeToDania" fx:id="dania">Dania</Button>
         </VBox>

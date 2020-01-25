@@ -1,16 +1,15 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Konferencje extends MainView{
 
@@ -63,6 +62,8 @@ public class Konferencje extends MainView{
                 Label personCount = new Label(vLOsob);
                 personCount.setPrefWidth(190);
                 Label halaKonf = new Label(vHala);
+                halaKonf.setPrefWidth(110);
+                aggregate.setStyle("-fx-alignment: center;");
                 aggregate.getChildren().addAll(nazwaL, dataL, personCount, halaKonf);
                 current.setGraphic(aggregate);
                 String id_konf = rs.getString("id_konferencji");

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="950.0" prefHeight="750"
+            stylesheets="@../style/style.css"
+            style="-fx-padding: 0 20 20 20;">
+    <top>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
+    </top>
+    <center>
+        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Klient:</Label>
+                <TextField styleClass="addTextWithButton"/>
+                <Button style="-fx-background-color: #d2d2d2; -fx-max-width: 50px; -fx-max-height: 50px; -fx-min-width: 50px; -fx-min-height: 50px;">
+                    <graphic>
+                        <ImageView fitWidth="30" preserveRatio="true">
+                            <Image url="@../images/plusv2.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Pracownik:</Label>
+                <ComboBox promptText="Wybierz" fx:id="epracownicy"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Data zameldowania:</Label>
+                <DatePicker styleClass="addDate" fx:id="zdata"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Data wymeldowania:</Label>
+                <DatePicker styleClass="addDate" fx:id="wdata"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Rabat:</Label>
+                <CheckBox styleClass="check" onMouseClicked="#rabatCheck"/>
+                <TextField styleClass="non-writable" editable="false" fx:id="rabatTextField"/>
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox style="-fx-padding: 100 0 0 550">
+            <Button styleClass="addButton" onAction="#addRezerwacje">Dodaj</Button>
+        </HBox>
+
+    </bottom>
+</BorderPane>

@@ -2,13 +2,15 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
 import main.java.base.DataBase;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Pracownicy extends MainView{
     @FXML
@@ -27,7 +29,7 @@ public class Pracownicy extends MainView{
 
     @Override
     public void plus() {
-        System.out.println("plus");
+        controller.changeScene("addPracownicy.fxml", new AddPracownicy(controller, this));
     }
 
     @FXML

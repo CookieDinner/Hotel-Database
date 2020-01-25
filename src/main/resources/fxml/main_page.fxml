@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="main.java.controller.main_page"
-            fx:id="borderPane"
+            fx:id="borderPane" prefHeight="750"
             stylesheets="@../style/style.css"
             prefWidth="950">
 
