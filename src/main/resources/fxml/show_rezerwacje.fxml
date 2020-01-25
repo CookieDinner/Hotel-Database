@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../style/style.css"
+            style="-fx-padding: 0 20 20 20;"
+            prefWidth="950" prefHeight="750">
+    <top>
+        <BorderPane>
+            <left>
+                <Button styleClass="returnButton" onAction="#returnTo">
+                    <graphic>
+                        <ImageView fitWidth="25" preserveRatio="true">
+                            <Image url="@../images/arrow.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </left>
+            <right>
+                <Button styleClass="returnButton" onAction="#delete">
+                    <graphic>
+                        <ImageView fitWidth="50" preserveRatio="true">
+                            <Image url="@../images/trash.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </right>
+        </BorderPane>
+
+    </top>
+    <center>
+        <VBox spacing="40">
+            <HBox>
+                <Label fx:id="imieLabel" styleClass="title"/>
+                <Label fx:id="nazwiskoLabel" styleClass="title"/>
+            </HBox>
+            <HBox spacing="200">
+                <VBox>
+                    <Label styleClass="labelOfThings">Data zameldowania:</Label>
+                    <Label fx:id="dataZLabel" styleClass="date"/>
+                </VBox>
+                <VBox>
+                    <Label styleClass="labelOfThings">Data wymeldowania:</Label>
+                    <Label fx:id="dataWLabel" styleClass="date"/>
+                </VBox>
+            </HBox>
+            <HBox spacing="200">
+                <VBox>
+                    <Label styleClass="labelOfThings">Pokój:</Label>
+                    <Button styleClass="littlePlus" fx:id="pokojButton"/>
+                </VBox>
+                <VBox>
+                    <Label styleClass="labelOfThings">Rabat:</Label>
+                    <Label/>
+                </VBox>
+            </HBox>
+            <HBox style="-fx-alignment: center-left;" spacing="100">
+                <Label styleClass="labelOfThings">Pracownik:</Label>
+                <Button styleClass="employee"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

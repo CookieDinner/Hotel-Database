@@ -65,11 +65,20 @@ public class Rezerwacje extends MainView{
                 current.getStyleClass().add("tag");
                 i++;
             }
+            populate(rs);
             rs.close();
             stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
+    }
+
+    private void populate(ResultSet rs){
+        Button button = new Button("Temp");
+        button.getStyleClass().add("field");
+        button.getStyleClass().add("tag");
+        button.setOnAction(e->moreInfo());
+        fillableRows.getChildren().add(button);
     }
 
     @Override
@@ -79,6 +88,6 @@ public class Rezerwacje extends MainView{
 
     @Override
     public void moreInfo() {
-
+        controller.changeScene("show_rezerwacje.fxml", new ShowRezerwacje(controller, this));
     }
 }
