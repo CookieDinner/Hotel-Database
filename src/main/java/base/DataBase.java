@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 public class DataBase {
     private Connection con = null;
+    private CallableStatement cstmt = null;
 
     public void connect(){
         Properties connectionProps = new Properties();
@@ -26,14 +27,37 @@ public class DataBase {
         }
     }
 
-    public void addKonferencje(String nazwa, Date data, int lOsob){
+    public void addKonferencje(String nazwa, Date data, int lOsob, String pesel, int idHali){
         try {
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO hotel_konferencje (nazwa, data_konferencji, liczba_osob, hala_konferencyjna) VALUES (?,?,?,1)");
-            stmt.setString(1, nazwa);
-            stmt.setDate(2, data);
-            stmt.setInt(3, lOsob);
-            stmt.executeUpdate();
-            stmt.close();
+            cstmt = con.prepareCall("{? = call dodajKonferencje(null,?,?,?,?,0)}");
+            cstmt.setString(2, nazwa);
+            cstmt.setDate(3, data);
+            cstmt.setInt(4, lOsob);
+            cstmt.setInt(5,idHali);
+            cstmt.registerOutParameter(1, Types.INTEGER);
+            cstmt.execute();
+            System.out.println(cstmt.getInt(1));
+            cstmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void addZamowienie(Date data, String pesel, int idDania){
+        try {
+            cstmt = con.prepareCall("{? = call dodajZamowienie(null,?,?,0)}");
+            cstmt.setDate(2, data);
+            cstmt.setString(3, pesel);
+            cstmt.registerOutParameter(1, Types.INTEGER);
+            cstmt.execute();
+            int zamId = cstmt.getInt(1);
+            cstmt.close();
+
+            cstmt = con.prepareCall("{call dodajZamowienieDania(?,?)}");
+            cstmt.setInt(1, zamId);
+            cstmt.setInt(2, idDania);
+            cstmt.execute();
+            cstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -69,7 +93,7 @@ public class DataBase {
     public ArrayList<String> getSomePracownicy(){
         ArrayList<String> pracownicy = new ArrayList<>();
         try{
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_pracownicy");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_pracownicy order by nazwisko asc");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 pracownicy.add(rs.getString("nazwisko"));
@@ -79,6 +103,36 @@ public class DataBase {
             ex.printStackTrace();
         }
         return pracownicy;
+    }
+
+    public ArrayList<String> getSomeDania(){
+        ArrayList<String> dania = new ArrayList<>();
+        try{
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_dania order by nazwa asc");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                dania.add(rs.getString("nazwa"));
+            }
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return dania;
+    }
+
+    public ArrayList<String> getSomeHale(){
+        ArrayList<String> hale = new ArrayList<>();
+        try{
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_hale_konferencyjne order by numer_hali asc");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                hale.add(rs.getInt("numer_hali")+", Liczba miejsc: "+rs.getInt("liczba_miejsc"));
+            }
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return hale;
     }
 
     public Connection getCon(){ return con; }

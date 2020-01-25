@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             prefWidth="950.0" prefHeight="750"
@@ -21,30 +25,26 @@
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Pracownik:</Label>
-                <ComboBox promptText="Wybierz" fx:id="epracownicy"/>
+                <Label styleClass="typeLabel">NIP:</Label>
+                <TextField styleClass="addTextField" fx:id="nip"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Data:</Label>
-                <DatePicker styleClass="addDate" fx:id="edata"/>
+                <Label styleClass="typeLabel">Nazwa:</Label>
+                <TextField styleClass="addTextField" fx:id="nazwa"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Dania:</Label>
-                <ComboBox promptText="Wybierz" fx:id="edania"/>
+                <Label styleClass="typeLabel">Adres:</Label>
+                <TextField styleClass="addTextField" fx:id="adres"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel"/>
-                <ScrollPane style="-fx-border-width: 0; -fx-min-height: 150px; -fx-max-width: 300px; -fx-min-width: 300px; -fx-background-color: none;" hbarPolicy="NEVER">
-
-                </ScrollPane>
+                <Label styleClass="typeLabel">Numer telefonu:</Label>
+                <TextField styleClass="addTextField" fx:id="numer_telefonu"/>
             </HBox>
-
         </VBox>
-
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addZamowienie">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addDostawce">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>
