@@ -6,10 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import main.java.base.DataBase;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Konferencje extends MainView{
 
@@ -42,11 +39,19 @@ public class Konferencje extends MainView{
         halaKonferencyjna.setStyle("-fx-padding: 0 0 0 0;");
         halaKonferencyjna.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(nazwa, data, liczbaOsob, halaKonferencyjna);
-
         try {
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_konferencje");
+            populate(rs);
+        } catch(SQLException ex){
+        ex.printStackTrace();
+    }
 
+    }
+
+    public void populate(ResultSet rs){
+        try {
+            fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
@@ -79,10 +84,16 @@ public class Konferencje extends MainView{
             ex.printStackTrace();
         }
     }
-
     @Override
     public void search() {
-        System.out.println(searchField.getText());
+        try {
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM hotel_konferencje where upper(nazwa) like UPPER(?)||'%'");
+            pstmt.setString(1, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     public void moreInfo(String id_konf) {

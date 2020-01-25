@@ -4,11 +4,11 @@ import javafx.fxml.FXML;
 
 public class AddDostawy {
     private Controller controller;
-    private Dostawy dostawy;
+    private Dostawcy dostawcy;
 
-    public AddDostawy(Controller controller, Dostawy dostawy){
+    public AddDostawy(Controller controller, Dostawcy dostawcy){
         this.controller = controller;
-        this.dostawy = dostawy;
+        this.dostawcy = dostawcy;
     }
     @FXML
     private void initialize(){
@@ -16,7 +16,7 @@ public class AddDostawy {
     }
     @FXML
     private void returnTo(){
-        controller.changeScene("main_view.fxml", dostawy);
+        controller.changeScene("main_view.fxml", dostawcy);
     }
     @FXML
     private void addDostawy(){
