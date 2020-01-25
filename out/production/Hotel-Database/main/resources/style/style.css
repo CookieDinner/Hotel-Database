@@ -8,8 +8,8 @@
 }
 
 .button{
-    -fx-min-width: 300px;
-    -fx-min-height: 75px;
+    -fx-min-width: 350px;
+    -fx-min-height: 70px;
     -fx-background-color: none;
     -fx-font-size: 30px;
     -fx-text-fill: #5B5B5B;

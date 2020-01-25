@@ -10,7 +10,6 @@
             fx:controller="main.java.controller.Controller">
     <left>
         <VBox id="sidebar">
-            <Button onAction="#changeToMain" fx:id="mainPage">Strona Główna</Button>
             <Button onAction="#changeToKonferencje" fx:id="konferencje">Konferencje</Button>
             <Button onAction="#changeToRezerwacje" fx:id="rezerwacje">Rezerwacje</Button>
             <Button onAction="#changeToZamowiania" fx:id="zamowienia">Zamówienia</Button>
@@ -19,6 +18,8 @@
             <Button onAction="#changeToKlienci" fx:id="klienci">Klienci</Button>
             <Button onAction="#changeToPracownicy" fx:id="pracownicy">Pracownicy</Button>
             <Button onAction="#changeToDania" fx:id="dania">Dania</Button>
+            <Button onAction="#changeToHale" fx:id="hale">Hale konferencyjne</Button>
+            <Button onAction="#changeToPokoje" fx:id="pokoje">Pokoje</Button>
         </VBox>
     </left>
     <center>

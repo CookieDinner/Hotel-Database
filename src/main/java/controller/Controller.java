@@ -14,7 +14,7 @@ public class Controller {
     @FXML
     public Pane mainView;
     @FXML
-    public Button mainPage, konferencje, rezerwacje, zamowienia, dostawy, magazyn, klienci, pracownicy, dania;
+    public Button konferencje, rezerwacje, zamowienia, dostawy, magazyn, klienci, pracownicy, dania, hale, pokoje;
     private DataBase dataBase;
 
     public Controller(){
@@ -22,14 +22,6 @@ public class Controller {
         dataBase.connect();
     }
 
-    @FXML
-    public void changeToMain(){
-        mainView.getChildren().clear();
-        try{
-            mainView.getChildren().add(FXMLLoader.load(Main.class.getResource("../resources/fxml/main_page.fxml")));
-        }catch (IOException ignored){}
-        currentButton(mainPage);
-    }
     @FXML
     public void changeToKonferencje(){
         changeScene(new Konferencje(this, dataBase));
@@ -71,12 +63,23 @@ public class Controller {
         currentButton(dania);
     }
     @FXML
+    private void changeToHale(){
+        changeScene(new Hale(this, dataBase));
+        currentButton(hale);
+    }
+    @FXML
+    private void changeToPokoje(){
+        changeScene(new Pokoje(this, dataBase));
+        currentButton(pokoje);
+    }
+    @FXML
     public void addKonferencje(){
         System.out.println("test");
     }
 
     private void currentButton(Button button){
-        while(mainPage.getStyleClass().remove("clicked_button"));
+        while(hale.getStyleClass().remove("clicked_button"));
+        while(pokoje.getStyleClass().remove("clicked_button"));
         while(konferencje.getStyleClass().remove("clicked_button"));
         while(rezerwacje.getStyleClass().remove("clicked_button"));
         while(zamowienia.getStyleClass().remove("clicked_button"));
@@ -106,7 +109,7 @@ public class Controller {
 
     @FXML
     public void initialize(){
-        changeToMain();
+        changeToKonferencje();
     }
 
 }
