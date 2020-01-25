@@ -126,6 +126,16 @@
     -fx-border-color: #8c8c8c;
 }
 
+.good{
+    -fx-background-color: green;
+    -fx-opacity: 0.2;
+}
+
+.wrong{
+    -fx-background-color: red;
+    -fx-opacity: 0.2;
+}
+
 .addTextWithButtonSmall{
     -fx-min-width: 120px;
     -fx-max-width: 120px;
@@ -141,6 +151,18 @@
     -fx-background-color: #d2d2d2;
     -fx-border-width: 1 1 1 1;
     -fx-border-color: #8c8c8c;
+}
+
+.littlePlus{
+    -fx-background-color: #d2d2d2;
+    -fx-max-width: 50px;
+    -fx-max-height: 50px;
+    -fx-min-width: 50px;
+    -fx-min-height: 50px;
+}
+
+.littlePlus:hover{
+    -fx-background-color: #c1c1c1;
 }
 
 .non-writableSmall{
