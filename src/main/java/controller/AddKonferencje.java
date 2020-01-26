@@ -68,7 +68,7 @@ public class AddKonferencje {
             ehala.setDisable(true);
             epracownicy.setDisable(true);
             saveButton.setVisible(false);
-        }else {
+        }else if(checkCorrectness()){
             String pesel = null;
             try {
                 String str = "SELECT * FROM hotel_pracownicy WHERE nazwisko=\'" + epracownicy.getSelectionModel().getSelectedItem() + "\'";
@@ -130,6 +130,41 @@ public class AddKonferencje {
     @FXML
     private void choosePracownik(){
         pracownicyScroll.getChildren().add(createPracownikButton(epracownicy.getValue().toString()));
+    }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (enazwa.getText().isEmpty() || enazwa.getText().length() > 100){
+            correct = false;
+            enazwa.getStyleClass().add("wrong");
+        }else{
+            while (enazwa.getStyleClass().remove("wrong"));
+        }
+        if (edata.getValue() == null || !edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            edata.getStyleClass().add("wrong");
+        }else{
+            while (edata.getStyleClass().remove("wrong")) ;
+        }
+        if (eliczba_osob.getText().isEmpty() || Integer.parseInt(eliczba_osob.getText()) < 0){
+            correct = false;
+            eliczba_osob.getStyleClass().add("wrong");
+        }else{
+            while (eliczba_osob.getStyleClass().remove("wrong"));
+        }
+        if (ehala.getValue() == null){
+            correct = false;
+            ehala.getStyleClass().add("wrong");
+        }else{
+            while (ehala.getStyleClass().remove("wrong"));
+        }
+        if (pracownicyScroll.getChildren().isEmpty()){
+            correct = false;
+            epracownicy.getStyleClass().add("wrong");
+        }else{
+            while (epracownicy.getStyleClass().remove("wrong"));
+        }
+        return correct;
     }
 
     private Button createPracownikButton(String nazwa) {

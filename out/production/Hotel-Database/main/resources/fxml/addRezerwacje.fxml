@@ -36,7 +36,7 @@
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Klient:</Label>
-                <TextField styleClass="addTextWithButton" fx:id="peselTextField"/>
+                <TextField styleClass="addTextWithButton" fx:id="peselTextField" onKeyReleased="#peselTyped"/>
                 <Button styleClass="littlePlus" onAction="#addKlient">
                     <graphic>
                         <ImageView fitWidth="30" preserveRatio="true">
