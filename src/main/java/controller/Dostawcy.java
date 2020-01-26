@@ -104,6 +104,6 @@ public class Dostawcy extends MainView{
 
 
     public void moreInfo(String nip) {
-        //controller.changeScene("show_view.fxml", new ShowDost(nip, this, controller)); //TODO ShowDost i fxml(?)
+        controller.changeScene("addDostawy.fxml", new AddDostawy(controller, this, nip));
     }
 }

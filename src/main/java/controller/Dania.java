@@ -55,10 +55,11 @@ public class Dania extends MainView{
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
-                Node current = new Button(vNazwa);
+                Button current = new Button(vNazwa);
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
+                current.setOnAction(e->moreInfo("1"));
                 i++;
             }
             rs.close();
@@ -73,8 +74,8 @@ public class Dania extends MainView{
 
     }
 
-    @Override
-    public void moreInfo() {
+    public void moreInfo(String id) {
+        controller.changeScene("addDania.fxml", new AddDania(controller, this, id));
 
     }
 }

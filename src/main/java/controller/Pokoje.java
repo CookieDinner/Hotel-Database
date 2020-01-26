@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import main.java.base.DataBase;
 
@@ -31,5 +32,20 @@ public class Pokoje extends MainView {
         lazienka.setStyle("-fx-padding: 0 0 0 0;");
         lazienka.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(numer, cena, liczbaLozek, telewizor, lazienka);
+
+        Button button = new Button("lol");
+        button.getStyleClass().add("field");
+        button.getStyleClass().add("tag");
+        button.setOnAction(e->moreInfo("1"));
+        fillableRows.getChildren().add(button);
+    }
+
+    @Override
+    public void search(){
+
+    }
+
+    public void moreInfo(String numer){
+        controller.changeScene("addPokoj.fxml", new AddPokoj(controller, this, numer));
     }
 }
