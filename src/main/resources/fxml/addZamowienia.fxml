@@ -43,7 +43,7 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Dania:</Label>
-                <ComboBox promptText="Wybierz" fx:id="edania"/>
+                <ComboBox promptText="Wybierz" fx:id="edania" onAction="#chooseDanie"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel"/>

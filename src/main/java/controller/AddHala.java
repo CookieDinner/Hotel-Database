@@ -4,6 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class AddHala {
     private Controller controller;
     private Hale hale;
@@ -29,11 +33,19 @@ public class AddHala {
     @FXML
     private void initialize(){
         if(look){
-            saveButton.setVisible(false);
-            numer.setText("");  // TODO
-            numer.setEditable(false);
-            lMiejsc.setText("");    // TODO
-            lMiejsc.setEditable(false);
+            try {
+                saveButton.setVisible(false);
+                String str = "SELECT * FROM hotel_hale_konferencyjne WHERE numer_hali=\'" + numerHali + "\'";
+                PreparedStatement stmt = hale.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                numer.setText(rs.getString("numer_hali"));
+                numer.setEditable(false);
+                lMiejsc.setText(rs.getString("liczba_miejsc"));
+                lMiejsc.setEditable(false);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             editButton.setVisible(false);
         }
@@ -46,8 +58,9 @@ public class AddHala {
             numer.setEditable(false);
             lMiejsc.setEditable(false);
         }else if(checkCorrectness()){
+            hale.dataBase.addHale(Integer.parseInt(numer.getText()), Integer.parseInt(lMiejsc.getText()));
+            returnTo();
         }else{
-            // TODO
         }
 
     }

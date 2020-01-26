@@ -79,7 +79,6 @@ public class AddKlienci {
                 returnTo();
             }
         }else{
-            //TODO
         }
     }
     @FXML

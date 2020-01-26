@@ -1,11 +1,21 @@
 package main.java.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class AddDania {
     private Controller controller;
@@ -15,9 +25,12 @@ public class AddDania {
     @FXML
     private Button saveButton, editButton;
     @FXML
-    private TextField nazwa, cena, skladniki;
+    private TextField nazwa, cena;
+    @FXML
+    private ComboBox<String> skladniki;
     @FXML
     private VBox skladnikiScroll;
+    private ArrayList<String> arrSkladniki = new ArrayList<>();
 
     public AddDania(Controller controller, Dania dania){
         this.controller = controller;
@@ -34,17 +47,29 @@ public class AddDania {
     @FXML
     private void initialize(){
         if(look){
-            saveButton.setVisible(false);
-            nazwa.setText("Danie"); // TODO
-            nazwa.setEditable(false);
-            cena.setText("12");     // TODO
-            cena.setEditable(false);
-            skladniki.setEditable(false);
-//            for(String i : Skladniki)  // TODO
-//                skladnikiScroll.getChildren().add(createDanieButton(i));
+            try {
+                String str = "SELECT * FROM hotel_dania WHERE nazwa=\'" + id + "\'";
+                PreparedStatement stmt = dania.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                saveButton.setVisible(false);
+                nazwa.setText(rs.getString("nazwa"));
+                nazwa.setEditable(false);
+                cena.setText(Float.toString(rs.getFloat("cena")));
+                cena.setEditable(false);
+                skladniki.setEditable(false);
+                getSkladniki();
+                for (String i : arrSkladniki)
+                    skladnikiScroll.getChildren().add(createSkladnikButton(i));
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             editButton.setVisible(false);
         }
+        ObservableList<String> observPracownicy = FXCollections.observableArrayList();
+        observPracownicy.addAll(dania.dataBase.getSomeSkladniki());
+        skladniki.setItems(observPracownicy);
 
     }
     @FXML
@@ -59,6 +84,8 @@ public class AddDania {
             cena.setEditable(false);
             skladniki.setEditable(false);
         }else if(checkCorrectness()) {
+            dania.dataBase.addDanie(nazwa.getText(), Float.parseFloat(cena.getText()), arrSkladniki);
+            returnTo();
         }else{
             // TODO
         }
@@ -77,25 +104,36 @@ public class AddDania {
         return true;
     }
 
-    @FXML
-    private void danieReady(KeyEvent ke){
-        if(ke.getCode().equals(KeyCode.ENTER)){
-            if(isDanieCorrect(skladniki.getText())) {
-                skladnikiScroll.getChildren().add(createDanieButton(skladniki.getText()));
-                skladniki.setText("");
-            }
-        }
-    }
+//    @FXML
+//    private void danieReady(KeyEvent ke){
+//        if(ke.getCode().equals(KeyCode.ENTER)){
+//            if(isDanieCorrect(skladniki.getText())) {
+//                skladnikiScroll.getChildren().add(createDanieButton(skladniki.getText()));
+//                skladniki.setText("");
+//            }
+//        }
+//    }
 
-    private Button createDanieButton(String nazwa){
+    private Button createSkladnikButton(String nazwa){
         Button button = new Button(nazwa);
         button.getStyleClass().add("danieButton");
         button.setOnAction(e->deleteButton(button));
         return button;
     }
 
+    @FXML
+    private void chooseSkladnik(){
+        String temp_nazwa = skladniki.getValue().toString();
+        arrSkladniki.add(temp_nazwa);
+        skladnikiScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+    }
+
     private void deleteButton(Button toDelete){
         skladnikiScroll.getChildren().remove(toDelete);
+        arrSkladniki.clear();
+        for (Node i : skladnikiScroll.getChildren()) {
+            arrSkladniki.add(((Button) i).getText());
+        }
     }
 
     private boolean checkCorrectness(){
@@ -121,4 +159,16 @@ public class AddDania {
         return correct;
     }
 
+    private void getSkladniki(){
+        try {
+            String str = "select d.nazwa, s.skladnik from hotel_dania d inner join hotel_sklad_dania s on (d.id_dania=s.id_dania) where d.nazwa=\'" + id + "\'";
+            PreparedStatement stmt = dania.dataBase.getCon().prepareStatement(str);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                arrSkladniki.add(rs.getString("skladnik"));
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

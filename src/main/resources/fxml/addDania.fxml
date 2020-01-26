@@ -50,7 +50,7 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Składniki:</Label>
-                <TextField styleClass="addTextField" fx:id="skladniki" onKeyReleased="#danieReady"/>
+                <ComboBox promptText="Wybierz" fx:id="skladniki" onAction="#chooseSkladnik"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel"/>

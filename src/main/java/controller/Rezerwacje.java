@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -53,8 +54,9 @@ public class Rezerwacje extends MainView{
         tagsHBox.getChildren().addAll(imie, nazwisko, pokoj, dataZameldowania, dataWymeldowania);
 
         try {
+            String str = "select k.imie, k.nazwisko, rp.pokoj, r.* from hotel_klienci k inner join hotel_rezerwacje r on (r.klient=k.pesel) inner join hotel_pracownicy p on (r.pracownik=p.pesel) inner join hotel_rezerwacja_pokoju rp on (r.id_rezerwacji=rp.rezerwacja)";
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_rezerwacje order by id_rezerwacji asc");
+            rs = stmt.executeQuery(str);
             populate(rs);
         }catch(SQLException ex){
             ex.printStackTrace();
@@ -62,21 +64,37 @@ public class Rezerwacje extends MainView{
     }
     private void populate(ResultSet rs){
         try {
+            fillableRows.getChildren().clear();
             int i = 0;
             while (rs.next()) {
-                String vId = rs.getString("id_rezerwacji");
-                Button current = new Button(vId);
+                String vImie = rs.getString("imie");
+                String vNazwisko = rs.getString("nazwisko");
+                Integer vPokoj = rs.getInt("pokoj");
+                Date vDatz = rs.getDate("data_zameldowania");
+                Date vDatw = rs.getDate("termin_wymeldowania");
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label imieL = new Label(vImie);
+                imieL.setPrefWidth(140);
+                Label nazwL = new Label(vNazwisko);
+                nazwL.setPrefWidth(210);
+                Label pokL = new Label(vPokoj.toString());
+                pokL.setPrefWidth(110);
+                Label datzL = new Label(vDatz.toString());
+                datzL.setPrefWidth(190);
+                Label datwL = new Label(vDatw.toString());
+                datwL.setPrefWidth(100);
+                aggregate.setStyle("-fx-alignment: center-left;");
+                aggregate.getChildren().addAll(imieL, nazwL, pokL, datzL, datwL);
+                current.setGraphic(aggregate);
                 fillableRows.getChildren().add(current);
+                Integer vId = rs.getInt("id_rezerwacji");
+                current.setOnAction(e->moreInfo());
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
-                current.setOnAction(e -> moreInfo(vId));
+                current.setOnAction(e -> moreInfo(vId.toString()));
                 i++;
             }
-//            Button button = new Button("Temp");
-//            button.getStyleClass().add("field");
-//            button.getStyleClass().add("tag");
-//            button.setOnAction(e -> moreInfo("1"));
-//            fillableRows.getChildren().add(button);
             rs.close();
             stmt.close();
         }catch(SQLException ex){
