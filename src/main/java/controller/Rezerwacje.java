@@ -65,6 +65,7 @@ public class Rezerwacje extends MainView{
                 current.getStyleClass().add("tag");
                 i++;
             }
+            populate(rs);
             rs.close();
             stmt.close();
         }catch(SQLException ex){
@@ -72,13 +73,20 @@ public class Rezerwacje extends MainView{
         }
     }
 
+    private void populate(ResultSet rs){
+        Button button = new Button("Temp");
+        button.getStyleClass().add("field");
+        button.getStyleClass().add("tag");
+        button.setOnAction(e->moreInfo("1"));
+        fillableRows.getChildren().add(button);
+    }
+
     @Override
     public void search() {
 
     }
 
-    @Override
-    public void moreInfo() {
-
+    public void moreInfo(String id) {
+        controller.changeScene("addRezerwacje.fxml", new AddRezerwacje(controller, this, id));
     }
 }

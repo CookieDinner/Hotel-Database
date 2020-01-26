@@ -59,10 +59,11 @@ public class Pracownicy extends MainView{
             int i = 0;
             while(rs.next()){
                 String vNazwisko = rs.getString("nazwisko");
-                Node current = new Button(vNazwisko);
+                Button current = new Button(vNazwisko);
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
+                current.setOnAction(e->moreInfo("98092200114"));
                 i++;
             }
             rs.close();
@@ -77,8 +78,7 @@ public class Pracownicy extends MainView{
 
     }
 
-    @Override
-    public void moreInfo() {
-        System.out.println("test");
+    public void moreInfo(String pesel) {
+        controller.changeScene("addPracownicy.fxml", new AddPracownicy(controller, this, pesel));
     }
 }

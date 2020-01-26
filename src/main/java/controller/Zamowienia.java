@@ -51,8 +51,9 @@ public class Zamowienia extends MainView{
             int i = 0;
             while(rs.next()){
                 String vId = rs.getString("id_zamowienia");
-                Node current = new Button(vId);
+                Button current = new Button(vId);
                 fillableRows.getChildren().add(current);
+                current.setOnAction(e->moreInfo("1"));
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
                 i++;
@@ -69,8 +70,7 @@ public class Zamowienia extends MainView{
 
     }
 
-    @Override
-    public void moreInfo() {
-
+    public void moreInfo(String id) {
+        controller.changeScene("addZamowienia.fxml", new AddZamowienia(controller, this, id));
     }
 }

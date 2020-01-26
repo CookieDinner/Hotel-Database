@@ -97,6 +97,6 @@ public class Konferencje extends MainView{
     }
 
     public void moreInfo(String id_konf) {
-        controller.changeScene("show_view.fxml", new ShowKonf(id_konf, this, controller));
+        controller.changeScene("addKonferencje.fxml", new AddController(dataBase, this, controller, id_konf));
     }
 }
