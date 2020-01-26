@@ -69,7 +69,7 @@ public class AddController {
             epracownicy.setDisable(true);
             saveButton.setVisible(false);
         }else {
-            dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()), epracownicy.getValue(), Integer.parseInt(ehala.getValue()));
+            //dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()), epracownicy.getValue(), Integer.parseInt(ehala.getValue()));
         }
     }
 

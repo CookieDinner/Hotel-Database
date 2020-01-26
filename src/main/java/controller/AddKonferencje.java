@@ -17,6 +17,7 @@ import main.java.base.DataBase;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,7 @@ public class AddKonferencje {
     private Controller controller;
     private boolean look;
     private String id_konf;
+    private ArrayList<String> pracownicy = new ArrayList<>();
 
     public AddKonferencje(DataBase dataBase, Konferencje konferencje, Controller controller){
         this.dataBase = dataBase;
@@ -80,7 +82,9 @@ public class AddKonferencje {
                 ex.printStackTrace();
             }
             String hala = ehala.getSelectionModel().getSelectedItem().toString();
-            dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()), pesel, Integer.parseInt(hala.substring(0, hala.indexOf(","))));
+            dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()),
+                    Integer.parseInt(eliczba_osob.getText()), pesel,
+                    Integer.parseInt(hala.substring(0, hala.indexOf(","))),pracownicy);
             returnTo();
         }
     }
@@ -93,27 +97,37 @@ public class AddKonferencje {
     @FXML
     private void initialize(){
         if(look){
-            enazwa.setText("nazwa");    // TODO
-            enazwa.setEditable(false);
-            edata.setValue(Main.dateCreate("2020-01-13"));  // TODO
-            edata.setDisable(true);
-            eliczba_osob.setText("-1/12");  // TODO
-            eliczba_osob.setEditable(false);
-            ehala.setValue("2");    // TODO
-            ehala.setDisable(true);
-//            for (String i : pracownicy)   // TODO
-//                pracownicyScroll.getChildren().add(createPracownikButton(i));
-            epracownicy.setDisable(true);
-            saveButton.setVisible(false);
+            try {
+                String str = "SELECT * FROM hotel_konferencje WHERE id_konferencji=" + id_konf;
+                PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                enazwa.setText(rs.getString("nazwa"));    // TODO
+                enazwa.setEditable(false);
+                edata.setValue(rs.getDate("data_konferencji").toLocalDate());//Main.dateCreate("2020-01-13"));  // TODO
+                edata.setDisable(true);
+                eliczba_osob.setText(Integer.toString(rs.getInt("liczba_osob")));  // TODO
+                eliczba_osob.setEditable(false);
+                ehala.setValue(Integer.toString(rs.getInt("hala_konferencyjna")));    // TODO
+                ehala.setDisable(true);
+                getPracownicy();
+                //pracownicyScroll.getChildren().add(createPracownikButton(epracownicy.getValue().toString()));
+                for (String i : pracownicy)   // TODO
+                    pracownicyScroll.getChildren().add(createPracownikButton(i));
+                epracownicy.setDisable(true);
+                saveButton.setVisible(false);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else {
             editImageView.setImage(null);   // TODO
-            ObservableList<String> observPracownicy = FXCollections.observableArrayList();
-            observPracownicy.addAll(konferencje.dataBase.getSomePracownicy());
-            epracownicy.setItems(observPracownicy);
-            ObservableList<String> observHale = FXCollections.observableArrayList();
-            observHale.addAll(konferencje.dataBase.getSomeHale());
-            ehala.setItems(observHale);
         }
+        ObservableList<String> observPracownicy = FXCollections.observableArrayList();
+        observPracownicy.addAll(konferencje.dataBase.getSomePracownicy());
+        epracownicy.setItems(observPracownicy);
+        ObservableList<String> observHale = FXCollections.observableArrayList();
+        observHale.addAll(konferencje.dataBase.getSomeHale());
+        ehala.setItems(observHale);
     }
 
     @FXML
@@ -129,7 +143,18 @@ public class AddKonferencje {
     }
     @FXML
     private void choosePracownik(){
-        pracownicyScroll.getChildren().add(createPracownikButton(epracownicy.getValue().toString()));
+        String temp_nazwisko = epracownicy.getValue().toString();
+        try {
+            String str = "SELECT * FROM hotel_pracownicy WHERE upper(nazwisko)=upper(\'" + temp_nazwisko + "\')";
+            PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            pracownicy.add(rs.getString("pesel"));
+            stmt.close();
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        pracownicyScroll.getChildren().add(createPracownikButton(temp_nazwisko));
     }
 
     private Button createPracownikButton(String nazwa) {
@@ -141,6 +166,34 @@ public class AddKonferencje {
 
     private void deleteButton(Button toDelete) {
         pracownicyScroll.getChildren().remove(toDelete);
+        pracownicy.clear();
+        getPracownicy();
+        try {
+            for (Node i : pracownicyScroll.getChildren()) {
+                String temp_nazwisko = ((Button) i).getText();
+                String str = "SELECT * FROM hotel_pracownicy WHERE upper(nazwisko)=upper(\'" + temp_nazwisko + "\')";
+                PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                pracownicy.add(rs.getString("pesel"));
+                stmt.close();
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void getPracownicy(){
+        try {
+            String str = "select n.*, p.nazwisko from hotel_pracownicy p inner join hotel_nadzor_konferencji n on (p.pesel=n.pracownik) where n.id_konferencji=" + id_konf;
+            PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                pracownicy.add(rs.getString("nazwisko"));
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
