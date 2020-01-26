@@ -54,7 +54,7 @@ public class AddKlienci {
             pesel.setEditable(false);
             numerTel.setEditable(false);
             adresZa.setEditable(false);
-        }else{
+        }else if(checkCorrectness()){
             // TODO
         }
     }
@@ -68,5 +68,40 @@ public class AddKlienci {
         pesel.setEditable(true);
         numerTel.setEditable(true);
         adresZa.setEditable(true);
+    }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (imie.getText().isEmpty() || imie.getText().length() > 30){
+            correct = false;
+            imie.getStyleClass().add("wrong");
+        }else{
+            while (imie.getStyleClass().remove("wrong"));
+        }
+        if (nazwisko.getText().isEmpty() || nazwisko.getText().length() > 30){
+            correct = false;
+            nazwisko.getStyleClass().add("wrong");
+        }else{
+            while (nazwisko.getStyleClass().remove("wrong"));
+        }
+        if (!pesel.getText().matches("[0-9]{11}")){
+            correct = false;
+            pesel.getStyleClass().add("wrong");
+        }else{
+            while (pesel.getStyleClass().remove("wrong"));
+        }
+        if (!numerTel.getText().matches("[0-9]{9}")){
+            correct = false;
+            numerTel.getStyleClass().add("wrong");
+        }else{
+            while (numerTel.getStyleClass().remove("wrong"));
+        }
+        if (adresZa.getText().isEmpty() || adresZa.getText().length() > 50){
+            correct = false;
+            adresZa.getStyleClass().add("wrong");
+        }else{
+            while (adresZa.getStyleClass().remove("wrong"));
+        }
+        return correct;
     }
 }

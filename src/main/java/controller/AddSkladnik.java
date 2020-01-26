@@ -57,7 +57,7 @@ public class AddSkladnik {
             dostawca.setEditable(false);
             edit = false;
             saveButton.setVisible(false);
-        }else{
+        }else if(checkCorrectness()){
             // TODO
         }
     }
@@ -72,4 +72,34 @@ public class AddSkladnik {
         dostawca.setEditable(true);
         edit = true;
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (enazwa.getText().isEmpty() || enazwa.getText().length() > 30){
+            correct = false;
+            enazwa.getStyleClass().add("wrong");
+        }else{
+            while(enazwa.getStyleClass().remove("wrong"));
+        }
+        if (!stanM.getText().matches("[0-9]{1,5}")){
+            correct = false;
+            stanM.getStyleClass().add("wrong");
+        }else{
+            while (stanM.getStyleClass().remove("wrong"));
+        }
+        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
+            correct = false;
+            cena.getStyleClass().add("wrong");
+        }else{
+            while (cena.getStyleClass().remove("wrong"));
+        }
+        if (!dostawca.getText().matches("[0-9]{11}")){
+            correct = false;
+            dostawca.getStyleClass().add("wrong");
+        }else{
+            while (dostawca.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
 }

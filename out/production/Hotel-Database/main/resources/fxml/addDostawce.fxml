@@ -14,13 +14,26 @@
             stylesheets="@../style/style.css"
             style="-fx-padding: 0 20 20 20;">
     <top>
-        <Button styleClass="returnButton" onAction="#returnTo">
-            <graphic>
-                <ImageView fitWidth="25" preserveRatio="true">
-                    <Image url="@../images/arrow.png"/>
-                </ImageView>
-            </graphic>
-        </Button>
+        <BorderPane>
+            <left>
+                <Button styleClass="returnButton" onAction="#returnTo">
+                    <graphic>
+                        <ImageView fitWidth="25" preserveRatio="true">
+                            <Image url="@../images/arrow.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </left>
+            <right>
+                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
+                    <graphic>
+                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
+                            <Image url="@../images/edit.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </right>
+        </BorderPane>
     </top>
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
@@ -30,7 +43,7 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Nazwa:</Label>
-                <TextField styleClass="addTextField" fx:id="nazwa"/>
+                <TextField styleClass="addTextField" fx:id="enazwa"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Adres:</Label>
@@ -44,7 +57,7 @@
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addDostawce">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addDostawce" fx:id="saveButton">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>

@@ -108,7 +108,9 @@ public class AddRezerwacje {
             edit = false;
             saveButton.setVisible(false);
         }else{
-            // TODO
+            if(checkCorrectness()){
+                // TODO
+            }
         }
     }
     @FXML
@@ -131,6 +133,36 @@ public class AddRezerwacje {
         rabatTextField.setEditable(true);
         edit = true;
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (!peselTextField.getText().matches("^[0-9]{11}$")){
+            correct = false;
+            peselTextField.getStyleClass().add("wrong");
+        }else{
+            while(peselTextField.getStyleClass().remove("wrong"));
+        }
+        if (epracownicy.getValue() == null){
+            correct = false;
+            epracownicy.getStyleClass().add("wrong");
+        }else{
+            while(epracownicy.getStyleClass().remove("wrong"));
+        }
+        if (zdata.getValue() == null || !zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            zdata.getStyleClass().add("wrong");
+        }else{
+            while(zdata.getStyleClass().remove("wrong"));
+        }
+        if (wdata.getValue() == null || !wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            wdata.getStyleClass().add("wrong");
+        }else{
+            while(wdata.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
     @FXML
     private void peselTyped(){
         ArrayList<String> pesels = new ArrayList<>();
