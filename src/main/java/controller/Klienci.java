@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import main.java.base.DataBase;
 
@@ -11,7 +12,7 @@ public class Klienci extends MainView {
     }
     @Override
     public void plus() {
-        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, "", "main_view.fxml"));
+        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, "", "main_view.fxml", false));
     }
 
     @FXML
@@ -29,14 +30,20 @@ public class Klienci extends MainView {
         numerTel.getStyleClass().add("tag");
         pesel.getStyleClass().add("tag");
         tagsHBox.getChildren().addAll(imie, nazwisko, numerTel, pesel);
+
+        Button button = new Button("halo");
+        button.setOnAction(e->moreInfo("98092200114"));
+        button.getStyleClass().add("tag");
+        button.getStyleClass().add("field");
+        fillableRows.getChildren().add(button);
     }
     @Override
     public void search() {
         System.out.println(searchField.getText());
     }
 
-    public void moreInfo() {
-
+    public void moreInfo(String pesel) {
+        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, pesel, "main_view.fxml", true));
     }
 
 }

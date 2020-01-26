@@ -33,7 +33,7 @@
 
     </top>
     <center>
-        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
+        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 25 0 0 100">
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Nazwa:</Label>
                 <TextField styleClass="addTextField" fx:id="enazwa"/>
@@ -52,12 +52,18 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Pracownicy:</Label>
-                <ComboBox promptText="Wybierz" fx:id="epracownicy"/>
+                <ComboBox promptText="Wybierz" fx:id="epracownicy" onAction="#choosePracownik"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel"/>
+                <ScrollPane style="-fx-border-width: 0; -fx-min-height: 120px; -fx-max-width: 300px; -fx-min-width: 300px; -fx-background-color: none;" hbarPolicy="NEVER">
+                    <VBox fx:id="pracownicyScroll"/>
+                </ScrollPane>
             </HBox>
         </VBox>
     </center>
     <bottom>
-        <HBox style="-fx-padding: 100 0 0 550">
+        <HBox style="-fx-padding: 50 0 0 550">
             <Button styleClass="addButton" onAction="#addKonferencje" fx:id="saveButton">Dodaj</Button>
         </HBox>
     </bottom>

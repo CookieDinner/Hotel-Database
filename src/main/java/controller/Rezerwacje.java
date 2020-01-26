@@ -77,7 +77,7 @@ public class Rezerwacje extends MainView{
         Button button = new Button("Temp");
         button.getStyleClass().add("field");
         button.getStyleClass().add("tag");
-        button.setOnAction(e->moreInfo());
+        button.setOnAction(e->moreInfo("1"));
         fillableRows.getChildren().add(button);
     }
 
@@ -86,8 +86,7 @@ public class Rezerwacje extends MainView{
 
     }
 
-    @Override
-    public void moreInfo() {
-        controller.changeScene("show_rezerwacje.fxml", new ShowRezerwacje(controller, this));
+    public void moreInfo(String id) {
+        controller.changeScene("addRezerwacje.fxml", new AddRezerwacje(controller, this, id));
     }
 }

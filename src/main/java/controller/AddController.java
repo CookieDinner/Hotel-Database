@@ -10,28 +10,34 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import main.java.Main;
 import main.java.base.DataBase;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AddController {
     @FXML
-    TextField enazwa;
+    private TextField enazwa;
     @FXML
-    DatePicker edata;
+    private DatePicker edata;
     @FXML
-    TextField eliczba_osob;
+    private TextField eliczba_osob;
     @FXML
-    ComboBox ehala;
+    private ComboBox<String> ehala;
     @FXML
-    ComboBox epracownicy;
+    private ComboBox<String> epracownicy;
     @FXML
     private ImageView editImageView;
     @FXML
     private Button editButton, saveButton;
+    @FXML
+    private VBox pracownicyScroll;
 
     private DataBase dataBase;
     private Konferencje konferencje;
@@ -57,13 +63,13 @@ public class AddController {
     public void addKonferencje(){
         if(look){
             enazwa.setEditable(false);
-            edata.setEditable(false);
+            edata.setDisable(true);
             eliczba_osob.setEditable(false);
-            ehala.setEditable(false);
-            epracownicy.setEditable(false);
+            ehala.setDisable(true);
+            epracownicy.setDisable(true);
             saveButton.setVisible(false);
         }else {
-            dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()));
+            dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()), Integer.parseInt(eliczba_osob.getText()));    // TODO
         }
     }
 
@@ -75,19 +81,20 @@ public class AddController {
     @FXML
     private void initialize(){
         if(look){
-            enazwa.setText("nazwa");
+            enazwa.setText("nazwa");    // TODO
             enazwa.setEditable(false);
-            edata.setValue(null);
-            edata.setEditable(false);
-            eliczba_osob.setText("-1/12");
+            edata.setValue(Main.dateCreate("2020-01-13"));  // TODO
+            edata.setDisable(true);
+            eliczba_osob.setText("-1/12");  // TODO
             eliczba_osob.setEditable(false);
-//            ehala
-            ehala.setEditable(false);
-//            epracownicy
-            epracownicy.setEditable(false);
+            ehala.setValue("2");    // TODO
+            ehala.setDisable(true);
+//            for (String i : pracownicy)   // TODO
+//                pracownicyScroll.getChildren().add(createPracownikButton(i));
+            epracownicy.setDisable(true);
             saveButton.setVisible(false);
         }else {
-            editImageView.setImage(null);
+            editImageView.setImage(null);   // TODO
             ObservableList<String> observPracownicy = FXCollections.observableArrayList();
             observPracownicy.addAll(konferencje.dataBase.getSomePracownicy());
             epracownicy.setItems(observPracownicy);
@@ -98,10 +105,26 @@ public class AddController {
         if(!look)
             return;
         enazwa.setEditable(true);
-        edata.setEditable(true);
+        edata.setDisable(false);
         eliczba_osob.setEditable(true);
-        ehala.setEditable(true);
-        epracownicy.setEditable(true);
+        ehala.setDisable(false);
+        epracownicy.setDisable(false);
         saveButton.setVisible(true);
+    }
+
+    @FXML
+    private void choosePracownik(){
+        pracownicyScroll.getChildren().add(createPracownikButton(epracownicy.getValue().toString()));
+    }
+
+    private Button createPracownikButton(String nazwa){
+        Button button = new Button(nazwa);
+        button.getStyleClass().add("danieButton");
+        button.setOnAction(e->deleteButton(button));
+        return button;
+    }
+
+    private void deleteButton(Button toDelete){
+        pracownicyScroll.getChildren().remove(toDelete);
     }
 }
