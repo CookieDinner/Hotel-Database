@@ -1,69 +1,22 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import main.java.Main;
 
 public class AddPracownicy {
     private Controller controller;
     private Pracownicy pracownicy;
-    private boolean premia = false, look, edit;
-    private String peselString;
+    private boolean premia = false;
     @FXML
-    private Button saveButton, editButton;
-    @FXML
-    private TextField premiaTextField, imie, nazwisko, pesel, adres, etat, placa, umowa;
-    @FXML
-    private DatePicker dataZa, dataUr;
-    @FXML
-    private CheckBox premiaBox;
+    private TextField premiaTextField;
 
     public AddPracownicy(Controller controller, Pracownicy pracownicy){
         this.controller = controller;
         this.pracownicy = pracownicy;
-        this.look = false;
-        this.edit = true;
-    }
-
-    public AddPracownicy(Controller controller, Pracownicy pracownicy, String peselString){
-        this.controller = controller;
-        this.pracownicy = pracownicy;
-        this.peselString = peselString;
-        this.look = true;
-        this.edit = false;
     }
     @FXML
     private void initialize(){
-        if(look){
-            saveButton.setVisible(false);
-            imie.setText("");   // TODO
-            imie.setEditable(false);
-            nazwisko.setText("");   // TODO
-            nazwisko.setEditable(false);
-            pesel.setText("");  // TODO
-            pesel.setEditable(false);
-            adres.setText("");  // TODO
-            adres.setEditable(false);
-            etat.setText("");   // TODO
-            etat.setEditable(false);
-            placa.setText("");  // TODO
-            placa.setEditable(false);
-            umowa.setText("");  // TODO
-            umowa.setEditable(false);
-            premiaTextField.setText("");    // TODO
-            premiaTextField.setEditable(false);
-            dataUr.setValue(Main.dateCreate("2020-10-13")); // TODO
-            dataUr.setDisable(true);
-            dataZa.setValue(Main.dateCreate("2010-01-01")); // TODO
-            dataZa.setDisable(true);
-            premiaBox.setSelected(true);    // TODO
-            premiaBox.setOnAction(e->{if(!edit) premiaBox.setSelected(!premiaBox.isSelected());});
-        }else{
-            editButton.setVisible(false);
-        }
+
     }
     @FXML
     private void returnTo(){
@@ -71,54 +24,20 @@ public class AddPracownicy {
     }
     @FXML
     private void addPracownicy(){
-        if(look){
-            edit = false;
-            saveButton.setVisible(false);
-            imie.setEditable(false);
-            nazwisko.setEditable(false);
-            pesel.setEditable(false);
-            adres.setEditable(false);
-            etat.setEditable(false);
-            placa.setEditable(false);
-            umowa.setEditable(false);
-            premiaTextField.setEditable(false);
-            dataUr.setDisable(true);
-            dataZa.setDisable(true);
-        }else{
-            // TODO
-        }
+
     }
     @FXML
     private void premiaCheck(){
-        if(edit) {
-            premia = !premia;
-            if (premia) {
-                premiaTextField.setEditable(true);
-                while (premiaTextField.getStyleClass().remove("non-writableSmall")) ;
-                premiaTextField.getStyleClass().add("addTextWithButtonSmall");
-            } else {
-                premiaTextField.setEditable(false);
-                premiaTextField.setText("");
-                while (premiaTextField.getStyleClass().remove("addTextWithButtonSmall")) ;
-                premiaTextField.getStyleClass().add("non-writableSmall");
-            }
+        premia = !premia;
+        if(premia){
+            premiaTextField.setEditable(true);
+            while(premiaTextField.getStyleClass().remove("non-writableSmall"));
+            premiaTextField.getStyleClass().add("addTextWithButtonSmall");
+        }else{
+            premiaTextField.setEditable(false);
+            premiaTextField.setText("");
+            while(premiaTextField.getStyleClass().remove("addTextWithButtonSmall"));
+            premiaTextField.getStyleClass().add("non-writableSmall");
         }
-    }
-    @FXML
-    private void edit(){
-        if(!look)
-            return;
-        edit = true;
-        saveButton.setVisible(true);
-        imie.setEditable(true);
-        nazwisko.setEditable(true);
-        pesel.setEditable(true);
-        adres.setEditable(true);
-        etat.setEditable(true);
-        placa.setEditable(true);
-        umowa.setEditable(true);
-        premiaTextField.setEditable(true);
-        dataUr.setDisable(false);
-        dataZa.setDisable(false);
     }
 }

@@ -1,16 +1,13 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Pracownicy extends MainView{
     @FXML
@@ -54,16 +51,43 @@ public class Pracownicy extends MainView{
         tagsHBox.getChildren().addAll(imie, nazwisko, etat, placa, data);
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_pracownicy");
+            rs = stmt.executeQuery("SELECT * FROM hotel_pracownicy order by nazwisko asc");
+            populate(rs);
+        } catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
 
+    public void populate(ResultSet rs){
+        try {
+            fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
                 String vNazwisko = rs.getString("nazwisko");
-                Button current = new Button(vNazwisko);
+                String vImie = rs.getString("imie");
+                String vEtat = rs.getString("etat");
+                String vPlaca = rs.getString("placa");
+                Date vData = rs.getDate("data_zatrudnienia");
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label nazwL = new Label(vNazwisko);
+                nazwL.setPrefWidth(190);
+                Label imieL = new Label(vImie);
+                imieL.setPrefWidth(200);
+                Label etatL = new Label(vEtat);
+                etatL.setPrefWidth(145);
+                Label placaL = new Label(vPlaca);
+                placaL.setPrefWidth(110);
+                Label dataL = new Label(vData.toString());
+                dataL.setPrefWidth(110);
+                aggregate.setStyle("-fx-alignment: center-left;");
+                aggregate.getChildren().addAll(nazwL, imieL, etatL, placaL, dataL);
+                current.setGraphic(aggregate);
+                String pesel = rs.getString("pesel");
+                current.setOnAction(e -> moreInfo(pesel));
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
-                current.setOnAction(e->moreInfo("98092200114"));
                 i++;
             }
             rs.close();
@@ -75,10 +99,22 @@ public class Pracownicy extends MainView{
 
     @Override
     public void search() {
-
+        try {
+            String str = "SELECT * FROM (\n" +
+                    "SELECT * FROM hotel_pracownicy where upper(nazwisko) like UPPER(?)||'%'\n" +
+                    "UNION\n" +
+                    "SELECT * FROM hotel_pracownicy where upper(imie) like UPPER(?)||'%') order by nazwisko";
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement(str);
+            pstmt.setString(1, searchField.getText());
+            pstmt.setString(2, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     public void moreInfo(String pesel) {
-        controller.changeScene("addPracownicy.fxml", new AddPracownicy(controller, this, pesel));
+        System.out.println("test");
     }
 }

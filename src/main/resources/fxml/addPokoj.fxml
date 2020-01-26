@@ -14,26 +14,13 @@
             stylesheets="@../style/style.css"
             style="-fx-padding: 0 20 20 20;">
     <top>
-        <BorderPane>
-            <left>
-                <Button styleClass="returnButton" onAction="#returnTo">
-                    <graphic>
-                        <ImageView fitWidth="25" preserveRatio="true">
-                            <Image url="@../images/arrow.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </left>
-            <right>
-                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
-                    <graphic>
-                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
-                            <Image url="@../images/edit.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </right>
-        </BorderPane>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </top>
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
@@ -51,17 +38,17 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Telewizor:</Label>
-                <CheckBox styleClass="check" style="-fx-min-width: 300px;" fx:id="telewizorCheck"/>
+                <CheckBox styleClass="check" style="-fx-min-width: 300px;"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Łazienka:</Label>
-                <CheckBox styleClass="check" style="-fx-min-width: 300px;" fx:id="lazienkaCheck"/>
+                <CheckBox styleClass="check" style="-fx-min-width: 300px;"/>
             </HBox>
         </VBox>
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addPokoj" fx:id="saveButton">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addPokoj">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>

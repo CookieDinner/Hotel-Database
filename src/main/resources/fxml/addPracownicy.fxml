@@ -17,26 +17,13 @@
             stylesheets="@../style/style.css"
             style="-fx-padding: 0 20 20 20;">
     <top>
-        <BorderPane>
-            <left>
-                <Button styleClass="returnButton" onAction="#returnTo">
-                    <graphic>
-                        <ImageView fitWidth="25" preserveRatio="true">
-                            <Image url="@../images/arrow.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </left>
-            <right>
-                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
-                    <graphic>
-                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
-                            <Image url="@../images/edit.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </right>
-        </BorderPane>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </top>
     <center>
         <HBox minWidth="500" spacing="30" style="-fx-padding: 100 0 0 25">
@@ -81,7 +68,7 @@
                 </HBox>
                 <HBox style="-fx-alignment: center;">
                     <Label styleClass="typeLabelSmall">Premia:</Label>
-                    <CheckBox styleClass="check" onMouseClicked="#premiaCheck" fx:id="premiaBox"/>
+                    <CheckBox styleClass="check" onMouseClicked="#premiaCheck"/>
                     <TextField styleClass="non-writableSmall" editable="false" fx:id="premiaTextField"/>
                 </HBox>
             </VBox>
@@ -89,7 +76,7 @@
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addPracownicy" fx:id="saveButton">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addPracownicy">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>

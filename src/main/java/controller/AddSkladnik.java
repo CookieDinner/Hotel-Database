@@ -2,13 +2,13 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 
-public class AddDania {
+public class AddSkladnik {
     private Controller controller;
-    private Dania dania;
+    private Magazyn magazyn;
 
-    public AddDania(Controller controller, Dania dania){
+    public AddSkladnik(Controller controller, Magazyn magazyn){
         this.controller = controller;
-        this.dania = dania;
+        this.magazyn = magazyn;
     }
     @FXML
     private void initialize(){
@@ -16,10 +16,10 @@ public class AddDania {
     }
     @FXML
     private void returnTo(){
-        controller.changeScene("main_view.fxml", dania);
+        controller.changeScene("main_view.fxml", magazyn);
     }
     @FXML
-    private void addDania(){
+    private void addSkladnik(){
 
     }
 }

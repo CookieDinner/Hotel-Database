@@ -25,30 +25,33 @@
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Imie:</Label>
-                <TextField styleClass="addTextField" fx:id="imie"/>
+                <Label styleClass="typeLabel">Nazwa:</Label>
+                <TextField styleClass="addTextField" fx:id="enazwa"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Nazwisko:</Label>
-                <TextField styleClass="addTextField" fx:id="nazwisko"/>
+                <Label styleClass="typeLabel">Stan magazynu:</Label>
+                <TextField styleClass="addTextField" fx:id="stanM"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Pesel:</Label>
-                <TextField styleClass="addTextField" fx:id="pesel"/>
+                <Label styleClass="typeLabel">Cena:</Label>
+                <TextField styleClass="addTextField" fx:id="cena"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Numer telefonu:</Label>
-                <TextField styleClass="addTextField" fx:id="numerTel"/>
-            </HBox>
-            <HBox style="-fx-alignment: center;">
-                <Label styleClass="typeLabel">Adres zamieszkania:</Label>
-                <TextField styleClass="addTextField" fx:id="adresZa"/>
+                <Label styleClass="typeLabel">Dostawca:</Label>
+                <TextField styleClass="addTextWithButton"/>
+                <Button style="-fx-background-color: #d2d2d2; -fx-max-width: 50px; -fx-max-height: 50px; -fx-min-width: 50px; -fx-min-height: 50px;">
+                    <graphic>
+                        <ImageView fitWidth="30" preserveRatio="true">
+                            <Image url="@../images/plusv2.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
             </HBox>
         </VBox>
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addKlienci">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addSkladnik">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>

@@ -17,52 +17,39 @@
             stylesheets="@../style/style.css"
             style="-fx-padding: 0 20 20 20;">
     <top>
-        <BorderPane>
-            <left>
-                <Button styleClass="returnButton" onAction="#returnTo">
-                    <graphic>
-                        <ImageView fitWidth="25" preserveRatio="true">
-                            <Image url="@../images/arrow.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </left>
-            <right>
-                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
-                    <graphic>
-                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
-                            <Image url="@../images/edit.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </right>
-        </BorderPane>
+        <Button styleClass="returnButton" onAction="#returnTo">
+            <graphic>
+                <ImageView fitWidth="25" preserveRatio="true">
+                    <Image url="@../images/arrow.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </top>
     <center>
         <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Nazwa:</Label>
-                <TextField styleClass="addTextField" fx:id="nazwa"/>
+                <TextField styleClass="addTextField"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Cena:</Label>
-                <TextField styleClass="addTextField" fx:id="cena"/>
+                <TextField styleClass="addTextField"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Składniki:</Label>
-                <TextField styleClass="addTextField" fx:id="skladniki" onKeyReleased="#danieReady"/>
+                <TextField styleClass="addTextField"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel"/>
                 <ScrollPane style="-fx-border-width: 0; -fx-min-height: 150px; -fx-max-width: 300px; -fx-min-width: 300px; -fx-background-color: none;" hbarPolicy="NEVER">
-                    <VBox fx:id="skladnikiScroll"/>
+
                 </ScrollPane>
             </HBox>
         </VBox>
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addDania" fx:id="saveButton">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addDania">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>
