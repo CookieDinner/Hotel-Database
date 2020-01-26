@@ -27,7 +27,6 @@ public class AddPracownicy {
         this.look = false;
         this.edit = true;
     }
-
     public AddPracownicy(Controller controller, Pracownicy pracownicy, String peselString){
         this.controller = controller;
         this.pracownicy = pracownicy;

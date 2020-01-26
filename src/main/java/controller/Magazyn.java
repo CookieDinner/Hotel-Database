@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,9 +31,14 @@ public class Magazyn extends MainView{
         super(controller, dataBase);
     }
 
+    @Override
+    public void plus() {
+        controller.changeScene("addSkladnik.fxml", new AddSkladnik(controller, this));
+    }
+
     @FXML
     public void initialize(){
-        plusButton.setImage(null);
+        //plusButton.setImage(null);
         title.setText("Magazyn");
         Label skladnik = new Label("Składnik");
         Label ilosc = new Label("Ilość");
@@ -51,13 +57,36 @@ public class Magazyn extends MainView{
 
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_skladniki");
-
+            rs = stmt.executeQuery("SELECT s.*, d.nazwa as \"NAZWA_DOSTAWCY\" FROM hotel_skladniki s inner join hotel_dostawcy d ON (d.nip=s.dostawca) order by s.nazwa asc");
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+    public void populate(ResultSet rs){
+        try {
+            fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
-                Node current = new Button(vNazwa);
+                Integer vIlosc = rs.getInt("stan_magazynu");
+                String vDostawca = rs.getString("nazwa_dostawcy");
+                Float vCena = rs.getFloat("cena");
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label nazwaL = new Label(vNazwa);
+                nazwaL.setPrefWidth(330);
+                Label iloscL = new Label(vIlosc.toString());
+                iloscL.setPrefWidth(80);
+                Label dostL = new Label(vDostawca.toString());
+                dostL.setPrefWidth(330);
+                Label cenaL = new Label(vCena.toString());
+                cenaL.setPrefWidth(110);
+                aggregate.setStyle("-fx-alignment: center-left;");
+                aggregate.getChildren().addAll(nazwaL, iloscL, dostL, cenaL);
+                current.setGraphic(aggregate);
                 fillableRows.getChildren().add(current);
+                current.setOnAction(e->moreInfo(vNazwa));
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
                 i++;
@@ -68,14 +97,23 @@ public class Magazyn extends MainView{
             ex.printStackTrace();
         }
     }
-
     @Override
     public void search() {
-
+        try {
+            String st = "SELECT s.*, d.nazwa as \"NAZWA_DOSTAWCY\" FROM hotel_skladniki s inner join hotel_dostawcy d ON (d.nip=s.dostawca) where upper(s.nazwa) like UPPER(?)||'%'\n" +
+                    "UNION \n" +
+                    "SELECT s.*, d.nazwa as \"NAZWA_DOSTAWCY\" FROM hotel_skladniki s inner join hotel_dostawcy d ON (d.nip=s.dostawca) where upper(d.nazwa) like UPPER(?)||'%'";
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement(st);
+            pstmt.setString(1, searchField.getText());
+            pstmt.setString(2, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
-    @Override
-    public void moreInfo() {
+    public void moreInfo(String vNazwa) {
 
     }
 }

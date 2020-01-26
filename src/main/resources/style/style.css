@@ -212,7 +212,6 @@
     -fx-cursor: hand;
 }
 
-
 .addDate .button, .addDateSmall .button{
     -fx-min-width: 50px;
 }
@@ -270,17 +269,15 @@
     -fx-max-height: 50px;
 }
 
-.danieButton{
-    -fx-min-width: 300px;
-    -fx-max-width: 300px;
-    -fx-min-height: 30px;
-    -fx-max-height: 30px;
-    -fx-font-size: 16px;
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 20;
+.danieButton{	
+   -fx-min-width: 300px;	
+   -fx-max-width: 300px;
+   -fx-min-height: 30px;	
+   -fx-max-height: 30px;
+   -fx-font-size: 16px;
+   -fx-alignment: center-left;
+   -fx-padding: 0 0 0 20;
 }
-
-
 
 
 

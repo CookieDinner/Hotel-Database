@@ -37,6 +37,7 @@ public class AddHala {
         }else{
             editButton.setVisible(false);
         }
+
     }
     @FXML
     private void addHale(){
@@ -47,11 +48,13 @@ public class AddHala {
         }else{
             // TODO
         }
+
     }
     @FXML
     private void returnTo(){
         controller.changeScene("main_view.fxml", hale);
     }
+
     @FXML
     private void edit(){
         if(!look)

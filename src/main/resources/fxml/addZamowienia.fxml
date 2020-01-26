@@ -43,7 +43,7 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Dania:</Label>
-                <TextField styleClass="addTextField" fx:id="dania" onKeyReleased="#danieReady"/>
+                <ComboBox promptText="Wybierz" fx:id="edania"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel"/>
@@ -57,7 +57,7 @@
     </center>
     <bottom>
         <HBox style="-fx-padding: 100 0 0 550">
-            <Button styleClass="addButton" onAction="#addRezerwacje" fx:id="saveButton">Dodaj</Button>
+            <Button styleClass="addButton" onAction="#addZamowienie" fx:id="saveButton">Dodaj</Button>
         </HBox>
     </bottom>
 </BorderPane>

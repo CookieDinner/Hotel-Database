@@ -20,7 +20,7 @@ public class Konferencje extends MainView{
 
     @Override
     public void plus() {
-        controller.changeScene("addKonferencje.fxml", new AddController(dataBase, this, controller));
+        controller.changeScene("addKonferencje.fxml", new AddKonferencje(dataBase, this, controller));
     }
 
     @FXML
@@ -41,11 +41,11 @@ public class Konferencje extends MainView{
         tagsHBox.getChildren().addAll(nazwa, data, liczbaOsob, halaKonferencyjna);
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_konferencje");
+            rs = stmt.executeQuery("SELECT * FROM hotel_konferencje order by nazwa asc");
             populate(rs);
         } catch(SQLException ex){
-        ex.printStackTrace();
-    }
+            ex.printStackTrace();
+        }
 
     }
 
@@ -87,7 +87,7 @@ public class Konferencje extends MainView{
     @Override
     public void search() {
         try {
-            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM hotel_konferencje where upper(nazwa) like UPPER(?)||'%'");
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM hotel_konferencje where upper(nazwa) like UPPER(?)||'%' order by nazwa asc");
             pstmt.setString(1, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
@@ -97,6 +97,6 @@ public class Konferencje extends MainView{
     }
 
     public void moreInfo(String id_konf) {
-        controller.changeScene("addKonferencje.fxml", new AddController(dataBase, this, controller, id_konf));
+        controller.changeScene("addKonferencje.fxml", new AddKonferencje(dataBase, this, controller, id_konf));
     }
 }

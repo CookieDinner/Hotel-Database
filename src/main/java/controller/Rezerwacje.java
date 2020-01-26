@@ -54,31 +54,34 @@ public class Rezerwacje extends MainView{
 
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_rezerwacje");
-
+            rs = stmt.executeQuery("SELECT * FROM hotel_rezerwacje order by id_rezerwacji asc");
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+    private void populate(ResultSet rs){
+        try {
             int i = 0;
-            while(rs.next()){
+            while (rs.next()) {
                 String vId = rs.getString("id_rezerwacji");
-                Node current = new Button(vId);
+                Button current = new Button(vId);
                 fillableRows.getChildren().add(current);
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
+                current.setOnAction(e -> moreInfo(vId));
                 i++;
             }
-            populate(rs);
+//            Button button = new Button("Temp");
+//            button.getStyleClass().add("field");
+//            button.getStyleClass().add("tag");
+//            button.setOnAction(e -> moreInfo("1"));
+//            fillableRows.getChildren().add(button);
             rs.close();
             stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
-    }
-
-    private void populate(ResultSet rs){
-        Button button = new Button("Temp");
-        button.getStyleClass().add("field");
-        button.getStyleClass().add("tag");
-        button.setOnAction(e->moreInfo("1"));
-        fillableRows.getChildren().add(button);
     }
 
     @Override
