@@ -65,12 +65,13 @@ public class AddRezerwacje {
     private void initialize(){
         if (look) {
             try {
-                String str = "SELECT * FROM hotel_rezerwacje WHERE id_rezerwacji=" + id;
+                String str = "SELECT * FROM hotel_rezerwacje r inner join hotel_pracownicy p on(r.pracownik=p.pesel) WHERE r.id_rezerwacji=" + id;
                 PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
                 peselTextField.setText(rs.getString("klient"));
                 peselTextField.setEditable(false);
+                epracownicy.setPromptText(rs.getString("nazwisko"));
                 epracownicy.setDisable(true);
                 zdata.setValue(rs.getDate("data_zameldowania").toLocalDate());
                 zdata.setDisable(true);

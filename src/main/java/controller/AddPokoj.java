@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class AddPokoj {
     private Controller controller;
     private Pokoje pokoje;
@@ -36,17 +39,30 @@ public class AddPokoj {
     @FXML
     private void initialize(){
         if(look){
-            saveButton.setVisible(false);
-            numer.setText("");  // TODO
-            numer.setEditable(false);
-            cena.setText("");   // TODO
-            cena.setEditable(false);
-            liczbaL.setText("");    // TODO
-            liczbaL.setEditable(false);
-            telewizorCheck.setSelected(false);  // TODO
-            telewizorCheck.setOnAction(e->{if(!edit) telewizorCheck.setSelected(!telewizorCheck.isSelected());});
-            lazienkaCheck.setSelected(false);   // TODO
-            lazienkaCheck.setOnAction(e->{if(!edit) lazienkaCheck.setSelected(!lazienkaCheck.isSelected());});
+            try {
+                saveButton.setVisible(false);
+                String str = "SELECT * FROM hotel_pokoje WHERE numer=" + numerString;
+                PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                saveButton.setVisible(false);
+                numer.setText(rs.getString("numer"));
+                numer.setEditable(false);
+                cena.setText(rs.getString("cena_za_dobe"));
+                cena.setEditable(false);
+                liczbaL.setText(rs.getString("liczba_lozek"));
+                liczbaL.setEditable(false);
+                telewizorCheck.setSelected(rs.getInt("czy_telewizor") == 1);
+                telewizorCheck.setOnAction(e -> {
+                    if (!edit) telewizorCheck.setSelected(!telewizorCheck.isSelected());
+                });
+                lazienkaCheck.setSelected(rs.getInt("czy_lazienka") == 1);
+                lazienkaCheck.setOnAction(e -> {
+                    if (!edit) lazienkaCheck.setSelected(!lazienkaCheck.isSelected());
+                });
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             editButton.setVisible(false);
         }
@@ -60,8 +76,10 @@ public class AddPokoj {
             cena.setEditable(false);
             liczbaL.setEditable(false);
         }else if(checkCorrectness()) {
+            pokoje.dataBase.addPokoj(Integer.parseInt(numer.getText()), Float.parseFloat(cena.getText()), Integer.parseInt(liczbaL.getText()),
+                    ((telewizorCheck.isSelected()) ? 1 : 0),((lazienkaCheck.isSelected()) ? 1 : 0));
+            returnTo();
         }else{
-            // TODO
         }
     }
     @FXML

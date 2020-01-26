@@ -51,7 +51,7 @@ public class Dania extends MainView{
 
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_dania");
+            rs = stmt.executeQuery("SELECT * FROM hotel_dania order by nazwa asc");
             populate(rs);
         }catch(SQLException ex){
             ex.printStackTrace();

@@ -7,6 +7,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import main.java.Main;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class AddPracownicy {
     private Controller controller;
     private Pracownicy pracownicy;
@@ -38,28 +42,42 @@ public class AddPracownicy {
     private void initialize(){
         if(look){
             saveButton.setVisible(false);
-            imie.setText("");   // TODO
-            imie.setEditable(false);
-            nazwisko.setText("");   // TODO
-            nazwisko.setEditable(false);
-            pesel.setText("");  // TODO
-            pesel.setEditable(false);
-            adres.setText("");  // TODO
-            adres.setEditable(false);
-            etat.setText("");   // TODO
-            etat.setEditable(false);
-            placa.setText("");  // TODO
-            placa.setEditable(false);
-            umowa.setText("");  // TODO
-            umowa.setEditable(false);
-            premiaTextField.setText("");    // TODO
-            premiaTextField.setEditable(false);
-            dataUr.setValue(Main.dateCreate("2020-10-13")); // TODO
-            dataUr.setDisable(true);
-            dataZa.setValue(Main.dateCreate("2010-01-01")); // TODO
-            dataZa.setDisable(true);
-            premiaBox.setSelected(true);    // TODO
-            premiaBox.setOnAction(e->{if(!edit) premiaBox.setSelected(!premiaBox.isSelected());});
+            try {
+                saveButton.setVisible(false);
+                String str = "SELECT * FROM hotel_pracownicy WHERE pesel=" + peselString;
+                PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                imie.setText(rs.getString("imie"));
+                imie.setEditable(false);
+                nazwisko.setText(rs.getString("nazwisko"));
+                nazwisko.setEditable(false);
+                pesel.setText(rs.getString("pesel"));
+                pesel.setEditable(false);
+                adres.setText(rs.getString("adres"));
+                adres.setEditable(false);
+                etat.setText(rs.getString("etat"));
+                etat.setEditable(false);
+                placa.setText(rs.getString("placa"));
+                placa.setEditable(false);
+                umowa.setText(rs.getString("umowa"));
+                umowa.setEditable(false);
+                premiaTextField.setText(rs.getString("premia"));
+                premiaTextField.setEditable(false);
+                dataUr.setValue(rs.getDate("data_urodzenia").toLocalDate());
+                dataUr.setDisable(true);
+                dataZa.setValue(rs.getDate("data_zatrudnienia").toLocalDate());
+                dataZa.setDisable(true);
+                if(rs.getFloat("premia") > 0)
+                    premiaBox.setSelected(true);
+                else
+                    premiaBox.setSelected(false);
+                premiaBox.setOnAction(e -> {
+                    if (!edit) premiaBox.setSelected(!premiaBox.isSelected());
+                });
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             editButton.setVisible(false);
         }
@@ -84,8 +102,11 @@ public class AddPracownicy {
             dataUr.setDisable(true);
             dataZa.setDisable(true);
         }else if(checkCorrectness()){
+            pracownicy.dataBase.addPracownika(pesel.getText(), imie.getText(), nazwisko.getText(), etat.getText(),
+                    Float.parseFloat(placa.getText()), Date.valueOf(dataUr.getValue()), Date.valueOf(dataZa.getValue()),
+                    umowa.getText(), adres.getText(), ((premiaBox.isSelected()) ? Float.parseFloat(premiaTextField.getText()) : 0));
+            returnTo();
         }else{
-            // TODO
         }
     }
     @FXML
@@ -123,7 +144,7 @@ public class AddPracownicy {
     }
 
     private boolean checkCorrectness(){
-        boolean correct = false;
+        boolean correct = true;
         if (imie.getText().isEmpty() || imie.getText().length() > 30){
             correct = false;
             imie.getStyleClass().add("wrong");

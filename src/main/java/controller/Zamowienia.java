@@ -35,18 +35,21 @@ public class Zamowienia extends MainView{
     @FXML
     public void initialize(){
         title.setText("Zamówienia");
+        Label id = new Label("Id Zamowienia");
         Label danie = new Label("Danie");
         Label data = new Label("Data");
 
-        danie.setStyle("-fx-padding: 0 300 0 0;");
+        id.setStyle("-fx-padding: 0 100 0 0;");
+        id.getStyleClass().add("tag");
+        danie.setStyle("-fx-padding: 0 200 0 0;");
         danie.getStyleClass().add("tag");
         data.setStyle("-fx-padding: 0 120 0 0;");
         data.getStyleClass().add("tag");
-        tagsHBox.getChildren().addAll(danie, data);
+        tagsHBox.getChildren().addAll(id, danie, data);
 
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT d.*, z.* FROM hotel_zamowienie_dania zd inner join hotel_dania d on(zd.id_dania=d.id_dania) inner join hotel_zamowienia z on(zd.zamowienie=z.id_zamowienia) order by nazwa asc");
+            rs = stmt.executeQuery("SELECT d.*, z.* FROM hotel_zamowienie_dania zd inner join hotel_dania d on(zd.id_dania=d.id_dania) inner join hotel_zamowienia z on(zd.zamowienie=z.id_zamowienia) order by id_zamowienia asc");
             populate(rs);
 
         }catch(SQLException ex){
@@ -58,16 +61,19 @@ public class Zamowienia extends MainView{
             fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
+                Integer vId = rs.getInt("id_zamowienia");
                 String vNazwa = rs.getString("nazwa");
                 Date vData = rs.getDate("data_zamowienia");
                 Button current = new Button();
                 HBox aggregate = new HBox();
+                Label idL = new Label(Integer.toString(vId));
+                idL.setPrefWidth(210);
                 Label nazwaL = new Label(vNazwa);
-                nazwaL.setPrefWidth(350);
+                nazwaL.setPrefWidth(250);
                 Label dataL = new Label(vData.toString());
                 dataL.setPrefWidth(245);
                 aggregate.setStyle("-fx-alignment: center-left;");
-                aggregate.getChildren().addAll(nazwaL, dataL);
+                aggregate.getChildren().addAll(idL, nazwaL, dataL);
                 current.setGraphic(aggregate);
                 int id = rs.getInt("id_zamowienia");
                 current.setOnAction(e->moreInfo(Integer.toString(id)));

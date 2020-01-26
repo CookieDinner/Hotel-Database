@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class AddDostawce {
     private Controller controller;
     private Dostawcy dostawcy;
@@ -28,15 +31,23 @@ public class AddDostawce {
     @FXML
     private void initialize(){
         if(look){
-            saveButton.setVisible(false);
-            nip.setText(""); // TODO
-            nip.setEditable(false);
-            enazwa.setText(""); // TODO
-            enazwa.setEditable(false);
-            adres.setText(""); // TODO
-            adres.setEditable(false);
-            numer_telefonu.setText(""); // TODO
-            numer_telefonu.setEditable(false);
+            try {
+                saveButton.setVisible(false);
+                String str = "SELECT * FROM hotel_dostawcy WHERE nip=" + id;
+                PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                nip.setText(rs.getString("nip"));
+                nip.setEditable(false);
+                enazwa.setText(rs.getString("nazwa"));
+                enazwa.setEditable(false);
+                adres.setText(rs.getString("adres"));
+                adres.setEditable(false);
+                numer_telefonu.setText(rs.getString("numer_telefonu"));
+                numer_telefonu.setEditable(false);
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             editButton.setVisible(false);
         }
@@ -50,8 +61,9 @@ public class AddDostawce {
             adres.setEditable(false);
             numer_telefonu.setEditable(false);
         }else if(checkCorrectness()) {
+            dostawcy.dataBase.addDostawce(nip.getText(), enazwa.getText(), adres.getText(), numer_telefonu.getText());
+            returnTo();
         }else{
-            // TODO
         }
     }
     @FXML
