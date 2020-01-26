@@ -43,7 +43,7 @@
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Nazwa:</Label>
-                <TextField styleClass="addTextField" fx:id="nazwa"/>
+                <TextField styleClass="addTextField" fx:id="enazwa"/>
             </HBox>
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Adres:</Label>
