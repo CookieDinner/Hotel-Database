@@ -132,26 +132,30 @@ public class AddRezerwacje {
             rabatTextField.setEditable(false);
             edit = false;
             saveButton.setVisible(false);
-        }else{
-            try {
-                String str = "SELECT pesel FROM hotel_pracownicy where upper(nazwisko)=upper(\'" + epracownicy.getValue().toString() + "\')";
-                PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
-                ResultSet rs = stmt.executeQuery();
-                rs.next();
-                String temp_rabat;
-                if(rabatCheckBox.isSelected())
-                    rezerwacje.dataBase.addRezerwacje(Date.valueOf(zdata.getValue()), Date.valueOf(wdata.getValue()),
-                            Float.parseFloat(rabatTextField.getText()), rs.getString("pesel"),
-                            peselTextField.getText().toString(), pokoje);
-                else
-                    rezerwacje.dataBase.addRezerwacje(Date.valueOf(zdata.getValue()), Date.valueOf(wdata.getValue()),
-                            0, rs.getString("pesel"),
-                            peselTextField.getText().toString(), pokoje);
-            }catch (Exception ex){
-                ex.printStackTrace();
+        }else {
+            if (checkCorrectness()) {
+                try {
+                    String str = "SELECT pesel FROM hotel_pracownicy where upper(nazwisko)=upper(\'" + epracownicy.getValue().toString() + "\')";
+                    PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
+                    ResultSet rs = stmt.executeQuery();
+                    rs.next();
+                    String temp_rabat;
+                    if (rabatCheckBox.isSelected())
+                        rezerwacje.dataBase.addRezerwacje(Date.valueOf(zdata.getValue()), Date.valueOf(wdata.getValue()),
+                                Float.parseFloat(rabatTextField.getText()), rs.getString("pesel"),
+                                peselTextField.getText().toString(), pokoje);
+                    else
+                        rezerwacje.dataBase.addRezerwacje(Date.valueOf(zdata.getValue()), Date.valueOf(wdata.getValue()),
+                                0, rs.getString("pesel"),
+                                peselTextField.getText().toString(), pokoje);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                returnTo();
+            } else {
+                //TODO
             }
         }
-        returnTo();
     }
     @FXML
     private void addKlient(){
@@ -173,6 +177,36 @@ public class AddRezerwacje {
         rabatTextField.setEditable(true);
         edit = true;
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (!peselTextField.getText().matches("^[0-9]{11}$")){
+            correct = false;
+            peselTextField.getStyleClass().add("wrong");
+        }else{
+            while(peselTextField.getStyleClass().remove("wrong"));
+        }
+        if (epracownicy.getValue() == null){
+            correct = false;
+            epracownicy.getStyleClass().add("wrong");
+        }else{
+            while(epracownicy.getStyleClass().remove("wrong"));
+        }
+        if (zdata.getValue() == null || !zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            zdata.getStyleClass().add("wrong");
+        }else{
+            while(zdata.getStyleClass().remove("wrong"));
+        }
+        if (wdata.getValue() == null || !wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            wdata.getStyleClass().add("wrong");
+        }else{
+            while(wdata.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
     @FXML
     private void peselTyped() {
         ArrayList<String> pesels = new ArrayList<>();

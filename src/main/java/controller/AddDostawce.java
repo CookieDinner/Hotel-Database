@@ -49,6 +49,7 @@ public class AddDostawce {
             enazwa.setEditable(false);
             adres.setEditable(false);
             numer_telefonu.setEditable(false);
+        }else if(checkCorrectness()) {
         }else{
             // TODO
         }
@@ -68,4 +69,34 @@ public class AddDostawce {
     private void returnTo(){
         controller.changeScene("main_view.fxml", dostawcy);
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (!nip.getText().matches("^[0-9]{10}$")){
+            correct = false;
+            nip.getStyleClass().add("wrong");
+        }else{
+            while(nip.getStyleClass().remove("wrong"));
+        }
+        if (enazwa.getText().isEmpty() || enazwa.getText().length() > 30){
+            correct = false;
+            enazwa.getStyleClass().add("wrong");
+        }else{
+            while (enazwa.getStyleClass().remove("wrong"));
+        }
+        if (adres.getText().isEmpty() || adres.getText().length() > 50){
+            correct = false;
+            adres.getStyleClass().add("wrong");
+        }else{
+            while (adres.getStyleClass().remove("wrong"));
+        }
+        if (!numer_telefonu.getText().matches("[0-9]{9}")){
+            correct = false;
+            numer_telefonu.getStyleClass().add("wrong");
+        }else{
+            while (numer_telefonu.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
 }

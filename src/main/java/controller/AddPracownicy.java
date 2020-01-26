@@ -83,6 +83,7 @@ public class AddPracownicy {
             premiaTextField.setEditable(false);
             dataUr.setDisable(true);
             dataZa.setDisable(true);
+        }else if(checkCorrectness()){
         }else{
             // TODO
         }
@@ -120,4 +121,64 @@ public class AddPracownicy {
         dataUr.setDisable(false);
         dataZa.setDisable(false);
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = false;
+        if (imie.getText().isEmpty() || imie.getText().length() > 30){
+            correct = false;
+            imie.getStyleClass().add("wrong");
+        }else{
+            while (imie.getStyleClass().remove("wrong"));
+        }
+        if (nazwisko.getText().isEmpty() || nazwisko.getText().length() > 30){
+            correct = false;
+            nazwisko.getStyleClass().add("wrong");
+        }else{
+            while (nazwisko.getStyleClass().remove("wrong"));
+        }
+        if (!pesel.getText().matches("[0-9]{11}")){
+            correct = false;
+            pesel.getStyleClass().add("wrong");
+        }else{
+            while (pesel.getStyleClass().remove("wrong"));
+        }
+        if (adres.getText().isEmpty() || adres.getText().length() > 50){
+            correct = false;
+            adres.getStyleClass().add("wrong");
+        }else{
+            while (adres.getStyleClass().remove("wrong"));
+        }
+        if (etat.getText().isEmpty() || etat.getText().length() > 30){
+            correct = false;
+            etat.getStyleClass().add("wrong");
+        }else{
+            while (etat.getStyleClass().remove("wrong"));
+        }
+        if (!placa.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
+            correct = false;
+            placa.getStyleClass().add("wrong");
+        }else{
+            while (placa.getStyleClass().remove("wrong"));
+        }
+        if (umowa.getText().isEmpty() || umowa.getText().length() > 30){
+            correct = false;
+            umowa.getStyleClass().add("wrong");
+        }else{
+            while (umowa.getStyleClass().remove("wrong"));
+        }
+        if (dataUr.getValue() == null || dataUr.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            dataUr.getStyleClass().add("wrong");
+        }else{
+            while (dataUr.getStyleClass().remove("wrong"));
+        }
+        if (dataZa.getValue() == null || dataZa.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            dataZa.getStyleClass().add("wrong");
+        }else{
+            while (dataZa.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
 }

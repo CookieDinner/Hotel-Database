@@ -73,7 +73,7 @@ public class AddZamowienia {
             zdata.setDisable(true);
             edania.setEditable(false);
             saveButton.setVisible(false);
-        }else {
+        }else if(checkCorrectness()){
             int idDania = 0;
             String pesel = null;
             try {
@@ -95,6 +95,8 @@ public class AddZamowienia {
             }
             zamowienia.dataBase.addZamowienie(Date.valueOf(zdata.getValue()), pesel, idDania);
             returnTo();
+        }else{
+            //TODO
         }
     }
     @FXML
@@ -106,6 +108,30 @@ public class AddZamowienia {
         edania.setEditable(true);
         saveButton.setVisible(true);
     }
+
+    private boolean checkCorrectness(){
+        boolean correct = true;
+        if (epracownicy.getValue() == null){
+            correct = false;
+            epracownicy.getStyleClass().add("wrong");
+        }else{
+            while (epracownicy.getStyleClass().remove("wrong"));
+        }
+        if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+            correct = false;
+            zdata.getStyleClass().add("wrong");
+        }else{
+            while (zdata.getStyleClass().remove("wrong"));
+        }
+        if (daniaScroll.getChildren().isEmpty()){
+            correct = false;
+            edania.getStyleClass().add("wrong");
+        }else{
+            while (edania.getStyleClass().remove("wrong"));
+        }
+        return correct;
+    }
+
 //    private boolean isDanieCorrect(String danie){
 //        return true;
 //    }
