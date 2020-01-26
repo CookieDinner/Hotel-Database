@@ -59,7 +59,8 @@ public class AddPokoj {
             numer.setEditable(false);
             cena.setEditable(false);
             liczbaL.setEditable(false);
-        }else if(checkCorrectness()){
+        }else if(checkCorrectness()) {
+        }else{
             // TODO
         }
     }
@@ -101,4 +102,5 @@ public class AddPokoj {
         }
         return correct;
     }
+
 }

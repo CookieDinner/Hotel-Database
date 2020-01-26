@@ -84,6 +84,7 @@ public class AddPracownicy {
             dataUr.setDisable(true);
             dataZa.setDisable(true);
         }else if(checkCorrectness()){
+        }else{
             // TODO
         }
     }

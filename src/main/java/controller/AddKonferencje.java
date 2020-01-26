@@ -86,6 +86,8 @@ public class AddKonferencje {
                     Integer.parseInt(eliczba_osob.getText()), pesel,
                     Integer.parseInt(hala.substring(0, hala.indexOf(","))),pracownicy);
             returnTo();
+        }else {
+            //TODO
         }
     }
 
@@ -102,17 +104,16 @@ public class AddKonferencje {
                 PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
-                enazwa.setText(rs.getString("nazwa"));    // TODO
+                enazwa.setText(rs.getString("nazwa"));
                 enazwa.setEditable(false);
-                edata.setValue(rs.getDate("data_konferencji").toLocalDate());//Main.dateCreate("2020-01-13"));  // TODO
+                edata.setValue(rs.getDate("data_konferencji").toLocalDate());
                 edata.setDisable(true);
-                eliczba_osob.setText(Integer.toString(rs.getInt("liczba_osob")));  // TODO
+                eliczba_osob.setText(Integer.toString(rs.getInt("liczba_osob")));
                 eliczba_osob.setEditable(false);
-                ehala.setValue(Integer.toString(rs.getInt("hala_konferencyjna")));    // TODO
+                ehala.setValue(Integer.toString(rs.getInt("hala_konferencyjna")));
                 ehala.setDisable(true);
                 getPracownicy();
-                //pracownicyScroll.getChildren().add(createPracownikButton(epracownicy.getValue().toString()));
-                for (String i : pracownicy)   // TODO
+                for (String i : pracownicy)
                     pracownicyScroll.getChildren().add(createPracownikButton(i));
                 epracownicy.setDisable(true);
                 saveButton.setVisible(false);

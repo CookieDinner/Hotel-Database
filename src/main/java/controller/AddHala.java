@@ -46,6 +46,7 @@ public class AddHala {
             numer.setEditable(false);
             lMiejsc.setEditable(false);
         }else if(checkCorrectness()){
+        }else{
             // TODO
         }
 

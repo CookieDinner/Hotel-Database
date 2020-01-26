@@ -59,6 +59,8 @@ public class AddSkladnik {
             saveButton.setVisible(false);
         }else if(checkCorrectness()){
             // TODO
+        }else{
+            //TODO
         }
     }
     @FXML

@@ -58,7 +58,8 @@ public class AddDania {
             nazwa.setEditable(false);
             cena.setEditable(false);
             skladniki.setEditable(false);
-        }else if(checkCorrectness()){
+        }else if(checkCorrectness()) {
+        }else{
             // TODO
         }
     }

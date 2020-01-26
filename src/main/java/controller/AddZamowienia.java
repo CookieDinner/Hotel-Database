@@ -95,6 +95,8 @@ public class AddZamowienia {
             }
             zamowienia.dataBase.addZamowienie(Date.valueOf(zdata.getValue()), pesel, idDania);
             returnTo();
+        }else{
+            //TODO
         }
     }
     @FXML

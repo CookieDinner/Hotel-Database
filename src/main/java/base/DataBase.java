@@ -27,6 +27,46 @@ public class DataBase {
         }
     }
 
+    public void addKlienci(String imie, String nazwisko, String pesel, String numerTel, String adresZa){
+        try {
+            cstmt = con.prepareCall("{call dodajKlienta(?,?,?,?,?,0)}");
+            cstmt.setString(1, pesel);
+            cstmt.setString(2, imie);
+            cstmt.setString(3, nazwisko);
+            cstmt.setString(4, numerTel);
+            cstmt.setString(5, adresZa);
+            cstmt.execute();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void addRezerwacje(Date data_zam, Date term_wym, float rabat, String pracownik, String klient, ArrayList<String> pokoje){
+        try {
+            cstmt = con.prepareCall("{? = call dodajRezerwacje(null,?,?,?,?,?,0)}");
+            cstmt.setDate(2, data_zam);
+            cstmt.setDate(3, term_wym);
+            if(rabat == 0)
+                cstmt.setNull(4,Types.INTEGER);
+            else
+                cstmt.setFloat(4, rabat);
+            cstmt.setString(5, pracownik);
+            cstmt.setString(6, klient);
+            cstmt.registerOutParameter(1, Types.INTEGER);
+            cstmt.execute();
+            int rezId = cstmt.getInt(1);
+            cstmt.close();
+//            for(String i : pokoje){
+//                cstmt = con.prepareCall("{call dodajRezerwacjePokoju(?,?)}");
+//                cstmt.setInt(1, rezId);
+//                cstmt.setString(2, i);
+//                cstmt.execute();
+//            }
+//            cstmt.close();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
     public void addKonferencje(String nazwa, Date data, int lOsob, String pesel, int idHali, ArrayList<String> pracownicy){
         try {
             cstmt = con.prepareCall("{? = call dodajKonferencje(null,?,?,?,?,0)}");

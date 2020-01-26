@@ -49,7 +49,8 @@ public class AddDostawce {
             enazwa.setEditable(false);
             adres.setEditable(false);
             numer_telefonu.setEditable(false);
-        }else if(checkCorrectness()){
+        }else if(checkCorrectness()) {
+        }else{
             // TODO
         }
     }
@@ -63,6 +64,10 @@ public class AddDostawce {
         enazwa.setEditable(true);
         adres.setEditable(true);
         numer_telefonu.setEditable(true);
+    }
+    @FXML
+    private void returnTo(){
+        controller.changeScene("main_view.fxml", dostawcy);
     }
 
     private boolean checkCorrectness(){
@@ -94,8 +99,4 @@ public class AddDostawce {
         return correct;
     }
 
-    @FXML
-    private void returnTo(){
-        controller.changeScene("main_view.fxml", dostawcy);
-    }
 }
