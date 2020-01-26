@@ -59,7 +59,7 @@ public class AddPokoj {
             numer.setEditable(false);
             cena.setEditable(false);
             liczbaL.setEditable(false);
-        }else if(checkCorrectness()){
+        }else{
             // TODO
         }
     }
@@ -77,28 +77,5 @@ public class AddPokoj {
         numer.setEditable(true);
         cena.setEditable(true);
         liczbaL.setEditable(true);
-    }
-
-    private boolean checkCorrectness(){
-        boolean correct = true;
-        if (!numer.getText().matches("^[1-9][0-9]{0,2}$")){
-            correct = false;
-            numer.getStyleClass().add("wrong");
-        }else{
-            while (numer.getStyleClass().remove("wrong"));
-        }
-        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
-            correct = false;
-            cena.getStyleClass().add("wrong");
-        }else{
-            while (cena.getStyleClass().remove("wrong"));
-        }
-        if (!liczbaL.getText().matches("^[1-9][0-9]?$")){
-            correct = false;
-            liczbaL.getStyleClass().add("wrong");
-        }else{
-            while (liczbaL.getStyleClass().remove("wrong"));
-        }
-        return correct;
     }
 }

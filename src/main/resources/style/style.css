@@ -135,7 +135,6 @@
 .wrong{
     -fx-background-color: red;
     -fx-opacity: 0.2;
-    -fx-text-fill: black;
 }
 
 .addTextWithButtonSmall{

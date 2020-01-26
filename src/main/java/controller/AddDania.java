@@ -58,7 +58,7 @@ public class AddDania {
             nazwa.setEditable(false);
             cena.setEditable(false);
             skladniki.setEditable(false);
-        }else if(checkCorrectness()){
+        }else{
             // TODO
         }
     }
@@ -96,28 +96,4 @@ public class AddDania {
     private void deleteButton(Button toDelete){
         skladnikiScroll.getChildren().remove(toDelete);
     }
-
-    private boolean checkCorrectness(){
-        boolean correct = true;
-        if (nazwa.getText().isEmpty() || nazwa.getText().length() > 50){
-            correct = false;
-            nazwa.getStyleClass().add("wrong");
-        }else{
-            while (nazwa.getStyleClass().remove("wrong"));
-        }
-        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
-            correct = false;
-            cena.getStyleClass().add("wrong");
-        }else{
-            while (cena.getStyleClass().remove("wrong"));
-        }
-        if (skladnikiScroll.getChildren().isEmpty()){
-            correct = false;
-            skladniki.getStyleClass().add("wrong");
-        }else{
-            while (skladniki.getStyleClass().remove("wrong"));
-        }
-        return correct;
-    }
-
 }

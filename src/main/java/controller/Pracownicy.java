@@ -84,7 +84,7 @@ public class Pracownicy extends MainView{
                 Label dataL = new Label(vData.toString());
                 dataL.setPrefWidth(110);
                 aggregate.setStyle("-fx-alignment: center-left;");
-                aggregate.getChildren().addAll(nazwL, imieL, etatL, placaL, dataL);
+                aggregate.getChildren().addAll(imieL, nazwL, etatL, placaL, dataL);
                 current.setGraphic(aggregate);
                 String pesel = rs.getString("pesel");
                 current.setOnAction(e -> moreInfo(pesel));

@@ -45,7 +45,7 @@ public class AddHala {
             saveButton.setVisible(false);
             numer.setEditable(false);
             lMiejsc.setEditable(false);
-        }else if(checkCorrectness()){
+        }else{
             // TODO
         }
 
@@ -63,22 +63,4 @@ public class AddHala {
         numer.setEditable(true);
         lMiejsc.setEditable(true);
     }
-
-    private boolean checkCorrectness(){
-        boolean correct = true;
-        if (!numer.getText().matches("^[1-9][0-9]?$")){
-            correct = false;
-            numer.getStyleClass().add("wrong");
-        }else{
-            while (numer.getStyleClass().remove("wrong"));
-        }
-        if (!lMiejsc.getText().matches("^[1-9][0-9]{0,4}$")){
-            correct = false;
-            lMiejsc.getStyleClass().add("wrong");
-        }else{
-            while (lMiejsc.getStyleClass().remove("wrong"));
-        }
-        return correct;
-    }
-
 }

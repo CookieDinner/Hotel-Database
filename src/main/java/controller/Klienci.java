@@ -57,15 +57,15 @@ public class Klienci extends MainView {
                 Button current = new Button();
                 HBox aggregate = new HBox();
                 Label nazwL = new Label(vNazwisko);
-                nazwL.setPrefWidth(190);
+                nazwL.setPrefWidth(230);
                 Label imieL = new Label(vImie);
-                imieL.setPrefWidth(245);
+                imieL.setPrefWidth(195);
                 Label teleL = new Label(vTele);
                 teleL.setPrefWidth(230);
                 Label peseL = new Label(vPesel);
                 peseL.setPrefWidth(110);
                 aggregate.setStyle("-fx-alignment: center-left;");
-                aggregate.getChildren().addAll(nazwL, imieL, teleL, peseL);
+                aggregate.getChildren().addAll(imieL, nazwL, teleL, peseL);
                 current.setGraphic(aggregate);
                 current.setOnAction(e->moreInfo(vPesel));
                 fillableRows.getChildren().add(current);
