@@ -12,7 +12,7 @@ public class AddDostawce {
     @FXML
     private Button editButton, saveButton;
     @FXML
-    private TextField enazwa, stanM, cena, nip;
+    private TextField nip, enazwa, adres, numer_telefonu;
 
     public AddDostawce(Controller controller, Dostawcy dostawcy){
         this.controller = controller;
@@ -29,14 +29,14 @@ public class AddDostawce {
     private void initialize(){
         if(look){
             saveButton.setVisible(false);
+            nip.setText(""); // TODO
+            nip.setEditable(false);
             enazwa.setText(""); // TODO
             enazwa.setEditable(false);
-            stanM.setText("");  // TODO
-            stanM.setEditable(false);
-            cena.setText("");   // TODO
-            cena.setEditable(false);
-            nip.setText("");    // TODO
-            nip.setEditable(false);
+            adres.setText(""); // TODO
+            adres.setEditable(false);
+            numer_telefonu.setText(""); // TODO
+            numer_telefonu.setEditable(false);
         }else{
             editButton.setVisible(false);
         }
@@ -45,10 +45,10 @@ public class AddDostawce {
     private void addDostawce(){
         if(look) {
             saveButton.setVisible(false);
-            enazwa.setEditable(false);
-            stanM.setEditable(false);
-            cena.setEditable(false);
             nip.setEditable(false);
+            enazwa.setEditable(false);
+            adres.setEditable(false);
+            numer_telefonu.setEditable(false);
         }else{
             // TODO
         }
@@ -59,10 +59,10 @@ public class AddDostawce {
             return;
         saveButton.setVisible(true);
         saveButton.setVisible(true);
-        enazwa.setEditable(true);
-        stanM.setEditable(true);
-        cena.setEditable(true);
         nip.setEditable(true);
+        enazwa.setEditable(true);
+        adres.setEditable(true);
+        numer_telefonu.setEditable(true);
     }
     @FXML
     private void returnTo(){
