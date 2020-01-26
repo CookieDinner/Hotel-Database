@@ -32,6 +32,7 @@ public class AddPokoj {
         this.look = true;
         this.edit = false;
     }
+
     @FXML
     private void initialize(){
         if(look){
@@ -49,7 +50,6 @@ public class AddPokoj {
         }else{
             editButton.setVisible(false);
         }
-
     }
     @FXML
     private void addPokoj(){

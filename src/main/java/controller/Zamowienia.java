@@ -7,10 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.*;
 
 public class Zamowienia extends MainView{
     @FXML
@@ -46,14 +46,32 @@ public class Zamowienia extends MainView{
 
         try {
             stmt = dataBase.getCon().createStatement();
-            rs = stmt.executeQuery("SELECT * FROM hotel_zamowienia");
+            rs = stmt.executeQuery("SELECT d.*, z.* FROM hotel_zamowienie_dania zd inner join hotel_dania d on(zd.id_dania=d.id_dania) inner join hotel_zamowienia z on(zd.zamowienie=z.id_zamowienia) order by nazwa asc");
+            populate(rs);
 
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+    public void populate(ResultSet rs){
+        try {
+            fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
-                String vId = rs.getString("id_zamowienia");
-                Button current = new Button(vId);
+                String vNazwa = rs.getString("nazwa");
+                Date vData = rs.getDate("data_zamowienia");
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label nazwaL = new Label(vNazwa);
+                nazwaL.setPrefWidth(350);
+                Label dataL = new Label(vData.toString());
+                dataL.setPrefWidth(245);
+                aggregate.setStyle("-fx-alignment: center-left;");
+                aggregate.getChildren().addAll(nazwaL, dataL);
+                current.setGraphic(aggregate);
+                int id = rs.getInt("id_zamowienia");
+                current.setOnAction(e->moreInfo(Integer.toString(id)));
                 fillableRows.getChildren().add(current);
-                current.setOnAction(e->moreInfo("1"));
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
                 i++;
@@ -67,7 +85,16 @@ public class Zamowienia extends MainView{
 
     @Override
     public void search() {
-
+        try {
+            String str = "SELECT d.*, z.* FROM hotel_zamowienie_dania zd inner join hotel_dania d on(zd.id_dania=d.id_dania) inner join hotel_zamowienia z on(zd.zamowienie=z.id_zamowienia) " +
+                    "where UPPER(nazwa) like UPPER(?)||'%' order by nazwa asc";
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement(str);
+            pstmt.setString(1, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     public void moreInfo(String id) {

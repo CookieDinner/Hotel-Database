@@ -25,7 +25,7 @@ public class AddDania {
         this.look = false;
     }
 
-    public AddDania(Controller controller, Dania dania, String id){
+    public AddDania(Controller controller, Dania dania, String id) {
         this.controller = controller;
         this.dania = dania;
         this.id = id;
@@ -45,6 +45,7 @@ public class AddDania {
         }else{
             editButton.setVisible(false);
         }
+
     }
     @FXML
     private void returnTo(){

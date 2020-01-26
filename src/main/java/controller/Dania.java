@@ -7,10 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.*;
 
 public class Dania extends MainView{
     @FXML
@@ -22,6 +22,7 @@ public class Dania extends MainView{
 
     private Statement stmt = null;
     private ResultSet rs = null;
+    private CallableStatement cstmt = null;
 
 
     public Dania(Controller controller, DataBase dataBase){
@@ -51,15 +52,39 @@ public class Dania extends MainView{
         try {
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_dania");
-
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+    }
+    public void populate(ResultSet rs){
+        try{
+            fillableRows.getChildren().clear();
             int i = 0;
             while(rs.next()){
                 String vNazwa = rs.getString("nazwa");
-                Button current = new Button(vNazwa);
+                Float vCena = rs.getFloat("cena");
+                cstmt = dataBase.getCon().prepareCall("{? = call dostepnoscDania(?)}");
+                cstmt.setInt(2, rs.getInt("id_dania"));
+                cstmt.registerOutParameter(1, Types.VARCHAR);
+                cstmt.execute();
+                String vDostepnosc = cstmt.getString(1);
+                cstmt.close();
+                Button current = new Button();
+                HBox aggregate = new HBox();
+                Label nazwaL = new Label(vNazwa);
+                nazwaL.setPrefWidth(510);
+                Label cenaL = new Label(vCena.toString());
+                cenaL.setPrefWidth(200);
+                Label dostepnoscL = new Label(vDostepnosc);
+                dostepnoscL.setPrefWidth(340);
+                aggregate.setStyle("-fx-alignment: center-left;");
+                aggregate.getChildren().addAll(nazwaL, cenaL, dostepnoscL);
+                current.setGraphic(aggregate);
                 fillableRows.getChildren().add(current);
+                current.setOnAction(e->moreInfo(vNazwa));
                 current.getStyleClass().add("field");
                 current.getStyleClass().add("tag");
-                current.setOnAction(e->moreInfo("1"));
                 i++;
             }
             rs.close();
@@ -71,11 +96,18 @@ public class Dania extends MainView{
 
     @Override
     public void search() {
-
+        try {
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM hotel_dania where upper(nazwa) like '%'||UPPER(?)||'%' UNION SELECT * FROM hotel_dania where UPPER(dostepnoscDania(id_dania)) like '%'||UPPER(?)||'%'");
+            pstmt.setString(1, searchField.getText());
+            pstmt.setString(2, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
-    public void moreInfo(String id) {
-        controller.changeScene("addDania.fxml", new AddDania(controller, this, id));
-
+    public void moreInfo(String nazwa) {
+        controller.changeScene("addDania.fxml", new AddDania(controller, this, nazwa));
     }
 }

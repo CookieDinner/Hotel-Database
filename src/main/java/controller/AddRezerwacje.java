@@ -2,6 +2,10 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import main.java.Main;
@@ -113,12 +117,11 @@ public class AddRezerwacje {
         rabatString = rabatTextField.getText();
         dataZamString = zdata.getValue();
         dataWymString = wdata.getValue();
-        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, peselTextField.getText(), "addRezerwacje.fxml", false));
+        controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, peselTextField.getText(), "addRezerwacje.fxml",false));
     }
-
     @FXML
-    private void edit(){
-        if(!look)
+    private void edit() {
+        if (!look)
             return;
         saveButton.setVisible(true);
         peselTextField.setEditable(true);
@@ -127,6 +130,27 @@ public class AddRezerwacje {
         wdata.setDisable(false);
         rabatTextField.setEditable(true);
         edit = true;
+    }
+    @FXML
+    private void peselTyped(){
+        ArrayList<String> pesels = new ArrayList<>();
+        pesels.add("98092200114");
+        pesels.add("94102199893");
+        pesels.add("94603139293");
+        pesels.add("92091233333");
+        System.out.println(peselTextField.getText());
+        if(peselTextField.getText().length() == 11)
+            if(pesels.indexOf(peselTextField.getText()) == -1){
+                while(peselTextField.getStyleClass().remove("good"));
+                peselTextField.getStyleClass().add("wrong");
+            }else{
+                while(peselTextField.getStyleClass().remove("wrong"));
+                peselTextField.getStyleClass().add("good");
+            }
+        else{
+            while(peselTextField.getStyleClass().remove("wrong"));
+            while(peselTextField.getStyleClass().remove("good"));
+        }
     }
 
 }

@@ -22,11 +22,10 @@ public class AddKlienci {
         this.fxml = fxml;
         this.look = look;
     }
-
     @FXML
     private void initialize(){
         pesel.setText(peselFilled); // Pesel jest w taki sposób bo jak przejdziemy z rezerwacji
-                                    // do dodawania klientów to go tu automatycznie uzupełniamy
+        // do dodawania klientów to go tu automatycznie uzupełniamy
         if(look){
             saveButton.setVisible(false);
             imie.setText("");   // TODO
@@ -60,8 +59,8 @@ public class AddKlienci {
         }
     }
     @FXML
-    private void edit(){
-        if(!look)
+    private void edit() {
+        if (!look)
             return;
         saveButton.setVisible(true);
         imie.setEditable(true);

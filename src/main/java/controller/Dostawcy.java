@@ -30,7 +30,7 @@ public class Dostawcy extends MainView{
 
     @Override
     public void plus() {
-        controller.changeScene("addDostawy.fxml", new AddDostawy(controller, this));
+        controller.changeScene("addDostawce.fxml", new AddDostawce(controller, this));
     }
 
     @FXML
@@ -104,6 +104,6 @@ public class Dostawcy extends MainView{
 
 
     public void moreInfo(String nip) {
-        controller.changeScene("addDostawy.fxml", new AddDostawy(controller, this, nip));
+        controller.changeScene("addDostawce.fxml", new AddDostawce(controller, this, nip)); //TODO ShowDost i fxml(?)
     }
 }

@@ -32,29 +32,29 @@
         </BorderPane>
 
     </top>
-<!--    <center>-->
-<!--        <VBox>-->
-<!--            <Label fx:id="titleLabel" styleClass="title"/>-->
-<!--            <Label fx:id="dateLabel" styleClass="date"/>-->
-<!--            <HBox style="-fx-spacing: 250px; -fx-padding: 60 0 0 10;">-->
-<!--                <VBox style="-fx-alignment: center;">-->
-<!--                    <Label styleClass="labelOfThings">Liczba osób:</Label>-->
-<!--                    <Label fx:id="personCount" styleClass="numberOfThings"/>-->
-<!--                </VBox>-->
-<!--                <VBox style="-fx-alignment: center;">-->
-<!--                    <Label styleClass="labelOfThings">Numer Hali:</Label>-->
-<!--                    <Label fx:id="whichHala" styleClass="numberOfThings"/>-->
-<!--                </VBox>-->
-<!--            </HBox>-->
-<!--            <HBox style="-fx-spacing: 60px; -fx-padding: 30 0 0 10;">-->
-<!--                <Label styleClass="labelOfThings">Pracownicy:</Label>-->
-<!--                <VBox style="-fx-spacing: 10px;">-->
-<!--                    <Button styleClass="employee"/>-->
-<!--                    <Button styleClass="employee"/>-->
-<!--                    <Button styleClass="employee"/>-->
-<!--                </VBox>-->
-<!--            </HBox>-->
-<!--        </VBox>-->
+    <center>
+        <VBox>
+            <Label fx:id="titleLabel" styleClass="title"/>
+            <Label fx:id="dateLabel" styleClass="date"/>
+            <HBox style="-fx-spacing: 250px; -fx-padding: 60 0 0 10;">
+                <VBox style="-fx-alignment: center;">
+                    <Label styleClass="labelOfThings">Liczba osób:</Label>
+                    <Label fx:id="personCount" styleClass="numberOfThings"/>
+                </VBox>
+                <VBox style="-fx-alignment: center;">
+                    <Label styleClass="labelOfThings">Numer Hali:</Label>
+                    <Label fx:id="whichHala" styleClass="numberOfThings"/>
+                </VBox>
+            </HBox>
+            <HBox style="-fx-spacing: 60px; -fx-padding: 30 0 0 10;">
+                <Label styleClass="labelOfThings">Pracownicy:</Label>
+                <VBox style="-fx-spacing: 10px;">
+                    <Button styleClass="employee"/>
+                    <Button styleClass="employee"/>
+                    <Button styleClass="employee"/>
+                </VBox>
+            </HBox>
+        </VBox>
 
-<!--    </center>-->
+    </center>
 </BorderPane>
