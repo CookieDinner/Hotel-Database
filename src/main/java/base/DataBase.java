@@ -27,7 +27,7 @@ public class DataBase {
         }
     }
 
-    public void addKonferencje(String nazwa, Date data, int lOsob, String pesel, int idHali){
+    public void addKonferencje(String nazwa, Date data, int lOsob, String pesel, int idHali, ArrayList<String> pracownicy){
         try {
             cstmt = con.prepareCall("{? = call dodajKonferencje(null,?,?,?,?,0)}");
             cstmt.setString(2, nazwa);
@@ -36,7 +36,14 @@ public class DataBase {
             cstmt.setInt(5,idHali);
             cstmt.registerOutParameter(1, Types.INTEGER);
             cstmt.execute();
-            System.out.println(cstmt.getInt(1));
+            int konfId = cstmt.getInt(1);
+            cstmt.close();
+            for(String i : pracownicy){
+                cstmt = con.prepareCall("{call dodajNadzorKonferencji(?,?)}");
+                cstmt.setInt(1, konfId);
+                cstmt.setString(2, i);
+                cstmt.execute();
+            }
             cstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
