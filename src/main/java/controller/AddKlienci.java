@@ -26,8 +26,7 @@ public class AddKlienci {
     }
     @FXML
     private void initialize(){
-        pesel.setText(peselFilled);// Pesel jest w taki sposób bo jak przejdziemy z rezerwacji
-        // do dodawania klientów to go tu automatycznie uzupełniamy
+        pesel.setText(peselFilled);
         if(look){
             try {
                 String str = "SELECT * FROM hotel_klienci WHERE pesel=\'" + peselFilled + "\'";
@@ -44,6 +43,8 @@ public class AddKlienci {
                 numerTel.setEditable(false);
                 adresZa.setText(rs.getString("adres_zamieszkania"));    // TODO
                 adresZa.setEditable(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }

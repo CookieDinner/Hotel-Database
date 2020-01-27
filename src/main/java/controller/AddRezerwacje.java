@@ -91,6 +91,8 @@ public class AddRezerwacje {
                 for (String i : pokoje)
                     pokojeScroll.getChildren().add(createSkladnikButton(i));
                 saveButton.setVisible(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -163,6 +165,8 @@ public class AddRezerwacje {
                 cstmt.setString(7,peselTextField.getText());
                 cstmt.execute();
                 cstmt.close();
+                rs.close();
+                pstmt.close();
                 String str = "DELETE FROM hotel_rezerwacja_pokoju where rezerwacja=" + id;
                 PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
                 stmt.executeQuery();
@@ -193,12 +197,12 @@ public class AddRezerwacje {
                         rezerwacje.dataBase.addRezerwacje(Date.valueOf(zdata.getValue()), Date.valueOf(wdata.getValue()),
                                 0, rs.getString("pesel"),
                                 peselTextField.getText().toString(), pokoje);
+                    rs.close();
+                    stmt.close();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 returnTo();
-            } else {
-                //TODO
             }
         }
     }
@@ -276,15 +280,19 @@ public class AddRezerwacje {
         }
         if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            zdata.getStyleClass().add("wrong");
+            zdata.getStyleClass().add("wrongDate");
+            while(zdata.getStyleClass().remove("addDate"));
         }else{
-            while(zdata.getStyleClass().remove("wrong"));
+            while(zdata.getStyleClass().remove("wrongDate"));
+            zdata.getStyleClass().add("addDate");
         }
         if (wdata.getValue() == null || wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            wdata.getStyleClass().add("wrong");
+            wdata.getStyleClass().add("wrongDate");
+            while(wdata.getStyleClass().remove("addDate"));
         }else{
-            while(wdata.getStyleClass().remove("wrong"));
+            while(wdata.getStyleClass().remove("wrongDate"));
+            wdata.getStyleClass().add("addDate");
         }
         if(pokojeScroll.getChildren().isEmpty()){
             correct = false;
@@ -308,6 +316,8 @@ public class AddRezerwacje {
             while (rs.next()){
                 pokoje.add(rs.getString("pokoj"));
             }
+            rs.close();
+            stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
         }

@@ -122,8 +122,6 @@ public class AddSkladnik {
             }catch (Exception ex){
                 ex.printStackTrace();
             }
-        }else{
-            //TODO
         }
     }
     @FXML

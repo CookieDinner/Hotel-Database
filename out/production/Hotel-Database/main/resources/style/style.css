@@ -103,6 +103,11 @@
     -fx-background-color: #c1c1c1;
 }
 
+.littleCombo{
+    -fx-min-width: 170px;
+    -fx-max-width: 170px;
+}
+
 .addTextField{
     -fx-min-width: 300px;
     -fx-min-height: 50px;
@@ -133,9 +138,52 @@
 }
 
 .wrong{
-    -fx-background-color: red;
-    -fx-opacity: 0.2;
-    -fx-text-fill:black
+    -fx-background-color: rgba(255,0,0,0.2);
+}
+
+.wrongDate{
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+}
+
+.wrongDateSmall{
+    -fx-min-width: 170px;
+    -fx-max-width: 170px;
+    -fx-min-height: 50px;
+    -fx-background-color: none;
+}
+
+.wrongDate .text-field, .wrongDateSmall .text-field{
+    -fx-background-color: rgba(255,0,0,0.2);
+    -fx-border-width: 1 0 1 1;
+    -fx-border-color: #8c8c8c;
+}
+
+.wrongDate:hover, .wrongDateSmall:hover{
+    -fx-background-color: none;
+}
+
+.wrongDate .arrow-button, .wrongDateSmall .arrow-button{
+    -fx-background-color: rgba(255,0,0,0.2);
+    -fx-border-width: 1 1 1 0;
+    -fx-border-color: #8c8c8c;
+    -fx-min-width: 50px;
+    -fx-font-size: 18px;
+}
+
+.wrongDate .arrow-button:hover, .wrongDateSmall .arrow-button:hover{
+    -fx-background-color: rgba(255,0,0,0.2);
+    -fx-cursor: hand;
+}
+
+.wrongDate .button, .wrongDateSmall .button{
+    -fx-min-width: 50px;
+}
+
+.wrongDate:focused, .wrongDateSmall:focused{
+    -fx-background-color: none;
 }
 
 .addTextWithButtonSmall{

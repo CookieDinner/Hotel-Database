@@ -63,6 +63,8 @@ public class AddDania {
                 getSkladniki();
                 for (String i : arrSkladniki)
                     skladnikiScroll.getChildren().add(createSkladnikButton(i));
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -120,15 +122,6 @@ public class AddDania {
         return true;
     }
 
-//    @FXML
-//    private void danieReady(KeyEvent ke){
-//        if(ke.getCode().equals(KeyCode.ENTER)){
-//            if(isDanieCorrect(skladniki.getText())) {
-//                skladnikiScroll.getChildren().add(createDanieButton(skladniki.getText()));
-//                skladniki.setText("");
-//            }
-//        }
-//    }
 
     private Button createSkladnikButton(String nazwa){
         Button button = new Button(nazwa);
@@ -185,6 +178,8 @@ public class AddDania {
             while (rs.next()){
                 arrSkladniki.add(rs.getString("skladnik"));
             }
+            rs.close();
+            stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
         }

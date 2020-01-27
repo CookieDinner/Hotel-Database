@@ -64,7 +64,9 @@ public class AddZamowienia {
                 getDania();
                 for(String i : dania)
                     daniaScroll.getChildren().add(createDanieButton(i));
-                    saveButton.setVisible(false);
+                saveButton.setVisible(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -131,6 +133,7 @@ public class AddZamowienia {
                 rs = stmt.executeQuery();
                 rs.next();
                 pesel = rs.getString("pesel");
+                rs.close();
                 stmt.close();
 
             } catch (SQLException ex) {
@@ -138,8 +141,6 @@ public class AddZamowienia {
             }
             zamowienia.dataBase.addZamowienie(Date.valueOf(zdata.getValue()), pesel, dania);
             returnTo();
-        }else{
-            //TODO
         }
     }
     @FXML
@@ -176,9 +177,11 @@ public class AddZamowienia {
         }
         if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            zdata.getStyleClass().add("wrong");
+            zdata.getStyleClass().add("wrongDate");
+            while (zdata.getStyleClass().remove("addDate"));
         }else{
-            while (zdata.getStyleClass().remove("wrong"));
+            while (zdata.getStyleClass().remove("wrongDate"));
+            zdata.getStyleClass().add("addDate");
         }
         if (daniaScroll.getChildren().isEmpty()){
             correct = false;
@@ -189,19 +192,6 @@ public class AddZamowienia {
         return correct;
     }
 
-//    private boolean isDanieCorrect(String danie){
-//        return true;
-//    }
-//
-//    @FXML
-//    private void danieReady(KeyEvent ke) {
-//        if (ke.getCode().equals(KeyCode.ENTER)) {
-//            if (isDanieCorrect(dania.getText())) {
-//                daniaScroll.getChildren().add(createDanieButton(dania.getText()));
-//                dania.setText("");
-//            }
-//        }
-//    }
     @FXML
     private void chooseDanie(){
         if(edania.getValue() == null)
@@ -213,6 +203,7 @@ public class AddZamowienia {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             dania.add(rs.getString("id_dania"));
+            rs.close();
             stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
@@ -239,6 +230,7 @@ public class AddZamowienia {
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
                 dania.add(rs.getString("id_dania"));
+                rs.close();
                 stmt.close();
             }
         }catch (Exception ex){
@@ -258,6 +250,8 @@ public class AddZamowienia {
             while (rs.next()){
                 dania.add(rs.getString("nazwa"));
             }
+            rs.close();
+            stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
         }

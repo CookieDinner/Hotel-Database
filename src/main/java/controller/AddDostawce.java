@@ -46,6 +46,8 @@ public class AddDostawce {
                 adres.setEditable(false);
                 numer_telefonu.setText(rs.getString("numer_telefonu"));
                 numer_telefonu.setEditable(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }

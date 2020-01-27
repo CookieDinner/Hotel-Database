@@ -44,6 +44,8 @@ public class AddHala {
                 numer.setEditable(false);
                 lMiejsc.setText(rs.getString("liczba_miejsc"));
                 lMiejsc.setEditable(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }

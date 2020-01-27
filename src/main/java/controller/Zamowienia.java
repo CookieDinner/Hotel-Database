@@ -51,6 +51,8 @@ public class Zamowienia extends MainView{
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT d.*, z.* FROM hotel_zamowienie_dania zd inner join hotel_dania d on(zd.id_dania=d.id_dania) inner join hotel_zamowienia z on(zd.zamowienie=z.id_zamowienia) order by id_zamowienia asc");
             populate(rs);
+            rs.close();
+            stmt.close();
 
         }catch(SQLException ex){
             ex.printStackTrace();
@@ -98,6 +100,8 @@ public class Zamowienia extends MainView{
             pstmt.setString(1, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

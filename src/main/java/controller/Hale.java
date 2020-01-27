@@ -39,6 +39,8 @@ public class Hale extends MainView {
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_hale_konferencyjne order by numer_hali asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -81,6 +83,8 @@ public class Hale extends MainView {
             pstmt.setString(1, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

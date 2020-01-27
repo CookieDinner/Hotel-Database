@@ -48,6 +48,8 @@ public class Pokoje extends MainView {
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_pokoje order by numer asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         } catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -98,6 +100,8 @@ public class Pokoje extends MainView {
             pstmt.setString(1, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

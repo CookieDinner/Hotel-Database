@@ -99,6 +99,7 @@ public class AddKonferencje {
                     cstmt.setInt(1, Integer.parseInt(id_konf));
                     cstmt.setString(2, pesel);
                     cstmt.execute();
+                    rs.close();
                 }
                 cstmt.close();
             }catch (Exception ex){
@@ -112,6 +113,8 @@ public class AddKonferencje {
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
                 pesel = rs.getString("pesel");
+                rs.close();
+                stmt.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -120,8 +123,6 @@ public class AddKonferencje {
                     Integer.parseInt(eliczba_osob.getText()), pesel,
                     Integer.parseInt(hala.substring(0, hala.indexOf(","))),pracownicy);
             returnTo();
-        }else {
-            //TODO
         }
     }
 
@@ -151,6 +152,8 @@ public class AddKonferencje {
                     pracownicyScroll.getChildren().add(createPracownikButton(i));
                 epracownicy.setDisable(true);
                 saveButton.setVisible(false);
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -203,6 +206,7 @@ public class AddKonferencje {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             pracownicy.add(rs.getString("nazwisko"));
+            rs.close();
             stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
@@ -220,9 +224,11 @@ public class AddKonferencje {
         }
         if (edata.getValue() == null || edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            edata.getStyleClass().add("wrong");
+            edata.getStyleClass().add("wrongDate");
+            while(edata.getStyleClass().remove("addDate"));
         }else{
-            while (edata.getStyleClass().remove("wrong")) ;
+            while (edata.getStyleClass().remove("wrongDate")) ;
+            edata.getStyleClass().add("addDate");
         }
         if (eliczba_osob.getText().isEmpty() || Integer.parseInt(eliczba_osob.getText()) < 0){
             correct = false;
@@ -265,6 +271,7 @@ public class AddKonferencje {
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
                 pracownicy.add(rs.getString("nazwisko"));
+                rs.close();
                 stmt.close();
             }
         }catch (Exception ex){
@@ -280,6 +287,8 @@ public class AddKonferencje {
             while (rs.next()){
                 pracownicy.add(rs.getString("nazwisko"));
             }
+            rs.close();
+            stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
         }

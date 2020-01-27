@@ -53,6 +53,8 @@ public class Dania extends MainView{
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_dania order by nazwa asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -102,6 +104,8 @@ public class Dania extends MainView{
             pstmt.setString(2, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

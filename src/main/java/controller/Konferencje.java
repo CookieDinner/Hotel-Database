@@ -43,6 +43,8 @@ public class Konferencje extends MainView{
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_konferencje order by nazwa asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         } catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -95,6 +97,8 @@ public class Konferencje extends MainView{
                 pstmt.setString(2, "0");
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

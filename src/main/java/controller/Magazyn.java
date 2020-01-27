@@ -38,7 +38,6 @@ public class Magazyn extends MainView{
 
     @FXML
     public void initialize(){
-        //plusButton.setImage(null);
         title.setText("Magazyn");
         Label skladnik = new Label("Składnik");
         Label ilosc = new Label("Ilość");
@@ -59,6 +58,8 @@ public class Magazyn extends MainView{
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT s.*, d.nazwa as \"NAZWA_DOSTAWCY\" FROM hotel_skladniki s inner join hotel_dostawcy d ON (d.nip=s.dostawca) order by s.nazwa asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -108,6 +109,8 @@ public class Magazyn extends MainView{
             pstmt.setString(2, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

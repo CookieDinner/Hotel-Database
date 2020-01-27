@@ -61,6 +61,8 @@ public class AddPokoj {
                 lazienkaCheck.setOnAction(e -> {
                     if (!edit) lazienkaCheck.setSelected(!lazienkaCheck.isSelected());
                 });
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }

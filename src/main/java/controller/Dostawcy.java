@@ -38,22 +38,18 @@ public class Dostawcy extends MainView{
         title.setText("Dostawcy");
         Label dostawca = new Label("NIP");
         Label skladnik = new Label("Nazwa");
-        //Label data = new Label("Data");
-        //Label cena = new Label("Cena");
 
         dostawca.setStyle("-fx-padding: 0 300 0 0;");
         dostawca.getStyleClass().add("tag");
         skladnik.setStyle("-fx-padding: 0 250 0 0;");
         skladnik.getStyleClass().add("tag");
-        //data.setStyle("-fx-padding: 0 70 0 0;");
-        //data.getStyleClass().add("tag");
-        //cena.setStyle("-fx-padding: 0 0 0 0;");
-        //cena.getStyleClass().add("tag");
-        tagsHBox.getChildren().addAll(dostawca, skladnik);//, data, cena);
+        tagsHBox.getChildren().addAll(dostawca, skladnik);
         try {
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_dostawcy");
             populate(rs);
+            stmt.close();
+            rs.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -97,6 +93,8 @@ public class Dostawcy extends MainView{
             pstmt.setString(2, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            stmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }

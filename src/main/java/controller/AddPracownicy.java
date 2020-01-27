@@ -1,10 +1,9 @@
 package main.java.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import main.java.Main;
 
 import java.sql.*;
@@ -17,11 +16,14 @@ public class AddPracownicy {
     @FXML
     private Button saveButton, editButton, delButton;
     @FXML
-    private TextField premiaTextField, imie, nazwisko, pesel, adres, etat, placa, umowa;
+    private TextField premiaTextField, imie, nazwisko, pesel, adres, etat, placa;
+    @FXML
+    private ComboBox<String> umowa;
     @FXML
     private DatePicker dataZa, dataUr;
     @FXML
     private CheckBox premiaBox;
+    ObservableList<String> umowy = FXCollections.observableArrayList("o Pracę", "o Dzieło", "Zlecenie");
 
     public AddPracownicy(Controller controller, Pracownicy pracownicy){
         this.controller = controller;
@@ -38,6 +40,7 @@ public class AddPracownicy {
     }
     @FXML
     private void initialize(){
+        umowa.setItems(umowy);
         if(look){
             saveButton.setVisible(false);
             try {
@@ -58,8 +61,8 @@ public class AddPracownicy {
                 etat.setEditable(false);
                 placa.setText(rs.getString("placa"));
                 placa.setEditable(false);
-                umowa.setText(rs.getString("umowa"));
-                umowa.setEditable(false);
+                umowa.setValue(rs.getString("umowa"));
+                umowa.setDisable(true);
                 premiaTextField.setText(rs.getString("premia"));
                 premiaTextField.setEditable(false);
                 dataUr.setValue(rs.getDate("data_urodzenia").toLocalDate());
@@ -73,6 +76,8 @@ public class AddPracownicy {
                 premiaBox.setOnAction(e -> {
                     if (!edit) premiaBox.setSelected(!premiaBox.isSelected());
                 });
+                rs.close();
+                stmt.close();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -96,7 +101,7 @@ public class AddPracownicy {
             adres.setEditable(false);
             etat.setEditable(false);
             placa.setEditable(false);
-            umowa.setEditable(false);
+            umowa.setDisable(true);
             premiaTextField.setEditable(false);
             dataUr.setDisable(true);
             dataZa.setDisable(true);
@@ -109,7 +114,7 @@ public class AddPracownicy {
                 cstmt.setFloat(5, Float.parseFloat(placa.getText()));
                 cstmt.setDate(6, Date.valueOf(dataUr.getValue()));
                 cstmt.setDate(7, Date.valueOf(dataZa.getValue()));
-                cstmt.setString(8, umowa.getText());
+                cstmt.setString(8, umowa.getValue());
                 cstmt.setString(9, adres.getText());
                 if(premiaBox.isSelected())
                     cstmt.setFloat(10, Float.parseFloat(premiaTextField.getText()));
@@ -123,7 +128,7 @@ public class AddPracownicy {
         }else if(checkCorrectness()){
             pracownicy.dataBase.addPracownika(pesel.getText(), imie.getText(), nazwisko.getText(), etat.getText(),
                     Float.parseFloat(placa.getText()), Date.valueOf(dataUr.getValue()), Date.valueOf(dataZa.getValue()),
-                    umowa.getText(), adres.getText(), ((premiaBox.isSelected()) ? Float.parseFloat(premiaTextField.getText()) : 0));
+                    umowa.getValue(), adres.getText(), ((premiaBox.isSelected()) ? Float.parseFloat(premiaTextField.getText()) : 0));
             returnTo();
         }else{
         }
@@ -156,7 +161,7 @@ public class AddPracownicy {
         adres.setEditable(true);
         etat.setEditable(true);
         placa.setEditable(true);
-        umowa.setEditable(true);
+        umowa.setDisable(false);
         premiaTextField.setEditable(true);
         dataUr.setDisable(false);
         dataZa.setDisable(false);
@@ -212,7 +217,7 @@ public class AddPracownicy {
         }else{
             while (placa.getStyleClass().remove("wrong"));
         }
-        if (umowa.getText().isEmpty() || umowa.getText().length() > 30){
+        if (umowa.getValue() == null){
             correct = false;
             umowa.getStyleClass().add("wrong");
         }else{
@@ -220,15 +225,19 @@ public class AddPracownicy {
         }
         if (dataUr.getValue() == null || dataUr.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            dataUr.getStyleClass().add("wrong");
+            dataUr.getStyleClass().add("wrongDateSmall");
+            while (dataUr.getStyleClass().remove("addDateSmall"));
         }else{
-            while (dataUr.getStyleClass().remove("wrong"));
+            while (dataUr.getStyleClass().remove("wrongDateSmall"));
+            dataUr.getStyleClass().add("addDateSmall");
         }
         if (dataZa.getValue() == null || dataZa.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
-            dataZa.getStyleClass().add("wrong");
+            dataZa.getStyleClass().add("wrongDateSmall");
+            while (dataZa.getStyleClass().remove("addDateSmall"));
         }else{
-            while (dataZa.getStyleClass().remove("wrong"));
+            while (dataZa.getStyleClass().remove("wrongDateSmall"));
+            dataZa.getStyleClass().add("addDateSmall");
         }
         return correct;
     }

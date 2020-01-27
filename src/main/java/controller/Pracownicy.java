@@ -56,6 +56,8 @@ public class Pracownicy extends MainView{
             stmt = dataBase.getCon().createStatement();
             rs = stmt.executeQuery("SELECT * FROM hotel_pracownicy order by nazwisko asc");
             populate(rs);
+            rs.close();
+            stmt.close();
         } catch(SQLException ex){
             ex.printStackTrace();
         }
@@ -112,6 +114,8 @@ public class Pracownicy extends MainView{
             pstmt.setString(2, searchField.getText());
             rs = pstmt.executeQuery();
             populate(rs);
+            rs.close();
+            pstmt.close();
         }catch(SQLException ex){
             ex.printStackTrace();
         }
