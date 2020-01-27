@@ -8,10 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import main.java.base.DataBase;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Rezerwacje extends MainView{
     @FXML
@@ -83,7 +80,7 @@ public class Rezerwacje extends MainView{
                 Label datzL = new Label(vDatz.toString());
                 datzL.setPrefWidth(190);
                 Label datwL = new Label(vDatw.toString());
-                datwL.setPrefWidth(100);
+                datwL.setPrefWidth(120);
                 aggregate.setStyle("-fx-alignment: center-left;");
                 aggregate.getChildren().addAll(imieL, nazwL, pokL, datzL, datwL);
                 current.setGraphic(aggregate);
@@ -104,7 +101,18 @@ public class Rezerwacje extends MainView{
 
     @Override
     public void search() {
-
+        try {
+            String str = "select * from (select k.imie, k.nazwisko, rp.pokoj, r.* from hotel_klienci k inner join hotel_rezerwacje r on (r.klient=k.pesel) inner join hotel_pracownicy p on (r.pracownik=p.pesel) inner join hotel_rezerwacja_pokoju rp on (r.id_rezerwacji=rp.rezerwacja) where upper(k.imie) LIKE upper(?) || '%' \n" +
+                         "UNION \n"+
+                         "select k.imie, k.nazwisko, rp.pokoj, r.* from hotel_klienci k inner join hotel_rezerwacje r on (r.klient=k.pesel) inner join hotel_pracownicy p on (r.pracownik=p.pesel) inner join hotel_rezerwacja_pokoju rp on (r.id_rezerwacji=rp.rezerwacja) where upper(k.nazwisko) LIKE upper(?) || '%')";
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement(str);
+            pstmt.setString(1, searchField.getText());
+            pstmt.setString(2, searchField.getText());
+            rs = pstmt.executeQuery();
+            populate(rs);
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
     }
 
     public void moreInfo(String id) {

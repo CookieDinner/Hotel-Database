@@ -22,18 +22,27 @@
                 </Button>
             </left>
             <right>
-                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
-                    <graphic>
-                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
-                            <Image url="@../images/edit.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                <HBox spacing="30">
+                    <Button styleClass="returnButton" onAction="#delete" fx:id="delButton">
+                        <graphic>
+                            <ImageView fitWidth="40" preserveRatio="true" fx:id="deleteImageView">
+                                <Image url="@../images/trash.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
+                        <graphic>
+                            <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
+                                <Image url="@../images/edit.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
             </right>
         </BorderPane>
     </top>
     <center>
-        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 100 0 0 100">
+        <VBox minWidth="500" style="-fx-spacing: 30px; -fx-padding: 5 0 0 100">
             <HBox style="-fx-alignment: center;">
                 <Label styleClass="typeLabel">Klient:</Label>
                 <TextField styleClass="addTextWithButton" fx:id="peselTextField" onKeyReleased="#peselTyped"/>
@@ -62,10 +71,20 @@
                 <CheckBox styleClass="check" onMouseClicked="#rabatCheck" fx:id="rabatCheckBox"/>
                 <TextField styleClass="non-writable" editable="false" fx:id="rabatTextField"/>
             </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel">Pokoje:</Label>
+                <ComboBox promptText="Wybierz" fx:id="epokoje" onAction="#chooseSkladnik"/>
+            </HBox>
+            <HBox style="-fx-alignment: center;">
+                <Label styleClass="typeLabel"/>
+                <ScrollPane style="-fx-border-width: 0; -fx-min-height: 120px; -fx-max-width: 300px; -fx-min-width: 300px; -fx-background-color: none;" hbarPolicy="NEVER">
+                    <VBox fx:id="pokojeScroll"/>
+                </ScrollPane>
+            </HBox>
         </VBox>
     </center>
     <bottom>
-        <HBox style="-fx-padding: 100 0 0 550">
+        <HBox style="-fx-padding: 5 0 0 550">
             <Button styleClass="addButton" onAction="#addRezerwacje" fx:id="saveButton">Dodaj</Button>
         </HBox>
     </bottom>

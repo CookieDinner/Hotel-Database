@@ -87,8 +87,12 @@ public class Konferencje extends MainView{
     @Override
     public void search() {
         try {
-            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM hotel_konferencje where upper(nazwa) like UPPER(?)||'%' order by nazwa asc");
+            PreparedStatement pstmt = dataBase.getCon().prepareStatement("SELECT * FROM (SELECT * FROM hotel_konferencje where upper(nazwa) like UPPER(?)||'%' UNION SELECT * from hotel_konferencje where hala_konferencyjna=?) order by nazwa asc");
             pstmt.setString(1, searchField.getText());
+            if (searchField.getText().matches("^[0-9]+$"))
+                pstmt.setString(2, searchField.getText());
+            else
+                pstmt.setString(2, "0");
             rs = pstmt.executeQuery();
             populate(rs);
         }catch(SQLException ex){

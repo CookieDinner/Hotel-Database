@@ -1,9 +1,17 @@
 package main.java.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import main.java.Main;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 
 public class AddSkladnik {
@@ -12,9 +20,12 @@ public class AddSkladnik {
     private boolean look, edit = false;
     String nazwa;
     @FXML
-    private TextField enazwa, stanM, cena, dostawca;
+    private TextField enazwa, stanM, cena;
     @FXML
-    private Button saveButton, editButton;
+    private ComboBox<String> dostawca;
+    @FXML
+    private Button saveButton, editButton, delButton;
+    private ArrayList<String> arrDostawcy = new ArrayList<>();
 
     public AddSkladnik(Controller controller, Magazyn magazyn){
         this.controller = controller;
@@ -30,19 +41,34 @@ public class AddSkladnik {
     @FXML
     private void initialize(){
         if (look) {
-            enazwa.setText("");     // TODO
-            enazwa.setEditable(false);
-            stanM.setText("");       // TODO
-            stanM.setEditable(false);
-            cena.setText("");     // TODO
-            cena.setEditable(false);
-            dostawca.setText("");       // TODO
-            dostawca.setEditable(false);
-            saveButton.setVisible(false);
+            try {
+                String str = "SELECT s.*, d.nazwa as \"dosNazwa\" FROM hotel_skladniki s INNER JOIN hotel_dostawcy d on (s.dostawca = d.nip) WHERE s.nazwa=\'" + nazwa + "\'";
+                PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                enazwa.setText(rs.getString("nazwa"));     // TODO
+                enazwa.setEditable(false);
+                stanM.setText(rs.getString("stan_magazynu"));       // TODO
+                stanM.setEditable(false);
+                cena.setText(rs.getString("cena"));     // TODO
+                cena.setEditable(false);
+                dostawca.setValue(rs.getString("dosNazwa"));       // TODO
+                dostawca.setDisable(true);
+                saveButton.setVisible(false);
+                stmt.close();
+                rs.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+
         }else {
             editButton.setVisible(false);
+            delButton.setVisible(false);
 
         }
+        ObservableList<String> observDostawcy = FXCollections.observableArrayList();
+        observDostawcy.addAll(magazyn.dataBase.getSomeDostawcy());
+        dostawca.setItems(observDostawcy);
     }
     @FXML
     private void returnTo(){
@@ -50,15 +76,52 @@ public class AddSkladnik {
     }
     @FXML
     private void addSkladnik(){
-        if(look){
+        if(look && checkCorrectness()){
             enazwa.setEditable(false);
             cena.setEditable(false);
             stanM.setEditable(false);
-            dostawca.setEditable(false);
+            dostawca.setDisable(true);
             edit = false;
             saveButton.setVisible(false);
+            try{
+                String str = "SELECT nip FROM hotel_dostawcy WHERE upper(nazwa) = upper(\'" + dostawca.getValue() + "\')";
+                PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                String temp_nip = rs.getString("nip");
+                rs.close();
+                stmt.close();
+                CallableStatement cstmt = magazyn.dataBase.getCon().prepareCall("{call dodajSkladnik(?,?,?,?,1)}");
+                cstmt.setString(1, enazwa.getText());
+                cstmt.setInt(2, Integer.parseInt(stanM.getText()));
+                cstmt.setFloat(3, Float.parseFloat(cena.getText()));
+                cstmt.setString(4, temp_nip);
+                cstmt.execute();
+                cstmt.close();
+                returnTo();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()){
-            // TODO
+            try{
+                String str = "SELECT nip FROM hotel_dostawcy WHERE upper(nazwa) = upper(\'" + dostawca.getValue() + "\')";
+                PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                String temp_nip = rs.getString("nip");
+                rs.close();
+                stmt.close();
+                CallableStatement cstmt = magazyn.dataBase.getCon().prepareCall("{call dodajSkladnik(?,?,?,?,0)}");
+                cstmt.setString(1, enazwa.getText());
+                cstmt.setInt(2, Integer.parseInt(stanM.getText()));
+                cstmt.setFloat(3, Float.parseFloat(cena.getText()));
+                cstmt.setString(4, temp_nip);
+                cstmt.execute();
+                cstmt.close();
+                returnTo();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else{
             //TODO
         }
@@ -68,11 +131,23 @@ public class AddSkladnik {
         if (!look)
             return;
         saveButton.setVisible(true);
-        enazwa.setEditable(true);
+        enazwa.setEditable(false);
         stanM.setEditable(true);
         cena.setEditable(true);
-        dostawca.setEditable(true);
+        dostawca.setDisable(false);
         edit = true;
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_skladniki WHERE upper(nazwa) = upper(\'"+ nazwa + "\')";
+            PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean checkCorrectness(){
@@ -95,13 +170,18 @@ public class AddSkladnik {
         }else{
             while (cena.getStyleClass().remove("wrong"));
         }
-        if (!dostawca.getText().matches("[0-9]{11}")){
+        if (dostawca.getValue() == null){
             correct = false;
             dostawca.getStyleClass().add("wrong");
         }else{
             while (dostawca.getStyleClass().remove("wrong"));
         }
         return correct;
+    }
+
+    @FXML
+    private void chooseDostawce(){
+        System.out.println("test");
     }
 
 }

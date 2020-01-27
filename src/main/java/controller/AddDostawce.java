@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -13,7 +14,7 @@ public class AddDostawce {
     private String id;
     private boolean look;
     @FXML
-    private Button editButton, saveButton;
+    private Button editButton, saveButton, delButton;
     @FXML
     private TextField nip, enazwa, adres, numer_telefonu;
 
@@ -33,7 +34,7 @@ public class AddDostawce {
         if(look){
             try {
                 saveButton.setVisible(false);
-                String str = "SELECT * FROM hotel_dostawcy WHERE nip=" + id;
+                String str = "SELECT * FROM hotel_dostawcy WHERE nip = \'" + id + "\'";
                 PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
@@ -50,16 +51,28 @@ public class AddDostawce {
             }
         }else{
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
     }
     @FXML
     private void addDostawce(){
-        if(look) {
+        if(look && checkCorrectness()) {
             saveButton.setVisible(false);
             nip.setEditable(false);
             enazwa.setEditable(false);
             adres.setEditable(false);
             numer_telefonu.setEditable(false);
+            try{
+                CallableStatement cstmt = dostawcy.dataBase.getCon().prepareCall("{call dodajDostawce(?,?,?,?,1)}");
+                cstmt.setString(1, nip.getText());
+                cstmt.setString(2, enazwa.getText());
+                cstmt.setString(3, adres.getText());
+                cstmt.setString(4, numer_telefonu.getText());
+                cstmt.execute();
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()) {
             dostawcy.dataBase.addDostawce(nip.getText(), enazwa.getText(), adres.getText(), numer_telefonu.getText());
             returnTo();
@@ -72,10 +85,22 @@ public class AddDostawce {
             return;
         saveButton.setVisible(true);
         saveButton.setVisible(true);
-        nip.setEditable(true);
+        nip.setEditable(false);
         enazwa.setEditable(true);
         adres.setEditable(true);
         numer_telefonu.setEditable(true);
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_dostawcy WHERE nip = \'" + id + "\'";
+            PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
     @FXML
     private void returnTo(){

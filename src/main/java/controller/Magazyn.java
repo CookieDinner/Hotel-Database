@@ -114,6 +114,6 @@ public class Magazyn extends MainView{
     }
 
     public void moreInfo(String vNazwa) {
-
+        controller.changeScene("addSkladnik.fxml", new AddSkladnik(controller, this, vNazwa));
     }
 }

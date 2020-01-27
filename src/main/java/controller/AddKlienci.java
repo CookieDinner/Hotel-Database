@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class AddKlienci {
     private Controller controller;
@@ -16,7 +13,7 @@ public class AddKlienci {
     private String fxml;
     private boolean look;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
     @FXML
     private TextField imie, nazwisko, pesel, numerTel, adresZa;
 
@@ -52,6 +49,7 @@ public class AddKlienci {
             }
         }else{
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
     }
     @FXML
@@ -60,13 +58,25 @@ public class AddKlienci {
     }
     @FXML
     private void addKlienci(){
-        if(look) {
+        if(look && checkCorrectness()) {
             saveButton.setVisible(false);
             imie.setEditable(false);
             nazwisko.setEditable(false);
             pesel.setEditable(false);
             numerTel.setEditable(false);
             adresZa.setEditable(false);
+            try{
+                CallableStatement cstmt = ((Klienci) toReturnTo).dataBase.getCon().prepareCall("{call dodajKlienta(?,?,?,?,?,1)}");
+                cstmt.setString(1, pesel.getText());
+                cstmt.setString(2, imie.getText());
+                cstmt.setString(3, nazwisko.getText());
+                cstmt.setString(4, numerTel.getText());
+                cstmt.setString(5, adresZa.getText());
+                cstmt.execute();
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()) {
             if (toReturnTo.getClass() == Klienci.class) {
                 ((Klienci) toReturnTo).dataBase.addKlienci(imie.getText(), nazwisko.getText(),
@@ -88,9 +98,21 @@ public class AddKlienci {
         saveButton.setVisible(true);
         imie.setEditable(true);
         nazwisko.setEditable(true);
-        pesel.setEditable(true);
+        pesel.setEditable(false);
         numerTel.setEditable(true);
         adresZa.setEditable(true);
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_klienci WHERE pesel=\'" + peselFilled + "\'";
+            PreparedStatement stmt = ((Klienci) toReturnTo).dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean checkCorrectness(){

@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -15,7 +16,7 @@ public class AddPokoj {
     private boolean edit;
     private String numerString;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
     @FXML
     private TextField numer, cena, liczbaL;
     @FXML
@@ -65,16 +66,29 @@ public class AddPokoj {
             }
         }else{
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
     }
     @FXML
     private void addPokoj(){
-        if(look){
+        if(look && checkCorrectness()){
             edit = false;
             saveButton.setVisible(false);
             numer.setEditable(false);
             cena.setEditable(false);
             liczbaL.setEditable(false);
+            try{
+                CallableStatement cstmt = pokoje.dataBase.getCon().prepareCall("{call dodajPokoj(?,?,?,?,?,1)}");
+                cstmt.setInt(1, Integer.parseInt(numer.getText()));
+                cstmt.setFloat(2, Float.parseFloat(cena.getText()));
+                cstmt.setInt(3, Integer.parseInt(liczbaL.getText()));
+                cstmt.setInt(4, ((telewizorCheck.isSelected()) ? 1 : 0));
+                cstmt.setInt(5, ((lazienkaCheck.isSelected()) ? 1 : 0));
+                cstmt.execute();
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()) {
             pokoje.dataBase.addPokoj(Integer.parseInt(numer.getText()), Float.parseFloat(cena.getText()), Integer.parseInt(liczbaL.getText()),
                     ((telewizorCheck.isSelected()) ? 1 : 0),((lazienkaCheck.isSelected()) ? 1 : 0));
@@ -93,9 +107,22 @@ public class AddPokoj {
         saveButton.setVisible(true);
         edit = true;
         saveButton.setVisible(true);
-        numer.setEditable(true);
+        numer.setEditable(false);
         cena.setEditable(true);
         liczbaL.setEditable(true);
+    }
+
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_pokoje WHERE numer=" + numerString;
+            PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean checkCorrectness(){

@@ -25,13 +25,22 @@
                 </Button>
             </left>
             <right>
-                <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
-                    <graphic>
-                        <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
-                            <Image url="@../images/edit.png"/>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                <HBox spacing="30">
+                    <Button styleClass="returnButton" onAction="#delete" fx:id="delButton">
+                        <graphic>
+                            <ImageView fitWidth="40" preserveRatio="true" fx:id="deleteImageView">
+                                <Image url="@../images/trash.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button styleClass="returnButton" onAction="#edit" fx:id="editButton">
+                        <graphic>
+                            <ImageView fitWidth="40" preserveRatio="true" fx:id="editImageView">
+                                <Image url="@../images/edit.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </HBox>
             </right>
         </BorderPane>
     </top>

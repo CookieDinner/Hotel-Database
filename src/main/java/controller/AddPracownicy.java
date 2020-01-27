@@ -7,9 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import main.java.Main;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class AddPracownicy {
     private Controller controller;
@@ -17,7 +15,7 @@ public class AddPracownicy {
     private boolean premia = false, look, edit;
     private String peselString;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
     @FXML
     private TextField premiaTextField, imie, nazwisko, pesel, adres, etat, placa, umowa;
     @FXML
@@ -80,6 +78,7 @@ public class AddPracownicy {
             }
         }else{
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
     }
     @FXML
@@ -88,7 +87,7 @@ public class AddPracownicy {
     }
     @FXML
     private void addPracownicy(){
-        if(look){
+        if(look && checkCorrectness()){
             edit = false;
             saveButton.setVisible(false);
             imie.setEditable(false);
@@ -101,6 +100,26 @@ public class AddPracownicy {
             premiaTextField.setEditable(false);
             dataUr.setDisable(true);
             dataZa.setDisable(true);
+            try {
+                CallableStatement cstmt = pracownicy.dataBase.getCon().prepareCall("{call dodajPracownika(?,?,?,?,?,?,?,?,?,?,1)}");
+                cstmt.setString(1, pesel.getText());
+                cstmt.setString(2, imie.getText());
+                cstmt.setString(3, nazwisko.getText());
+                cstmt.setString(4, etat.getText());
+                cstmt.setFloat(5, Float.parseFloat(placa.getText()));
+                cstmt.setDate(6, Date.valueOf(dataUr.getValue()));
+                cstmt.setDate(7, Date.valueOf(dataZa.getValue()));
+                cstmt.setString(8, umowa.getText());
+                cstmt.setString(9, adres.getText());
+                if(premiaBox.isSelected())
+                    cstmt.setFloat(10, Float.parseFloat(premiaTextField.getText()));
+                else
+                    cstmt.setNull(10, Types.FLOAT);
+                cstmt.execute();
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()){
             pracownicy.dataBase.addPracownika(pesel.getText(), imie.getText(), nazwisko.getText(), etat.getText(),
                     Float.parseFloat(placa.getText()), Date.valueOf(dataUr.getValue()), Date.valueOf(dataZa.getValue()),
@@ -133,7 +152,7 @@ public class AddPracownicy {
         saveButton.setVisible(true);
         imie.setEditable(true);
         nazwisko.setEditable(true);
-        pesel.setEditable(true);
+        pesel.setEditable(false);
         adres.setEditable(true);
         etat.setEditable(true);
         placa.setEditable(true);
@@ -141,6 +160,18 @@ public class AddPracownicy {
         premiaTextField.setEditable(true);
         dataUr.setDisable(false);
         dataZa.setDisable(false);
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_pracownicy WHERE pesel = \'" + peselString + "\'";
+            PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean checkCorrectness(){

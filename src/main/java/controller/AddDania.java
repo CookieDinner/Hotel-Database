@@ -21,9 +21,9 @@ public class AddDania {
     private Controller controller;
     private Dania dania;
     private String id;
-    private boolean look;
+    private boolean look, edit;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
     @FXML
     private TextField nazwa, cena;
     @FXML
@@ -36,6 +36,7 @@ public class AddDania {
         this.controller = controller;
         this.dania = dania;
         this.look = false;
+        this.edit = true;
     }
 
     public AddDania(Controller controller, Dania dania, String id) {
@@ -43,6 +44,7 @@ public class AddDania {
         this.dania = dania;
         this.id = id;
         this.look = true;
+        this.edit = false;
     }
     @FXML
     private void initialize(){
@@ -66,6 +68,7 @@ public class AddDania {
             }
         }else{
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
         ObservableList<String> observPracownicy = FXCollections.observableArrayList();
         observPracownicy.addAll(dania.dataBase.getSomeSkladniki());
@@ -78,7 +81,8 @@ public class AddDania {
     }
     @FXML
     private void addDania(){
-        if(look){
+        if(look && checkCorrectness()){
+            edit = false;
             saveButton.setVisible(false);
             nazwa.setEditable(false);
             cena.setEditable(false);
@@ -86,18 +90,30 @@ public class AddDania {
         }else if(checkCorrectness()) {
             dania.dataBase.addDanie(nazwa.getText(), Float.parseFloat(cena.getText()), arrSkladniki);
             returnTo();
-        }else{
-            // TODO
         }
     }
     @FXML
     private void edit(){
         if(!look)
             return;
+        edit = true;
         saveButton.setVisible(true);
         nazwa.setEditable(true);
         cena.setEditable(true);
         skladniki.setEditable(true);
+    }
+
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_dania WHERE nazwa=\'" + id  + "\'";
+            PreparedStatement stmt = dania.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     private boolean isDanieCorrect(String danie){
@@ -129,6 +145,8 @@ public class AddDania {
     }
 
     private void deleteButton(Button toDelete){
+        if(!edit)
+            return;
         skladnikiScroll.getChildren().remove(toDelete);
         arrSkladniki.clear();
         for (Node i : skladnikiScroll.getChildren()) {

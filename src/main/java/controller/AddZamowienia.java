@@ -12,16 +12,13 @@ import main.java.Main;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class AddZamowienia {
     private Controller controller;
     private Zamowienia zamowienia;
-    private boolean look;
+    private boolean look, edit;
     private String id;
     @FXML
     private ComboBox<String> epracownicy;
@@ -32,7 +29,7 @@ public class AddZamowienia {
     @FXML
     private VBox daniaScroll;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
 
     private ArrayList<String> dania = new ArrayList<>();
 
@@ -41,6 +38,7 @@ public class AddZamowienia {
         this.controller = controller;
         this.zamowienia = zamowienia;
         this.look = false;
+        this.edit = true;
     }
 
     public AddZamowienia(Controller controller, Zamowienia zamowienia, String id){
@@ -48,6 +46,7 @@ public class AddZamowienia {
         this.zamowienia = zamowienia;
         this.id = id;
         this.look = true;
+        this.edit = false;
     }
     @FXML
     private void initialize() {
@@ -61,7 +60,7 @@ public class AddZamowienia {
                 epracownicy.setDisable(true);
                 zdata.setValue(rs.getDate("data_zamowienia").toLocalDate());
                 zdata.setDisable(true);
-                edania.setEditable(false);
+                edania.setDisable(true);
                 getDania();
                 for(String i : dania)
                     daniaScroll.getChildren().add(createDanieButton(i));
@@ -71,6 +70,7 @@ public class AddZamowienia {
             }
         } else {
             editButton.setVisible(false);
+            delButton.setVisible(false);
         }
         ObservableList<String> observPracownicy = FXCollections.observableArrayList();
         observPracownicy.addAll(zamowienia.dataBase.getSomePracownicy());
@@ -81,11 +81,41 @@ public class AddZamowienia {
     }
     @FXML
     private void addZamowienie(){
-        if(look){
+        if(look && checkCorrectness()){
+            edit = false;
             epracownicy.setDisable(true);
             zdata.setDisable(true);
-            edania.setEditable(false);
+            edania.setDisable(false);
             saveButton.setVisible(false);
+            try{
+                String str = "SELECT pesel FROM hotel_pracownicy WHERE upper(nazwisko) = upper(\'" + epracownicy.getValue() + "\')";
+                PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                String temp_pesel = rs.getString("pesel");
+                rs.close();
+                stmt.close();
+                CallableStatement cstmt = zamowienia.dataBase.getCon().prepareCall("{? = call dodajZamowienie(?,?,?,1)}");
+                cstmt.registerOutParameter(1, Types.INTEGER);
+                cstmt.setString(2, id);
+                cstmt.setDate(3, Date.valueOf(zdata.getValue()));
+                cstmt.setString(4, temp_pesel);
+                cstmt.execute();
+                cstmt.close();
+                str = "DELETE FROM hotel_zamowienie_dania where zamowienie=" + id;
+                stmt = zamowienia.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                for(String i : dania){
+                    cstmt = zamowienia.dataBase.getCon().prepareCall("{call dodajZamowienieDania(?,?)}");
+                    cstmt.setInt(1, Integer.parseInt(id));
+                    cstmt.setInt(2, Integer.parseInt(i));
+                    cstmt.execute();
+                }
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()){
             int idDania = 0;
             String pesel = null;
@@ -116,10 +146,24 @@ public class AddZamowienia {
     private void edit(){
         if(!look)
             return;
+        edit = true;
         epracownicy.setDisable(false);
         zdata.setDisable(false);
-        edania.setEditable(true);
+        edania.setDisable(true);
         saveButton.setVisible(true);
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_zamowienia WHERE id_zamowienia=" + id;
+            PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private boolean checkCorrectness(){
@@ -160,7 +204,9 @@ public class AddZamowienia {
 //    }
     @FXML
     private void chooseDanie(){
-        String temp_danie = edania.getValue().toString();
+        if(edania.getValue() == null)
+            return;
+        String temp_danie = edania.getValue();
         try {
             String str = "SELECT * FROM hotel_dania WHERE upper(nazwa)=upper(\'" + temp_danie + "\')";
             PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
@@ -181,6 +227,8 @@ public class AddZamowienia {
         return button;
     }
     private void deleteButton(Button toDelete){
+        if(!edit)
+            return;
         daniaScroll.getChildren().remove(toDelete);
         dania.clear();
         try {

@@ -36,14 +36,14 @@ public class AddKonferencje {
     @FXML
     private ImageView editImageView;
     @FXML
-    private Button editButton, saveButton;
+    private Button editButton, saveButton, delButton;
     @FXML
     private VBox pracownicyScroll;
 
     private DataBase dataBase;
     private Konferencje konferencje;
     private Controller controller;
-    private boolean look;
+    private boolean look, edit;
     private String id_konf;
     private ArrayList<String> pracownicy = new ArrayList<>();
 
@@ -52,6 +52,7 @@ public class AddKonferencje {
         this.konferencje = konferencje;
         this.controller = controller;
         this.look = false;
+        this.edit = true;
     }
     public AddKonferencje(DataBase dataBase, Konferencje konferencje, Controller controller, String id_konf){
         this.dataBase = dataBase;
@@ -59,17 +60,50 @@ public class AddKonferencje {
         this.controller = controller;
         this.id_konf = id_konf;
         this.look = true;
+        this.edit = false;
     }
     @FXML
     public void addKonferencje(){
-        if(look){
+        if(look && checkCorrectness()){
+            edit = false;
             String pesel = null;
             enazwa.setEditable(false);
             edata.setDisable(true);
-            eliczba_osob.setEditable(false);
             ehala.setDisable(true);
             epracownicy.setDisable(true);
             saveButton.setVisible(false);
+            try{
+                CallableStatement cstmt = konferencje.dataBase.getCon().prepareCall("{? = call dodajKonferencje(?,?,?,?,?,1)}");
+                cstmt.registerOutParameter(1, Types.INTEGER);
+                cstmt.setInt(2, Integer.parseInt(id_konf));
+                cstmt.setString(3, enazwa.getText());
+                cstmt.setDate(4, Date.valueOf(edata.getValue()));
+                cstmt.setInt(5, Integer.parseInt(eliczba_osob.getText()));
+                if(ehala.getValue().contains(","))
+                    cstmt.setInt(6, Integer.parseInt(ehala.getValue().substring(0,ehala.getValue().indexOf(","))));
+                else
+                    cstmt.setInt(6, Integer.parseInt(ehala.getValue()));
+                cstmt.execute();
+                cstmt.close();
+                String str = "DELETE FROM hotel_nadzor_konferencji where id_konferencji=" + id_konf;
+                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                for(String i : pracownicy){
+                    str = "SELECT * FROM hotel_pracownicy WHERE nazwisko=\'" + i + "\'";
+                    stmt = dataBase.getCon().prepareStatement(str);
+                    ResultSet rs = stmt.executeQuery();
+                    rs.next();
+                    pesel = rs.getString("pesel");
+                    cstmt = konferencje.dataBase.getCon().prepareCall("{call dodajNadzorKonferencji(?,?)}");
+                    cstmt.setInt(1, Integer.parseInt(id_konf));
+                    cstmt.setString(2, pesel);
+                    cstmt.execute();
+                }
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else if(checkCorrectness()){
             String pesel = null;
             try {
@@ -121,7 +155,8 @@ public class AddKonferencje {
                 ex.printStackTrace();
             }
         }else {
-            editImageView.setImage(null);   // TODO
+            editButton.setVisible(false);
+            delButton.setVisible(false);
         }
         ObservableList<String> observPracownicy = FXCollections.observableArrayList();
         observPracownicy.addAll(konferencje.dataBase.getSomePracownicy());
@@ -135,6 +170,7 @@ public class AddKonferencje {
     private void edit(){
         if(!look)
             return;
+        edit = true;
         enazwa.setEditable(true);
         edata.setDisable(false);
         eliczba_osob.setEditable(true);
@@ -143,14 +179,30 @@ public class AddKonferencje {
         saveButton.setVisible(true);
     }
     @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_konferencje WHERE id_konferencji=" + id_konf;
+            PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+
+    @FXML
     private void choosePracownik(){
-        String temp_nazwisko = epracownicy.getValue().toString();
+        if(epracownicy.getValue() == null)
+            return;
+        String temp_nazwisko = epracownicy.getValue();
         try {
             String str = "SELECT * FROM hotel_pracownicy WHERE upper(nazwisko)=upper(\'" + temp_nazwisko + "\')";
             PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            pracownicy.add(rs.getString("pesel"));
+            pracownicy.add(rs.getString("nazwisko"));
             stmt.close();
         }catch(SQLException ex) {
             ex.printStackTrace();
@@ -166,7 +218,7 @@ public class AddKonferencje {
         }else{
             while (enazwa.getStyleClass().remove("wrong"));
         }
-        if (edata.getValue() == null || !edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (edata.getValue() == null || edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             edata.getStyleClass().add("wrong");
         }else{
@@ -201,9 +253,10 @@ public class AddKonferencje {
     }
 
     private void deleteButton(Button toDelete) {
+        if(!edit)
+            return;
         pracownicyScroll.getChildren().remove(toDelete);
         pracownicy.clear();
-        getPracownicy();
         try {
             for (Node i : pracownicyScroll.getChildren()) {
                 String temp_nazwisko = ((Button) i).getText();
@@ -211,7 +264,7 @@ public class AddKonferencje {
                 PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
-                pracownicy.add(rs.getString("pesel"));
+                pracownicy.add(rs.getString("nazwisko"));
                 stmt.close();
             }
         }catch (Exception ex){

@@ -285,4 +285,34 @@ public class DataBase {
     }
 
     public Connection getCon(){ return con; }
+
+    public ArrayList<String> getSomeDostawcy() {
+        ArrayList<String> dania = new ArrayList<>();
+        try{
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_dostawcy order by nazwa asc");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                dania.add(rs.getString("nazwa"));
+            }
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return dania;
+    }
+
+    public ArrayList<String> getSomePokoje() {
+        ArrayList<String> dania = new ArrayList<>();
+        try{
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM hotel_pokoje order by numer asc");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                dania.add(rs.getString("numer"));
+            }
+            stmt.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return dania;
+    }
 }

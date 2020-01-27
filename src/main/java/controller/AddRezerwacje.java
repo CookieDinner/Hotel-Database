@@ -3,19 +3,19 @@ package main.java.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import main.java.Main;
 import main.java.base.DataBase;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -31,13 +31,15 @@ public class AddRezerwacje {
     @FXML
     private TextField peselTextField;
     @FXML
-    private ComboBox<String> epracownicy;
+    private ComboBox<String> epracownicy, epokoje;
     @FXML
     private DatePicker zdata, wdata;
     @FXML
     private CheckBox rabatCheckBox;
     @FXML
-    private Button saveButton, editButton;
+    private Button saveButton, editButton, delButton;
+    @FXML
+    private VBox pokojeScroll;
     private boolean look, edit = false;
     public DataBase dataBase;
     private String id;
@@ -71,12 +73,13 @@ public class AddRezerwacje {
                 rs.next();
                 peselTextField.setText(rs.getString("klient"));
                 peselTextField.setEditable(false);
-                epracownicy.setPromptText(rs.getString("nazwisko"));
+                epracownicy.setValue(rs.getString("nazwisko"));
                 epracownicy.setDisable(true);
                 zdata.setValue(rs.getDate("data_zameldowania").toLocalDate());
                 zdata.setDisable(true);
                 wdata.setValue(rs.getDate("termin_wymeldowania").toLocalDate());
                 wdata.setDisable(true);
+                epokoje.setDisable(true);
                 float temp_rabat = rs.getFloat("rabat");
                 if(rabat)
                     rabatCheckBox.setSelected(true);
@@ -84,12 +87,16 @@ public class AddRezerwacje {
                     rabatCheckBox.setSelected(false);
                 rabatTextField.setText(Float.toString(temp_rabat));
                 rabatTextField.setEditable(false);
+                getPokoje();
+                for (String i : pokoje)
+                    pokojeScroll.getChildren().add(createSkladnikButton(i));
                 saveButton.setVisible(false);
             }catch (Exception ex){
                 ex.printStackTrace();
             }
         }else {
             editButton.setVisible(false);
+            delButton.setVisible(false);
             rabatCheckBox.setSelected(rabat);
             rabatCheck();
             peselTextField.setText(peselString);
@@ -100,6 +107,10 @@ public class AddRezerwacje {
         ObservableList<String> observPracownicy = FXCollections.observableArrayList();
         observPracownicy.addAll(rezerwacje.dataBase.getSomePracownicy());
         epracownicy.setItems(observPracownicy);
+
+        ObservableList<String> observPokoje = FXCollections.observableArrayList();
+        observPokoje.addAll(rezerwacje.dataBase.getSomePokoje());
+        epokoje.setItems(observPokoje);
     }
     @FXML
     private void returnTo(){
@@ -125,14 +136,47 @@ public class AddRezerwacje {
     }
     @FXML
     private void addRezerwacje(){
-        if(look){
+        if(look && checkCorrectness()){
             peselTextField.setEditable(false);
             epracownicy.setDisable(true);
             zdata.setDisable(true);
             wdata.setDisable(true);
             rabatTextField.setEditable(false);
+            epokoje.setDisable(false);
             edit = false;
             saveButton.setVisible(false);
+            try{
+                CallableStatement cstmt = rezerwacje.dataBase.getCon().prepareCall("{? = call dodajRezerwacje(?,?,?,?,?,?,1)}");
+                cstmt.registerOutParameter(1, Types.INTEGER);
+                cstmt.setInt(2, Integer.parseInt(id));
+                cstmt.setDate(3, Date.valueOf(zdata.getValue()));
+                cstmt.setDate(4, Date.valueOf(wdata.getValue()));
+                if(rabatCheckBox.isSelected())
+                    cstmt.setFloat(5, Float.parseFloat(rabatTextField.getText()));
+                else
+                    cstmt.setNull(5, Types.FLOAT);
+                PreparedStatement pstmt = rezerwacje.dataBase.getCon().prepareStatement("SELECT pesel from hotel_pracownicy where nazwisko=?");
+                pstmt.setString(1,epracownicy.getValue());
+                ResultSet rs = pstmt.executeQuery();
+                rs.next();
+                cstmt.setString(6, rs.getString("pesel"));
+                cstmt.setString(7,peselTextField.getText());
+                cstmt.execute();
+                cstmt.close();
+                String str = "DELETE FROM hotel_rezerwacja_pokoju where rezerwacja=" + id;
+                PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                for(String i : pokoje){
+                    cstmt = rezerwacje.dataBase.getCon().prepareCall("{call dodajRezerwacjePokoju(?,?)}");
+                    cstmt.setInt(1, Integer.parseInt(id));
+                    cstmt.setInt(2, Integer.parseInt(i));
+                    cstmt.execute();
+                }
+                cstmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }else {
             if (checkCorrectness()) {
                 try {
@@ -176,7 +220,44 @@ public class AddRezerwacje {
         zdata.setDisable(false);
         wdata.setDisable(false);
         rabatTextField.setEditable(true);
+        epokoje.setDisable(false);
         edit = true;
+    }
+    @FXML
+    private void delete(){
+        try {
+            String str = "DELETE FROM hotel_rezerwacje WHERE id_rezerwacji = " + id;
+            PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
+            returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private Button createSkladnikButton(String nazwa){
+        Button button = new Button(nazwa);
+        button.getStyleClass().add("danieButton");
+        button.setOnAction(e->deleteButton(button));
+        return button;
+    }
+
+    @FXML
+    private void chooseSkladnik(){
+        String temp_nazwa = epokoje.getValue().toString();
+        pokoje.add(temp_nazwa);
+        pokojeScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+    }
+
+    private void deleteButton(Button toDelete){
+        if(!edit)
+            return;
+        pokojeScroll.getChildren().remove(toDelete);
+        pokoje.clear();
+        for (Node i : pokojeScroll.getChildren()) {
+            pokoje.add(((Button) i).getText());
+        }
     }
 
     private boolean checkCorrectness(){
@@ -193,45 +274,41 @@ public class AddRezerwacje {
         }else{
             while(epracownicy.getStyleClass().remove("wrong"));
         }
-        if (zdata.getValue() == null || !zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             zdata.getStyleClass().add("wrong");
         }else{
             while(zdata.getStyleClass().remove("wrong"));
         }
-        if (wdata.getValue() == null || !wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (wdata.getValue() == null || wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             wdata.getStyleClass().add("wrong");
         }else{
             while(wdata.getStyleClass().remove("wrong"));
+        }
+        if(pokojeScroll.getChildren().isEmpty()){
+            correct = false;
+            epokoje.getStyleClass().add("wrong");
+        }else{
+            while(epokoje.getStyleClass().remove("wrong"));
         }
         return correct;
     }
 
     @FXML
     private void peselTyped() {
-        ArrayList<String> pesels = new ArrayList<>();
+
+    }
+
+    private void getPokoje(){
         try {
-            String str = "SELECT pesel FROM hotel_klienci";
+            String str = "select r.id_rezerwacji, rp.pokoj from hotel_rezerwacja_pokoju rp inner join hotel_rezerwacje r on (rp.rezerwacja=r.id_rezerwacji) where r.id_rezerwacji=\'" + id + "\'";
             PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
-            while(rs.next()) {
-                pesels.add(rs.getString("pesel"));
+            while (rs.next()){
+                pokoje.add(rs.getString("pokoj"));
             }
-            //System.out.println(peselTextField.getText());
-            if (peselTextField.getText().length() == 11)
-                if (pesels.indexOf(peselTextField.getText()) == -1) {
-                    while (peselTextField.getStyleClass().remove("good")) ;
-                    peselTextField.getStyleClass().add("wrong");
-                } else {
-                    while (peselTextField.getStyleClass().remove("wrong")) ;
-                    peselTextField.getStyleClass().add("good");
-                }
-            else {
-                while (peselTextField.getStyleClass().remove("wrong")) ;
-                while (peselTextField.getStyleClass().remove("good")) ;
-            }
-        }catch (Exception ex){
+        }catch(SQLException ex) {
             ex.printStackTrace();
         }
     }

@@ -63,7 +63,7 @@ public class Klienci extends MainView {
                 Label teleL = new Label(vTele);
                 teleL.setPrefWidth(230);
                 Label peseL = new Label(vPesel);
-                peseL.setPrefWidth(110);
+                peseL.setPrefWidth(130);
                 aggregate.setStyle("-fx-alignment: center-left;");
                 aggregate.getChildren().addAll(imieL, nazwL, teleL, peseL);
                 current.setGraphic(aggregate);
