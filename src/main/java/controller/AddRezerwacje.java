@@ -65,6 +65,7 @@ public class AddRezerwacje {
     }
     @FXML
     private void initialize(){
+        peselTextField.setTooltip(new Tooltip("Pesel klienta"));
         if (look) {
             try {
                 String str = "SELECT * FROM hotel_rezerwacje r inner join hotel_pracownicy p on(r.pracownik=p.pesel) WHERE r.id_rezerwacji=" + id;
@@ -269,36 +270,103 @@ public class AddRezerwacje {
         if (!peselTextField.getText().matches("^[0-9]{11}$")){
             correct = false;
             peselTextField.getStyleClass().add("wrong");
-        }else{
+            peselTextField.setTooltip(new Tooltip("Niepoprawny pesel"));
+        }else if(peselTextField.getText().matches("^[0-9]{11}$")){
+            try {
+                PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement("SELECT pesel from hotel_klienci");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while(rs.next()){
+                    if(peselTextField.getText().equals(rs.getString("pesel"))){
+                        nope = true;
+                        break;
+                    }
+                }
+                if (!nope){
+                    correct = false;
+                    peselTextField.getStyleClass().add("wrong");
+                    peselTextField.setTooltip(new Tooltip("Nie istnieje taki klient"));
+                }else{
+                    while(peselTextField.getStyleClass().remove("wrong"));
+                    peselTextField.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        } else{
             while(peselTextField.getStyleClass().remove("wrong"));
+            peselTextField.setTooltip(new Tooltip("Pesel klienta"));
         }
         if (epracownicy.getValue() == null){
             correct = false;
             epracownicy.getStyleClass().add("wrong");
+            epracownicy.setTooltip(new Tooltip("Trzeba wybrać pracownika"));
         }else{
             while(epracownicy.getStyleClass().remove("wrong"));
+            epracownicy.setTooltip(null);
         }
         if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             zdata.getStyleClass().add("wrongDate");
             while(zdata.getStyleClass().remove("addDate"));
+            zdata.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while(zdata.getStyleClass().remove("wrongDate"));
             zdata.getStyleClass().add("addDate");
+            zdata.setTooltip(null);
         }
         if (wdata.getValue() == null || wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             wdata.getStyleClass().add("wrongDate");
             while(wdata.getStyleClass().remove("addDate"));
+            wdata.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while(wdata.getStyleClass().remove("wrongDate"));
             wdata.getStyleClass().add("addDate");
+            wdata.setTooltip(null);
         }
         if(pokojeScroll.getChildren().isEmpty()){
             correct = false;
             epokoje.getStyleClass().add("wrong");
+            epokoje.setTooltip(new Tooltip("Trzeba wybrać pokój"));
         }else{
             while(epokoje.getStyleClass().remove("wrong"));
+            epokoje.setTooltip(null);
+        }
+        if(rabatCheckBox.isSelected() && !rabatTextField.getText().matches("^[0-9]{1,4}(\\.[0-9]{0,2}){0,1}$")){
+            correct = false;
+            rabatTextField.getStyleClass().add("wrong");
+            rabatTextField.setTooltip(new Tooltip("Niepoprawny rabat"));
+        }else if(rabatCheckBox.isSelected()){
+            while (rabatTextField.getStyleClass().remove("wrong"));
+            rabatTextField.setTooltip(null);
+        }
+        try{
+            if (zdata.getValue() != null && wdata.getValue() != null) {
+                int p = 1;
+                for(String i : pokoje) {
+                    CallableStatement cstmt = rezerwacje.dataBase.getCon().prepareCall("{? = call sprawdzPokoj(?,?,?)}");
+                    cstmt.registerOutParameter(1, Types.INTEGER);
+                    cstmt.setInt(2, Integer.parseInt(i));
+                    cstmt.setDate(3, Date.valueOf(zdata.getValue()));
+                    cstmt.setDate(4, Date.valueOf(wdata.getValue()));
+                    cstmt.execute();
+                    p = p & cstmt.getInt(1);
+                }
+                if(p == 0){
+                    epokoje.getStyleClass().add("wrong");
+                    epokoje.setTooltip(new Tooltip("Pokój zajęty"));
+                    correct = false;
+                }else{
+                    while(epokoje.getStyleClass().remove("wrong"));
+                    epokoje.setTooltip(null);
+                }
+            }
+
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
         return correct;
     }

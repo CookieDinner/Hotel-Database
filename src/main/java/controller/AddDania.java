@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -152,20 +153,26 @@ public class AddDania {
         if (nazwa.getText().isEmpty() || nazwa.getText().length() > 50){
             correct = false;
             nazwa.getStyleClass().add("wrong");
+            nazwa.setTooltip(new Tooltip("Nazwa musi się składać z 0-50 znaków"));
         }else{
             while (nazwa.getStyleClass().remove("wrong"));
+            nazwa.setTooltip(null);
         }
         if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
             correct = false;
             cena.getStyleClass().add("wrong");
+            cena.setTooltip(new Tooltip("Cena powinna być liczbą"));
         }else{
             while (cena.getStyleClass().remove("wrong"));
+            cena.setTooltip(null);
         }
         if (skladnikiScroll.getChildren().isEmpty()){
             correct = false;
             skladniki.getStyleClass().add("wrong");
+            skladniki.setTooltip(new Tooltip("Danie powinno zawierać składniki"));
         }else{
             while (skladniki.getStyleClass().remove("wrong"));
+            skladniki.setTooltip(null);
         }
         return correct;
     }

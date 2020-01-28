@@ -3,6 +3,7 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.*;
 
@@ -121,32 +122,42 @@ public class AddKlienci {
         if (imie.getText().isEmpty() || imie.getText().length() > 30){
             correct = false;
             imie.getStyleClass().add("wrong");
+            imie.setTooltip(new Tooltip("Imie powinno się składać z 0-30 znaków"));
         }else{
             while (imie.getStyleClass().remove("wrong"));
+            imie.setTooltip(null);
         }
         if (nazwisko.getText().isEmpty() || nazwisko.getText().length() > 30){
             correct = false;
             nazwisko.getStyleClass().add("wrong");
+            nazwisko.setTooltip(new Tooltip("Nazwisko powinno się składać z 0-30 znaków"));
         }else{
             while (nazwisko.getStyleClass().remove("wrong"));
+            nazwisko.setTooltip(null);
         }
         if (!pesel.getText().matches("[0-9]{11}")){
             correct = false;
             pesel.getStyleClass().add("wrong");
+            pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
         }else{
             while (pesel.getStyleClass().remove("wrong"));
+            pesel.setTooltip(null);
         }
         if (!numerTel.getText().matches("[0-9]{9}")){
             correct = false;
             numerTel.getStyleClass().add("wrong");
+            numerTel.setTooltip(new Tooltip("Niepoprawny numer telfonu"));
         }else{
             while (numerTel.getStyleClass().remove("wrong"));
+            numerTel.setTooltip(null);
         }
         if (adresZa.getText().isEmpty() || adresZa.getText().length() > 50){
             correct = false;
             adresZa.getStyleClass().add("wrong");
+            adresZa.setTooltip(new Tooltip("Adres powinien się składać z 0-50 znaków"));
         }else{
             while (adresZa.getStyleClass().remove("wrong"));
+            adresZa.setTooltip(null);
         }
         return correct;
     }

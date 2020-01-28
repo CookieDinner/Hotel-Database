@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import main.java.Main;
 
 import java.sql.CallableStatement;
@@ -46,13 +47,13 @@ public class AddSkladnik {
                 PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
-                enazwa.setText(rs.getString("nazwa"));     // TODO
+                enazwa.setText(rs.getString("nazwa"));
                 enazwa.setEditable(false);
-                stanM.setText(rs.getString("stan_magazynu"));       // TODO
+                stanM.setText(rs.getString("stan_magazynu"));
                 stanM.setEditable(false);
-                cena.setText(rs.getString("cena"));     // TODO
+                cena.setText(rs.getString("cena"));
                 cena.setEditable(false);
-                dostawca.setValue(rs.getString("dosNazwa"));       // TODO
+                dostawca.setValue(rs.getString("dosNazwa"));
                 dostawca.setDisable(true);
                 saveButton.setVisible(false);
                 stmt.close();
@@ -98,7 +99,6 @@ public class AddSkladnik {
                 cstmt.setString(4, temp_nip);
                 cstmt.execute();
                 cstmt.close();
-                returnTo();
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -153,26 +153,34 @@ public class AddSkladnik {
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 30){
             correct = false;
             enazwa.getStyleClass().add("wrong");
+            enazwa.setTooltip(new Tooltip("Nazwa musi się składać z 0-30 znaków"));
         }else{
             while(enazwa.getStyleClass().remove("wrong"));
+            enazwa.setTooltip(null);
         }
         if (!stanM.getText().matches("[0-9]{1,5}")){
             correct = false;
             stanM.getStyleClass().add("wrong");
+            stanM.setTooltip(new Tooltip("Niepoprawny stan magazynu"));
         }else{
             while (stanM.getStyleClass().remove("wrong"));
+            stanM.setTooltip(null);
         }
         if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
             correct = false;
             cena.getStyleClass().add("wrong");
+            cena.setTooltip(new Tooltip("Cena powinna byc liczbą"));
         }else{
             while (cena.getStyleClass().remove("wrong"));
+            cena.setTooltip(null);
         }
         if (dostawca.getValue() == null){
             correct = false;
             dostawca.getStyleClass().add("wrong");
+            dostawca.setTooltip(new Tooltip("Dostawca musi być wybrany"));
         }else{
             while (dostawca.getStyleClass().remove("wrong"));
+            dostawca.setTooltip(null);
         }
         return correct;
     }

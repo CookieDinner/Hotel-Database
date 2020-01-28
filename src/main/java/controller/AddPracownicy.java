@@ -184,60 +184,88 @@ public class AddPracownicy {
         if (imie.getText().isEmpty() || imie.getText().length() > 30){
             correct = false;
             imie.getStyleClass().add("wrong");
+            imie.setTooltip(new Tooltip("Imie powinno się składać z 0-30 znaków"));
         }else{
             while (imie.getStyleClass().remove("wrong"));
+            imie.setTooltip(null);
         }
         if (nazwisko.getText().isEmpty() || nazwisko.getText().length() > 30){
             correct = false;
             nazwisko.getStyleClass().add("wrong");
+            nazwisko.setTooltip(new Tooltip("Nazwisko powinno się składać z 0-30 znaków"));
         }else{
             while (nazwisko.getStyleClass().remove("wrong"));
+            nazwisko.setTooltip(null);
         }
         if (!pesel.getText().matches("[0-9]{11}")){
             correct = false;
             pesel.getStyleClass().add("wrong");
+            pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
         }else{
             while (pesel.getStyleClass().remove("wrong"));
+            pesel.setTooltip(null);
         }
         if (adres.getText().isEmpty() || adres.getText().length() > 50){
             correct = false;
             adres.getStyleClass().add("wrong");
+            adres.setTooltip(new Tooltip("Adres powinien się składać z 0-50 znaków"));
         }else{
             while (adres.getStyleClass().remove("wrong"));
+            adres.setTooltip(null);
         }
         if (etat.getText().isEmpty() || etat.getText().length() > 30){
             correct = false;
             etat.getStyleClass().add("wrong");
+            etat.setTooltip(new Tooltip("Adres powinien się składać z 0-50 znaków"));
         }else{
             while (etat.getStyleClass().remove("wrong"));
+            etat.setTooltip(null);
         }
         if (!placa.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
             correct = false;
             placa.getStyleClass().add("wrong");
+            placa.setTooltip(new Tooltip("Niepoprawna placa"));
         }else{
             while (placa.getStyleClass().remove("wrong"));
+            placa.setTooltip(null);
         }
         if (umowa.getValue() == null){
             correct = false;
             umowa.getStyleClass().add("wrong");
+            umowa.setTooltip(new Tooltip("Trzeba wybrać umowę"));
         }else{
             while (umowa.getStyleClass().remove("wrong"));
+            umowa.setTooltip(null);
         }
         if (dataUr.getValue() == null || dataUr.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             dataUr.getStyleClass().add("wrongDateSmall");
             while (dataUr.getStyleClass().remove("addDateSmall"));
+            dataUr.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while (dataUr.getStyleClass().remove("wrongDateSmall"));
             dataUr.getStyleClass().add("addDateSmall");
+            dataUr.setTooltip(null);
         }
         if (dataZa.getValue() == null || dataZa.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             dataZa.getStyleClass().add("wrongDateSmall");
             while (dataZa.getStyleClass().remove("addDateSmall"));
+            dataZa.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while (dataZa.getStyleClass().remove("wrongDateSmall"));
             dataZa.getStyleClass().add("addDateSmall");
+            dataZa.setTooltip(null);
+        }
+        if (premiaBox.isSelected() && !premiaTextField.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
+            correct = false;
+            premiaTextField.getStyleClass().add("wrongSmall");
+            while(premiaTextField.getStyleClass().remove("addTextWithButtonSmall"));
+            premiaTextField.setTooltip(new Tooltip("Niepoprawna premia"));
+        }else if (premiaBox.isSelected()){
+            while(premiaTextField.getStyleClass().remove("wrongSmall"));
+            premiaTextField.getStyleClass().add("addTextWithButtonSmall");
+            premiaTextField.setTooltip(null);
         }
         return correct;
     }

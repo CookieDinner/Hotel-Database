@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import main.java.Main;
@@ -219,34 +216,44 @@ public class AddKonferencje {
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 100){
             correct = false;
             enazwa.getStyleClass().add("wrong");
+            enazwa.setTooltip(new Tooltip("Nazwa powininna się składać z 0-100 znaków"));
         }else{
             while (enazwa.getStyleClass().remove("wrong"));
+            enazwa.setTooltip(null);
         }
         if (edata.getValue() == null || edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             edata.getStyleClass().add("wrongDate");
             while(edata.getStyleClass().remove("addDate"));
+            edata.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while (edata.getStyleClass().remove("wrongDate")) ;
             edata.getStyleClass().add("addDate");
+            edata.setTooltip(null);
         }
-        if (eliczba_osob.getText().isEmpty() || Integer.parseInt(eliczba_osob.getText()) < 0){
+        if (!eliczba_osob.getText().matches("^[1-9][0-9]{0,4}$")){
             correct = false;
             eliczba_osob.getStyleClass().add("wrong");
+            eliczba_osob.setTooltip(new Tooltip("Niepoprawna liczba osób"));
         }else{
             while (eliczba_osob.getStyleClass().remove("wrong"));
+            eliczba_osob.setTooltip(null);
         }
         if (ehala.getValue() == null){
             correct = false;
             ehala.getStyleClass().add("wrong");
+            ehala.setTooltip(new Tooltip("Potrzeba wybrać halę"));
         }else{
             while (ehala.getStyleClass().remove("wrong"));
+            ehala.setTooltip(null);
         }
         if (pracownicyScroll.getChildren().isEmpty()){
             correct = false;
             epracownicy.getStyleClass().add("wrong");
+            epracownicy.setTooltip(new Tooltip("Przynajmniej jeden pracownik musi nadzorować konferencję"));
         }else{
             while (epracownicy.getStyleClass().remove("wrong"));
+            epracownicy.setTooltip(null);
         }
         return correct;
     }

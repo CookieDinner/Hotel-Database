@@ -3,6 +3,7 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.CallableStatement;
 import java.sql.Date;
@@ -108,14 +109,18 @@ public class AddHala {
         if (!numer.getText().matches("^[1-9][0-9]?$")){
             correct = false;
             numer.getStyleClass().add("wrong");
+            numer.setTooltip(new Tooltip("Niepoprawny numer hali"));
         }else{
             while (numer.getStyleClass().remove("wrong"));
+            numer.setTooltip(null);
         }
         if (!lMiejsc.getText().matches("^[1-9][0-9]{0,4}$")){
             correct = false;
             lMiejsc.getStyleClass().add("wrong");
+            lMiejsc.setTooltip(new Tooltip("Niepoprawna liczba miejsc"));
         }else{
             while (lMiejsc.getStyleClass().remove("wrong"));
+            lMiejsc.setTooltip(null);
         }
         return correct;
     }

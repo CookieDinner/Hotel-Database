@@ -172,22 +172,28 @@ public class AddZamowienia {
         if (epracownicy.getValue() == null){
             correct = false;
             epracownicy.getStyleClass().add("wrong");
+            epracownicy.setTooltip(new Tooltip("Trzeba wybrać pracownika"));
         }else{
             while (epracownicy.getStyleClass().remove("wrong"));
+            epracownicy.setTooltip(null);
         }
         if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
             correct = false;
             zdata.getStyleClass().add("wrongDate");
             while (zdata.getStyleClass().remove("addDate"));
+            zdata.setTooltip(new Tooltip("Niepoprawna data"));
         }else{
             while (zdata.getStyleClass().remove("wrongDate"));
             zdata.getStyleClass().add("addDate");
+            zdata.setTooltip(null);
         }
         if (daniaScroll.getChildren().isEmpty()){
             correct = false;
             edania.getStyleClass().add("wrong");
+            edania.setTooltip(new Tooltip("Trzeba wybrać danie"));
         }else{
             while (edania.getStyleClass().remove("wrong"));
+            edania.setTooltip(null);
         }
         return correct;
     }

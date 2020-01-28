@@ -141,6 +141,13 @@
     -fx-background-color: rgba(255,0,0,0.2);
 }
 
+.wrongSmall{
+    -fx-background-color: rgba(255,0,0,0.2);
+    -fx-max-width: 120px;
+    -fx-min-width: 120px;
+    -fx-min-height: 50px;
+}
+
 .wrongDate{
     -fx-min-width: 300px;
     -fx-max-width: 300px;
@@ -326,6 +333,10 @@
    -fx-font-size: 16px;
    -fx-alignment: center-left;
    -fx-padding: 0 0 0 20;
+}
+
+.info{
+    -fx-background-color: red;
 }
 
 

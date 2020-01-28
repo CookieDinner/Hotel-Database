@@ -3,6 +3,7 @@ package main.java.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -114,26 +115,34 @@ public class AddDostawce {
         if (!nip.getText().matches("^[0-9]{10}$")){
             correct = false;
             nip.getStyleClass().add("wrong");
+            nip.setTooltip(new Tooltip("Nip nie jest poprawny"));
         }else{
             while(nip.getStyleClass().remove("wrong"));
+            nip.setTooltip(null);
         }
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 30){
             correct = false;
             enazwa.getStyleClass().add("wrong");
+            enazwa.setTooltip(new Tooltip("Nazwa musi się składać z 0-30 znaków"));
         }else{
             while (enazwa.getStyleClass().remove("wrong"));
+            enazwa.setTooltip(null);
         }
         if (adres.getText().isEmpty() || adres.getText().length() > 50){
             correct = false;
             adres.getStyleClass().add("wrong");
+            adres.setTooltip(new Tooltip("Adres musi się składać z 0-50 znaków"));
         }else{
             while (adres.getStyleClass().remove("wrong"));
+            adres.setTooltip(null);
         }
         if (!numer_telefonu.getText().matches("[0-9]{9}")){
             correct = false;
             numer_telefonu.getStyleClass().add("wrong");
+            numer_telefonu.setTooltip(new Tooltip("Niepoprawny numer telefonu"));
         }else{
             while (numer_telefonu.getStyleClass().remove("wrong"));
+            numer_telefonu.setTooltip(null);
         }
         return correct;
     }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -132,20 +133,26 @@ public class AddPokoj {
         if (!numer.getText().matches("^[1-9][0-9]{0,2}$")){
             correct = false;
             numer.getStyleClass().add("wrong");
+            numer.setTooltip(new Tooltip("Niepoprawny numer pokoju"));
         }else{
             while (numer.getStyleClass().remove("wrong"));
+            numer.setTooltip(null);
         }
         if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
             correct = false;
             cena.getStyleClass().add("wrong");
+            cena.setTooltip(new Tooltip("Niepoprawna cena"));
         }else{
             while (cena.getStyleClass().remove("wrong"));
+            cena.setTooltip(null);
         }
         if (!liczbaL.getText().matches("^[1-9][0-9]?$")){
             correct = false;
             liczbaL.getStyleClass().add("wrong");
+            liczbaL.setTooltip(new Tooltip("Niepoprawna liczba łóżek"));
         }else{
             while (liczbaL.getStyleClass().remove("wrong"));
+            liczbaL.setTooltip(null);
         }
         return correct;
     }
