@@ -221,7 +221,7 @@ public class AddKonferencje {
             while (enazwa.getStyleClass().remove("wrong"));
             enazwa.setTooltip(null);
         }
-        if (edata.getValue() == null || edata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (edata.getValue() == null || edata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             edata.getStyleClass().add("wrongDate");
             while(edata.getStyleClass().remove("addDate"));

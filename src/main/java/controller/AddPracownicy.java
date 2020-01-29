@@ -197,7 +197,7 @@ public class AddPracownicy {
             while (nazwisko.getStyleClass().remove("wrong"));
             nazwisko.setTooltip(null);
         }
-        if (!pesel.getText().matches("[0-9]{11}")){
+        if (!pesel.getText().matches("^[0-9]{11}$")){
             correct = false;
             pesel.getStyleClass().add("wrong");
             pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
@@ -237,7 +237,7 @@ public class AddPracownicy {
             while (umowa.getStyleClass().remove("wrong"));
             umowa.setTooltip(null);
         }
-        if (dataUr.getValue() == null || dataUr.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (dataUr.getValue() == null || dataUr.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             dataUr.getStyleClass().add("wrongDateSmall");
             while (dataUr.getStyleClass().remove("addDateSmall"));
@@ -247,7 +247,7 @@ public class AddPracownicy {
             dataUr.getStyleClass().add("addDateSmall");
             dataUr.setTooltip(null);
         }
-        if (dataZa.getValue() == null || dataZa.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (dataZa.getValue() == null || dataZa.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             dataZa.getStyleClass().add("wrongDateSmall");
             while (dataZa.getStyleClass().remove("addDateSmall"));

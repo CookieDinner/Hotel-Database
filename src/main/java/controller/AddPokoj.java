@@ -138,7 +138,7 @@ public class AddPokoj {
             while (numer.getStyleClass().remove("wrong"));
             numer.setTooltip(null);
         }
-        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
+        if (!cena.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
             correct = false;
             cena.getStyleClass().add("wrong");
             cena.setTooltip(new Tooltip("Niepoprawna cena"));

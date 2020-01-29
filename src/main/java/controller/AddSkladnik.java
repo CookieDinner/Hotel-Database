@@ -158,7 +158,7 @@ public class AddSkladnik {
             while(enazwa.getStyleClass().remove("wrong"));
             enazwa.setTooltip(null);
         }
-        if (!stanM.getText().matches("[0-9]{1,5}")){
+        if (!stanM.getText().matches("^[0-9]{1,5}$")){
             correct = false;
             stanM.getStyleClass().add("wrong");
             stanM.setTooltip(new Tooltip("Niepoprawny stan magazynu"));
@@ -166,7 +166,7 @@ public class AddSkladnik {
             while (stanM.getStyleClass().remove("wrong"));
             stanM.setTooltip(null);
         }
-        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
+        if (!cena.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
             correct = false;
             cena.getStyleClass().add("wrong");
             cena.setTooltip(new Tooltip("Cena powinna byc liczbą"));

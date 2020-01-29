@@ -136,7 +136,7 @@ public class AddDostawce {
             while (adres.getStyleClass().remove("wrong"));
             adres.setTooltip(null);
         }
-        if (!numer_telefonu.getText().matches("[0-9]{9}")){
+        if (!numer_telefonu.getText().matches("^[0-9]{9}$")){
             correct = false;
             numer_telefonu.getStyleClass().add("wrong");
             numer_telefonu.setTooltip(new Tooltip("Niepoprawny numer telefonu"));

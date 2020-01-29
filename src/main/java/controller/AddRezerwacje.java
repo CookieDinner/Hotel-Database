@@ -307,7 +307,7 @@ public class AddRezerwacje {
             while(epracownicy.getStyleClass().remove("wrong"));
             epracownicy.setTooltip(null);
         }
-        if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (zdata.getValue() == null || zdata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             zdata.getStyleClass().add("wrongDate");
             while(zdata.getStyleClass().remove("addDate"));
@@ -317,7 +317,7 @@ public class AddRezerwacje {
             zdata.getStyleClass().add("addDate");
             zdata.setTooltip(null);
         }
-        if (wdata.getValue() == null || wdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (wdata.getValue() == null || wdata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             wdata.getStyleClass().add("wrongDate");
             while(wdata.getStyleClass().remove("addDate"));

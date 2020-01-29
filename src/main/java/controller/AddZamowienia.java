@@ -87,7 +87,7 @@ public class AddZamowienia {
             edit = false;
             epracownicy.setDisable(true);
             zdata.setDisable(true);
-            edania.setDisable(false);
+            edania.setDisable(true);
             saveButton.setVisible(false);
             try{
                 String str = "SELECT pesel FROM hotel_pracownicy WHERE upper(nazwisko) = upper(\'" + epracownicy.getValue() + "\')";
@@ -150,7 +150,7 @@ public class AddZamowienia {
         edit = true;
         epracownicy.setDisable(false);
         zdata.setDisable(false);
-        edania.setDisable(true);
+        edania.setDisable(false);
         saveButton.setVisible(true);
     }
     @FXML
@@ -177,7 +177,7 @@ public class AddZamowienia {
             while (epracownicy.getStyleClass().remove("wrong"));
             epracownicy.setTooltip(null);
         }
-        if (zdata.getValue() == null || zdata.getValue().toString().matches("((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})")){
+        if (zdata.getValue() == null || zdata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
             zdata.getStyleClass().add("wrongDate");
             while (zdata.getStyleClass().remove("addDate"));

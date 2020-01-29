@@ -165,9 +165,16 @@ public class DataBase {
             int konfId = cstmt.getInt(1);
             cstmt.close();
             for(String i : pracownicy){
+                String str = "SELECT * FROM hotel_pracownicy WHERE nazwisko=\'" + i + "\'";
+                PreparedStatement stmt = con.prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                String vPesel = rs.getString("pesel");
+                rs.close();
+                stmt.close();
                 cstmt = con.prepareCall("{call dodajNadzorKonferencji(?,?)}");
                 cstmt.setInt(1, konfId);
-                cstmt.setString(2, i);
+                cstmt.setString(2, vPesel);
                 cstmt.execute();
             }
             cstmt.close();

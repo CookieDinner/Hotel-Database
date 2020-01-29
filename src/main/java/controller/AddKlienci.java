@@ -135,7 +135,7 @@ public class AddKlienci {
             while (nazwisko.getStyleClass().remove("wrong"));
             nazwisko.setTooltip(null);
         }
-        if (!pesel.getText().matches("[0-9]{11}")){
+        if (!pesel.getText().matches("^[0-9]{11}$")){
             correct = false;
             pesel.getStyleClass().add("wrong");
             pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
@@ -143,7 +143,7 @@ public class AddKlienci {
             while (pesel.getStyleClass().remove("wrong"));
             pesel.setTooltip(null);
         }
-        if (!numerTel.getText().matches("[0-9]{9}")){
+        if (!numerTel.getText().matches("^[0-9]{9}$")){
             correct = false;
             numerTel.getStyleClass().add("wrong");
             numerTel.setTooltip(new Tooltip("Niepoprawny numer telfonu"));

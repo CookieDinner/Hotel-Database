@@ -60,7 +60,7 @@ public class AddDania {
                 nazwa.setEditable(false);
                 cena.setText(Float.toString(rs.getFloat("cena")));
                 cena.setEditable(false);
-                skladniki.setEditable(false);
+                skladniki.setDisable(true);
                 getSkladniki();
                 for (String i : arrSkladniki)
                     skladnikiScroll.getChildren().add(createSkladnikButton(i));
@@ -89,7 +89,9 @@ public class AddDania {
             saveButton.setVisible(false);
             nazwa.setEditable(false);
             cena.setEditable(false);
-            skladniki.setEditable(false);
+            skladniki.setDisable(true);
+            delete2();
+            dania.dataBase.addDanie(nazwa.getText(), Float.parseFloat(cena.getText()), arrSkladniki);
         }else if(checkCorrectness()) {
             dania.dataBase.addDanie(nazwa.getText(), Float.parseFloat(cena.getText()), arrSkladniki);
             returnTo();
@@ -103,7 +105,7 @@ public class AddDania {
         saveButton.setVisible(true);
         nazwa.setEditable(true);
         cena.setEditable(true);
-        skladniki.setEditable(true);
+        skladniki.setDisable(false);
     }
 
     @FXML
@@ -114,6 +116,17 @@ public class AddDania {
             stmt.executeQuery();
             stmt.close();
             returnTo();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void delete2(){
+        try {
+            String str = "DELETE FROM hotel_dania WHERE nazwa=\'" + id  + "\'";
+            PreparedStatement stmt = dania.dataBase.getCon().prepareStatement(str);
+            stmt.executeQuery();
+            stmt.close();
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -158,7 +171,7 @@ public class AddDania {
             while (nazwa.getStyleClass().remove("wrong"));
             nazwa.setTooltip(null);
         }
-        if (!cena.getText().matches("[0-9]{1,7}(\\.[0-9]{0,2}){0,1}")){
+        if (!cena.getText().matches("^[0-9]{1,7}(\\.[0-9]{0,2}){0,1}$")){
             correct = false;
             cena.getStyleClass().add("wrong");
             cena.setTooltip(new Tooltip("Cena powinna być liczbą"));
