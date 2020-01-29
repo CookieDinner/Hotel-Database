@@ -46,7 +46,7 @@ public class Konferencje extends MainView{
             rs.close();
             stmt.close();
         } catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
 
     }
@@ -83,7 +83,7 @@ public class Konferencje extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     @Override
@@ -100,7 +100,7 @@ public class Konferencje extends MainView{
             rs.close();
             pstmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

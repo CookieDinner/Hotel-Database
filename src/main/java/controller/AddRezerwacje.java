@@ -95,7 +95,7 @@ public class AddRezerwacje {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else {
             editButton.setVisible(false);
@@ -106,6 +106,10 @@ public class AddRezerwacje {
             rabatTextField.setText(rabatString);
             zdata.setValue(dataZamString);
             wdata.setValue(dataWymString);
+            epracownicy.setValue(pracownikString);
+            for (String i : pokoje){
+                pokojeScroll.getChildren().add(createSkladnikButton(i));
+            }
         }
         ObservableList<String> observPracownicy = FXCollections.observableArrayList();
         observPracownicy.addAll(rezerwacje.dataBase.getSomePracownicy());
@@ -180,7 +184,7 @@ public class AddRezerwacje {
                 }
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else {
             if (checkCorrectness()) {
@@ -201,7 +205,7 @@ public class AddRezerwacje {
                     rs.close();
                     stmt.close();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+//                    ex.printStackTrace();
                 }
                 returnTo();
             }
@@ -209,10 +213,13 @@ public class AddRezerwacje {
     }
     @FXML
     private void addKlient(){
+        if (!edit)
+            return;
         peselString = peselTextField.getText();
         rabatString = rabatTextField.getText();
         dataZamString = zdata.getValue();
         dataWymString = wdata.getValue();
+        pracownikString = epracownicy.getValue();
         controller.changeScene("addKlienci.fxml", new AddKlienci(controller, this, peselTextField.getText(), "addRezerwacje.fxml",false));
     }
     @FXML
@@ -237,7 +244,7 @@ public class AddRezerwacje {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -251,8 +258,10 @@ public class AddRezerwacje {
     @FXML
     private void chooseSkladnik(){
         String temp_nazwa = epokoje.getValue().toString();
-        pokoje.add(temp_nazwa);
-        pokojeScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+        if (!pokoje.contains(temp_nazwa)){
+            pokoje.add(temp_nazwa);
+            pokojeScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+        }
     }
 
     private void deleteButton(Button toDelete){
@@ -267,6 +276,7 @@ public class AddRezerwacje {
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean dataCorrect = true;
         if (!peselTextField.getText().matches("^[0-9]{11}$")){
             correct = false;
             peselTextField.getStyleClass().add("wrong");
@@ -293,7 +303,7 @@ public class AddRezerwacje {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         } else{
             while(peselTextField.getStyleClass().remove("wrong"));
@@ -309,6 +319,7 @@ public class AddRezerwacje {
         }
         if (zdata.getValue() == null || zdata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
+            dataCorrect = false;
             zdata.getStyleClass().add("wrongDate");
             while(zdata.getStyleClass().remove("addDate"));
             zdata.setTooltip(new Tooltip("Niepoprawna data"));
@@ -319,6 +330,7 @@ public class AddRezerwacje {
         }
         if (wdata.getValue() == null || wdata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
+            dataCorrect = false;
             wdata.getStyleClass().add("wrongDate");
             while(wdata.getStyleClass().remove("addDate"));
             wdata.setTooltip(new Tooltip("Niepoprawna data"));
@@ -344,8 +356,9 @@ public class AddRezerwacje {
             rabatTextField.setTooltip(null);
         }
         try{
-            if (zdata.getValue() != null && wdata.getValue() != null) {
+            if (dataCorrect && !pokoje.isEmpty()) {
                 int p = 1;
+                String whichPokoj = "";
                 for(String i : pokoje) {
                     CallableStatement cstmt = rezerwacje.dataBase.getCon().prepareCall("{? = call sprawdzPokoj(?,?,?)}");
                     cstmt.registerOutParameter(1, Types.INTEGER);
@@ -354,10 +367,12 @@ public class AddRezerwacje {
                     cstmt.setDate(4, Date.valueOf(wdata.getValue()));
                     cstmt.execute();
                     p = p & cstmt.getInt(1);
+                    if (cstmt.getInt(1) == 0)
+                        whichPokoj = i;
                 }
                 if(p == 0){
                     epokoje.getStyleClass().add("wrong");
-                    epokoje.setTooltip(new Tooltip("Pokój zajęty"));
+                    epokoje.setTooltip(new Tooltip("Pokój numer "+ whichPokoj +" zajęty"));
                     correct = false;
                 }else{
                     while(epokoje.getStyleClass().remove("wrong"));
@@ -366,10 +381,28 @@ public class AddRezerwacje {
             }
 
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
+        if(dataCorrect && zdata.getValue().compareTo(wdata.getValue()) > 0){
+            correct = false;
+            zdata.getStyleClass().add("wrongDate");
+            while(zdata.getStyleClass().remove("addDate"));
+            zdata.setTooltip(new Tooltip("Data zameldowania jest niepoprawna w stosunku do daty wymeldowania"));
+            wdata.getStyleClass().add("wrongDate");
+            while(wdata.getStyleClass().remove("addDate"));
+            wdata.setTooltip(new Tooltip("Data wymeldowania jest niepoprawna w stosunku do daty zameldowania"));
+        }else if(dataCorrect){
+            while(zdata.getStyleClass().remove("wrongDate"));
+            zdata.getStyleClass().add("addDate");
+            zdata.setTooltip(null);
+            while(wdata.getStyleClass().remove("wrongDate"));
+            wdata.getStyleClass().add("addDate");
+            wdata.setTooltip(null);
+        }
+
         return correct;
     }
+
 
     @FXML
     private void peselTyped() {
@@ -382,12 +415,13 @@ public class AddRezerwacje {
             PreparedStatement stmt = rezerwacje.dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                pokoje.add(rs.getString("pokoj"));
+                if (!pokoje.contains(rs.getString("pokoj")))
+                    pokoje.add(rs.getString("pokoj"));
             }
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

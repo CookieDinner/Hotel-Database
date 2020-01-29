@@ -67,7 +67,7 @@ public class AddDania {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -117,7 +117,7 @@ public class AddDania {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -128,7 +128,7 @@ public class AddDania {
             stmt.executeQuery();
             stmt.close();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -201,7 +201,7 @@ public class AddDania {
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 }

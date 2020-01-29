@@ -68,7 +68,7 @@ public class AddZamowienia {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         } else {
             editButton.setVisible(false);
@@ -116,7 +116,7 @@ public class AddZamowienia {
                 }
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()){
             int idDania = 0;
@@ -137,7 +137,7 @@ public class AddZamowienia {
                 stmt.close();
 
             } catch (SQLException ex) {
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
             zamowienia.dataBase.addZamowienie(Date.valueOf(zdata.getValue()), pesel, dania);
             returnTo();
@@ -162,7 +162,7 @@ public class AddZamowienia {
             stmt.close();
             returnTo();
         } catch (Exception ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
 
     }
@@ -212,7 +212,7 @@ public class AddZamowienia {
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
         daniaScroll.getChildren().add(createDanieButton(temp_danie));
     }
@@ -240,7 +240,7 @@ public class AddZamowienia {
                 stmt.close();
             }
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     @FXML
@@ -259,7 +259,7 @@ public class AddZamowienia {
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

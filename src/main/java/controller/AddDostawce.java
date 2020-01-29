@@ -50,7 +50,7 @@ public class AddDostawce {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -74,7 +74,7 @@ public class AddDostawce {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()) {
             dostawcy.dataBase.addDostawce(nip.getText(), enazwa.getText(), adres.getText(), numer_telefonu.getText());
@@ -102,7 +102,7 @@ public class AddDostawce {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     @FXML
@@ -112,8 +112,10 @@ public class AddDostawce {
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean nipCorrect = true;
         if (!nip.getText().matches("^[0-9]{10}$")){
             correct = false;
+            nipCorrect = false;
             nip.getStyleClass().add("wrong");
             nip.setTooltip(new Tooltip("Nip nie jest poprawny"));
         }else{
@@ -144,6 +146,30 @@ public class AddDostawce {
             while (numer_telefonu.getStyleClass().remove("wrong"));
             numer_telefonu.setTooltip(null);
         }
+        if (nipCorrect)
+            try {
+                PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement("SELECT nip from hotel_dostawcy");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (nip.getText().equals(rs.getString("nip"))) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    nip.getStyleClass().add("wrong");
+                    nip.setTooltip(new Tooltip("Istnieje już taki dostawca"));
+                }else{
+                    while(nip.getStyleClass().remove("wrong"));
+                    nip.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         return correct;
     }
 

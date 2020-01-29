@@ -56,7 +56,7 @@ public class Dania extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     public void populate(ResultSet rs){
@@ -92,7 +92,7 @@ public class Dania extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -107,7 +107,7 @@ public class Dania extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

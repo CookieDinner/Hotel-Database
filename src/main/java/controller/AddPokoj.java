@@ -65,7 +65,7 @@ public class AddPokoj {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -90,7 +90,7 @@ public class AddPokoj {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()) {
             pokoje.dataBase.addPokoj(Integer.parseInt(numer.getText()), Float.parseFloat(cena.getText()), Integer.parseInt(liczbaL.getText()),
@@ -124,14 +124,16 @@ public class AddPokoj {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean numerCorrect = true;
         if (!numer.getText().matches("^[1-9][0-9]{0,2}$")){
             correct = false;
+            numerCorrect = false;
             numer.getStyleClass().add("wrong");
             numer.setTooltip(new Tooltip("Niepoprawny numer pokoju"));
         }else{
@@ -154,6 +156,30 @@ public class AddPokoj {
             while (liczbaL.getStyleClass().remove("wrong"));
             liczbaL.setTooltip(null);
         }
+        if (numerCorrect)
+            try {
+                PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement("SELECT numer from hotel_pokoje");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (numer.getText().equals(rs.getString("numer"))) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    numer.getStyleClass().add("wrong");
+                    numer.setTooltip(new Tooltip("Istnieje już taki pokój"));
+                }else{
+                    while(numer.getStyleClass().remove("wrong"));
+                    numer.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         return correct;
     }
 

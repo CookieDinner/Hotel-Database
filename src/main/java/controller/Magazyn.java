@@ -61,7 +61,7 @@ public class Magazyn extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     public void populate(ResultSet rs){
@@ -95,7 +95,7 @@ public class Magazyn extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     @Override
@@ -112,7 +112,7 @@ public class Magazyn extends MainView{
             rs.close();
             pstmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

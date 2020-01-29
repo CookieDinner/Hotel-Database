@@ -47,7 +47,7 @@ public class AddKlienci {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -77,7 +77,7 @@ public class AddKlienci {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()) {
             if (toReturnTo.getClass() == Klienci.class) {
@@ -113,12 +113,13 @@ public class AddKlienci {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean peselCorrect = true;
         if (imie.getText().isEmpty() || imie.getText().length() > 30){
             correct = false;
             imie.getStyleClass().add("wrong");
@@ -137,6 +138,7 @@ public class AddKlienci {
         }
         if (!pesel.getText().matches("^[0-9]{11}$")){
             correct = false;
+            peselCorrect = false;
             pesel.getStyleClass().add("wrong");
             pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
         }else{
@@ -159,7 +161,33 @@ public class AddKlienci {
             while (adresZa.getStyleClass().remove("wrong"));
             adresZa.setTooltip(null);
         }
+        if (peselCorrect)
+            try {
+                PreparedStatement stmt = controller.dataBase.getCon().prepareStatement("SELECT pesel from hotel_klienci");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (pesel.getText().equals(rs.getString("pesel"))) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    pesel.getStyleClass().add("wrong");
+                    pesel.setTooltip(new Tooltip("Istnieje już taki klient"));
+                }else{
+                    while(pesel.getStyleClass().remove("wrong"));
+                    pesel.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         return correct;
     }
+
+
 
 }

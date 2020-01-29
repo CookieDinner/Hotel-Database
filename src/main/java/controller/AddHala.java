@@ -1,9 +1,11 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.sql.CallableStatement;
 import java.sql.Date;
@@ -48,7 +50,7 @@ public class AddHala {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -69,7 +71,7 @@ public class AddHala {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()){
             hale.dataBase.addHale(Integer.parseInt(numer.getText()), Integer.parseInt(lMiejsc.getText()));
@@ -94,11 +96,21 @@ public class AddHala {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_hale_konferencyjne WHERE numer_hali=" + numerHali;
-            PreparedStatement stmt = hale.dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Delete ?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            Button button = new Button("halo");
+            vBox.getChildren().addAll(button);
+            scrollPane.setContent(vBox);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+            alert.showAndWait();
+            if(alert.getResult() == ButtonType.YES) {   // TODO: gdy isnieje konferencja
+                String str = "DELETE FROM hotel_hale_konferencyjne WHERE numer_hali=" + numerHali;
+                PreparedStatement stmt = hale.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                returnTo();
+            }
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -106,8 +118,10 @@ public class AddHala {
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean numerCorrect = true;
         if (!numer.getText().matches("^[1-9][0-9]?$")){
             correct = false;
+            numerCorrect = false;
             numer.getStyleClass().add("wrong");
             numer.setTooltip(new Tooltip("Niepoprawny numer hali"));
         }else{
@@ -122,6 +136,30 @@ public class AddHala {
             while (lMiejsc.getStyleClass().remove("wrong"));
             lMiejsc.setTooltip(null);
         }
+        if (numerCorrect && !look)
+            try {
+                PreparedStatement stmt = hale.dataBase.getCon().prepareStatement("SELECT numer_hali from hotel_hale_konferencyjne");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (numer.getText().equals(rs.getString("numer_hali"))) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    numer.getStyleClass().add("wrong");
+                    numer.setTooltip(new Tooltip("Istnieje już taka hala"));
+                }else{
+                    while(numer.getStyleClass().remove("wrong"));
+                    numer.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         return correct;
     }
 

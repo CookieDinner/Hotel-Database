@@ -55,7 +55,7 @@ public class Zamowienia extends MainView{
             stmt.close();
 
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     public void populate(ResultSet rs){
@@ -87,7 +87,7 @@ public class Zamowienia extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -103,7 +103,7 @@ public class Zamowienia extends MainView{
             rs.close();
             pstmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

@@ -100,7 +100,7 @@ public class AddKonferencje {
                 }
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()){
             String pesel = null;
@@ -113,7 +113,7 @@ public class AddKonferencje {
                 rs.close();
                 stmt.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
             String hala = ehala.getSelectionModel().getSelectedItem().toString();
             dataBase.addKonferencje(enazwa.getText(), Date.valueOf(edata.getValue()),
@@ -152,7 +152,7 @@ public class AddKonferencje {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else {
             editButton.setVisible(false);
@@ -187,7 +187,7 @@ public class AddKonferencje {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -202,17 +202,21 @@ public class AddKonferencje {
             PreparedStatement stmt = dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            pracownicy.add(rs.getString("nazwisko"));
+            if (!pracownicy.contains(rs.getString("nazwisko"))){
+                pracownicy.add(rs.getString("nazwisko"));
+                pracownicyScroll.getChildren().add(createPracownikButton(temp_nazwisko));
+            }
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
-        pracownicyScroll.getChildren().add(createPracownikButton(temp_nazwisko));
+
     }
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean dataCorrect = true;
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 100){
             correct = false;
             enazwa.getStyleClass().add("wrong");
@@ -223,6 +227,7 @@ public class AddKonferencje {
         }
         if (edata.getValue() == null || edata.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
+            dataCorrect = false;
             edata.getStyleClass().add("wrongDate");
             while(edata.getStyleClass().remove("addDate"));
             edata.setTooltip(new Tooltip("Niepoprawna data"));
@@ -243,9 +248,56 @@ public class AddKonferencje {
             correct = false;
             ehala.getStyleClass().add("wrong");
             ehala.setTooltip(new Tooltip("Potrzeba wybrać halę"));
-        }else{
-            while (ehala.getStyleClass().remove("wrong"));
-            ehala.setTooltip(null);
+        }else if(!eliczba_osob.getText().isEmpty()){
+            int l = 0;
+            try{
+                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement("SELECT liczba_miejsc from hotel_hale_konferencyjne where numer_hali = ?");
+                if(ehala.getValue().contains(","))
+                    stmt.setInt(1, Integer.parseInt(ehala.getValue().substring(0,ehala.getValue().indexOf(","))));
+                else
+                    stmt.setInt(1, Integer.parseInt(ehala.getValue()));
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                l = rs.getInt("liczba_miejsc");
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+            if(l < Integer.parseInt(eliczba_osob.getText())){
+                correct = false;
+                dataCorrect = false;
+                ehala.getStyleClass().add("wrong");
+                ehala.setTooltip(new Tooltip("Hala jest za mała"));
+            }else{
+                while (ehala.getStyleClass().remove("wrong"));
+                ehala.setTooltip(null);
+            }
+        }
+        if(dataCorrect){
+            try {
+                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement("SELECT data_konferencji from hotel_konferencje where hala_konferencyjna = ?");
+                if(ehala.getValue().contains(","))
+                    stmt.setInt(1, Integer.parseInt(ehala.getValue().substring(0,ehala.getValue().indexOf(","))));
+                else
+                    stmt.setInt(1, Integer.parseInt(ehala.getValue()));
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()){
+                    if(rs.getDate("data_konferencji").compareTo(Date.valueOf(edata.getValue())) == 0){
+                        nope = true;
+                        break;
+                    }
+                }
+                if(nope){
+                    correct = false;
+                    ehala.getStyleClass().add("wrong");
+                    ehala.setTooltip(new Tooltip("Hala jest niedostępna tego dnia"));
+                }else{
+                    while (ehala.getStyleClass().remove("wrong"));
+                    ehala.setTooltip(null);
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         if (pracownicyScroll.getChildren().isEmpty()){
             correct = false;
@@ -282,7 +334,7 @@ public class AddKonferencje {
                 stmt.close();
             }
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -297,7 +349,7 @@ public class AddKonferencje {
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

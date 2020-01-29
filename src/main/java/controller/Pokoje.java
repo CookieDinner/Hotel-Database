@@ -51,7 +51,7 @@ public class Pokoje extends MainView {
             rs.close();
             stmt.close();
         } catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     public void populate(ResultSet rs){
@@ -88,7 +88,7 @@ public class Pokoje extends MainView {
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -103,7 +103,7 @@ public class Pokoje extends MainView {
             rs.close();
             pstmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     public void moreInfo(String numer) {

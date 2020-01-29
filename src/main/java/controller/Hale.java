@@ -42,7 +42,7 @@ public class Hale extends MainView {
             rs.close();
             stmt.close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -71,7 +71,7 @@ public class Hale extends MainView {
             rs.close();
             stmt.close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -86,7 +86,7 @@ public class Hale extends MainView {
             rs.close();
             pstmt.close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

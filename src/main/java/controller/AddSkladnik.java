@@ -59,7 +59,7 @@ public class AddSkladnik {
                 stmt.close();
                 rs.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
 
         }else {
@@ -100,7 +100,7 @@ public class AddSkladnik {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()){
             try{
@@ -120,7 +120,7 @@ public class AddSkladnik {
                 cstmt.close();
                 returnTo();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }
     }
@@ -144,14 +144,16 @@ public class AddSkladnik {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean nazwaCorrect = true;
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 30){
             correct = false;
+            nazwaCorrect = false;
             enazwa.getStyleClass().add("wrong");
             enazwa.setTooltip(new Tooltip("Nazwa musi się składać z 0-30 znaków"));
         }else{
@@ -182,6 +184,30 @@ public class AddSkladnik {
             while (dostawca.getStyleClass().remove("wrong"));
             dostawca.setTooltip(null);
         }
+        if (nazwaCorrect)
+            try {
+                PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement("SELECT nazwa from hotel_skladniki");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (enazwa.getText().toUpperCase().equals((rs.getString("nazwa")).toUpperCase())) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    enazwa.getStyleClass().add("wrong");
+                    enazwa.setTooltip(new Tooltip("Istnieje już taki składnik"));
+                }else{
+                    while(enazwa.getStyleClass().remove("wrong"));
+                    enazwa.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         return correct;
     }
 

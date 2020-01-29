@@ -15,7 +15,7 @@ public class Controller {
     public Pane mainView;
     @FXML
     public Button konferencje, rezerwacje, zamowienia, dostawcy, magazyn, klienci, pracownicy, dania, hale, pokoje;
-    private DataBase dataBase;
+    protected DataBase dataBase;
 
     public Controller(){
         dataBase = new DataBase();
@@ -103,7 +103,7 @@ public class Controller {
             Parent root = loader.load();
             mainView.getChildren().add(root);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 

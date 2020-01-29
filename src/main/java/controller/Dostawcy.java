@@ -51,7 +51,7 @@ public class Dostawcy extends MainView{
             stmt.close();
             rs.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
 
 
@@ -82,7 +82,7 @@ public class Dostawcy extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
     @Override
@@ -96,7 +96,7 @@ public class Dostawcy extends MainView{
             rs.close();
             stmt.close();
         }catch(SQLException ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 

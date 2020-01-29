@@ -79,7 +79,7 @@ public class AddPracownicy {
                 rs.close();
                 stmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else{
             editButton.setVisible(false);
@@ -123,7 +123,7 @@ public class AddPracownicy {
                 cstmt.execute();
                 cstmt.close();
             }catch (Exception ex){
-                ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }else if(checkCorrectness()){
             pracownicy.dataBase.addPracownika(pesel.getText(), imie.getText(), nazwisko.getText(), etat.getText(),
@@ -175,12 +175,14 @@ public class AddPracownicy {
             stmt.close();
             returnTo();
         }catch (Exception ex){
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean peselCorrect = true;
+        boolean dataCorrect = true;
         if (imie.getText().isEmpty() || imie.getText().length() > 30){
             correct = false;
             imie.getStyleClass().add("wrong");
@@ -199,6 +201,7 @@ public class AddPracownicy {
         }
         if (!pesel.getText().matches("^[0-9]{11}$")){
             correct = false;
+            peselCorrect = false;
             pesel.getStyleClass().add("wrong");
             pesel.setTooltip(new Tooltip("Niepoprawny pesel"));
         }else{
@@ -239,6 +242,7 @@ public class AddPracownicy {
         }
         if (dataUr.getValue() == null || dataUr.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
+            dataCorrect = false;
             dataUr.getStyleClass().add("wrongDateSmall");
             while (dataUr.getStyleClass().remove("addDateSmall"));
             dataUr.setTooltip(new Tooltip("Niepoprawna data"));
@@ -249,6 +253,7 @@ public class AddPracownicy {
         }
         if (dataZa.getValue() == null || dataZa.getValue().toString().matches("^((0[1-9]|[12]\\d|3[01])-(0[1-9]|1[0-2])-[12]\\d{3})$")){
             correct = false;
+            dataCorrect = false;
             dataZa.getStyleClass().add("wrongDateSmall");
             while (dataZa.getStyleClass().remove("addDateSmall"));
             dataZa.setTooltip(new Tooltip("Niepoprawna data"));
@@ -266,6 +271,46 @@ public class AddPracownicy {
             while(premiaTextField.getStyleClass().remove("wrongSmall"));
             premiaTextField.getStyleClass().add("addTextWithButtonSmall");
             premiaTextField.setTooltip(null);
+        }
+        if (peselCorrect)
+            try {
+                PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement("SELECT pesel from hotel_pracownicy");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (pesel.getText().equals(rs.getString("pesel"))) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope){
+                    correct = false;
+                    pesel.getStyleClass().add("wrong");
+                    pesel.setTooltip(new Tooltip("Istnieje już taki pracownik"));
+                }else{
+                    while(pesel.getStyleClass().remove("wrong"));
+                    pesel.setTooltip(null);
+                }
+                rs.close();
+                stmt.close();
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        if (dataCorrect && dataUr.getValue().compareTo(dataZa.getValue()) > 0){
+            correct = false;
+            dataZa.getStyleClass().add("wrongDateSmall");
+            while (dataZa.getStyleClass().remove("addDateSmall"));
+            dataZa.setTooltip(new Tooltip("Data zatrudnienia wcześniej niż urodzenia?"));
+            dataUr.getStyleClass().add("wrongDateSmall");
+            while (dataUr.getStyleClass().remove("addDateSmall"));
+            dataUr.setTooltip(new Tooltip("Data zatrudnienia wcześniej niż urodzenia?"));
+        }else if(dataCorrect){
+            while (dataZa.getStyleClass().remove("wrongDateSmall"));
+            dataZa.getStyleClass().add("addDateSmall");
+            dataZa.setTooltip(null);
+            while (dataUr.getStyleClass().remove("wrongDateSmall"));
+            dataUr.getStyleClass().add("addDateSmall");
+            dataUr.setTooltip(null);
         }
         return correct;
     }
