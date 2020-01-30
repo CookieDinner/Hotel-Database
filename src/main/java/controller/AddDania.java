@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -111,13 +108,37 @@ public class AddDania {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_dania WHERE nazwa=\'" + id  + "\'";
-            PreparedStatement stmt = dania.dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            PreparedStatement stmt = dania.dataBase.getCon().prepareStatement("SELECT zamowienie FROM hotel_zamowienie_dania NATURAL JOIN hotel_dania WHERE nazwa = ?");
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> zamowienia = new ArrayList<>();
+            while (rs.next()){
+                zamowienia.add(rs.getString("zamowienie"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją zamowienia (" + zamowienia.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć danie?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            scrollPane.setContent(vBox);
+            scrollPane.setHmin(40);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+
+            if(!zamowienia.isEmpty()){
+                for (String n : zamowienia){
+                    vBox.getChildren().add(new Label("Zamówienie numer: "+n));
+                }
+                alert.showAndWait();
+            }
+
+            if(zamowienia.isEmpty() || alert.getResult() == ButtonType.YES) {
+                String str = "DELETE FROM hotel_dania WHERE nazwa=\'" + id + "\'";
+                stmt = dania.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                returnTo();
+            }
         }catch (Exception ex){
-//            ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -146,9 +167,11 @@ public class AddDania {
 
     @FXML
     private void chooseSkladnik(){
-        String temp_nazwa = skladniki.getValue().toString();
-        arrSkladniki.add(temp_nazwa);
-        skladnikiScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+        String temp_nazwa = skladniki.getValue();
+        if(!arrSkladniki.contains(temp_nazwa)){
+            arrSkladniki.add(temp_nazwa);
+            skladnikiScroll.getChildren().add(createSkladnikButton(temp_nazwa));
+        }
     }
 
     private void deleteButton(Button toDelete){

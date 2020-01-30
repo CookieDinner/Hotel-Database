@@ -1,11 +1,11 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AddKlienci {
     private Controller controller;
@@ -107,11 +107,35 @@ public class AddKlienci {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_klienci WHERE pesel=\'" + peselFilled + "\'";
-            PreparedStatement stmt = ((Klienci) toReturnTo).dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            PreparedStatement stmt = controller.dataBase.getCon().prepareStatement("SELECT id_rezerwacji FROM hotel_rezerwacje WHERE klient = ?");
+            stmt.setString(1, pesel.getText());
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> rezerwacje = new ArrayList<>();
+            while (rs.next()){
+                rezerwacje.add(rs.getString("id_rezerwacji"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją rezerwacje (" + rezerwacje.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć klienta?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            scrollPane.setContent(vBox);
+            scrollPane.setHmin(40);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+
+            if(!rezerwacje.isEmpty()){
+                for (String n : rezerwacje){
+                    vBox.getChildren().add(new Label("Rezerwacja numer: "+n));
+                }
+                alert.showAndWait();
+            }
+
+            if(rezerwacje.isEmpty() || alert.getResult() == ButtonType.YES) {
+                String str = "DELETE FROM hotel_klienci WHERE pesel=\'" + peselFilled + "\'";
+                stmt = ((Klienci) toReturnTo).dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                returnTo();
+            }
         }catch (Exception ex){
 //            ex.printStackTrace();
         }

@@ -41,7 +41,7 @@ public class AddKonferencje {
     private Konferencje konferencje;
     private Controller controller;
     private boolean look, edit;
-    private String id_konf;
+    private String id_konf = "";
     private ArrayList<String> pracownicy = new ArrayList<>();
 
     public AddKonferencje(DataBase dataBase, Konferencje konferencje, Controller controller){
@@ -274,7 +274,7 @@ public class AddKonferencje {
         }
         if(dataCorrect){
             try {
-                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement("SELECT data_konferencji from hotel_konferencje where hala_konferencyjna = ?");
+                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement("SELECT id_konferencji, data_konferencji from hotel_konferencje where hala_konferencyjna = ?");
                 if(ehala.getValue().contains(","))
                     stmt.setInt(1, Integer.parseInt(ehala.getValue().substring(0,ehala.getValue().indexOf(","))));
                 else
@@ -282,7 +282,7 @@ public class AddKonferencje {
                 ResultSet rs = stmt.executeQuery();
                 boolean nope = false;
                 while (rs.next()){
-                    if(rs.getDate("data_konferencji").compareTo(Date.valueOf(edata.getValue())) == 0){
+                    if(!rs.getString("id_konferencji").equals(id_konf) && rs.getDate("data_konferencji").compareTo(Date.valueOf(edata.getValue())) == 0){
                         nope = true;
                         break;
                     }

@@ -208,13 +208,16 @@ public class AddZamowienia {
             PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            dania.add(rs.getString("id_dania"));
+            if(!dania.contains(rs.getString("id_dania"))){
+                dania.add(rs.getString("id_dania"));
+                daniaScroll.getChildren().add(createDanieButton(temp_danie));
+            }
             rs.close();
             stmt.close();
         }catch(SQLException ex) {
 //            ex.printStackTrace();
         }
-        daniaScroll.getChildren().add(createDanieButton(temp_danie));
+
     }
 
     private Button createDanieButton(String nazwa) {

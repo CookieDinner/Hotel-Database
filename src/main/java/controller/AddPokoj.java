@@ -1,14 +1,13 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class AddPokoj {
     private Controller controller;
@@ -118,13 +117,37 @@ public class AddPokoj {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_pokoje WHERE numer=" + numerString;
-            PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement("SELECT rezerwacja FROM HOTEL_REZERWACJA_POKOJU WHERE pokoj = ?");
+            stmt.setString(1, numer.getText());
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> rezerwacje = new ArrayList<>();
+            while (rs.next()){
+                rezerwacje.add(rs.getString("rezerwacja"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją rezerwacje (" + rezerwacje.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć pokój?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            scrollPane.setContent(vBox);
+            scrollPane.setHmin(40);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+
+            if(!rezerwacje.isEmpty()){
+                for (String n : rezerwacje){
+                    vBox.getChildren().add(new Label("Rezerwacja numer: "+n));
+                }
+                alert.showAndWait();
+            }
+
+            if(rezerwacje.isEmpty() || alert.getResult() == ButtonType.YES) {
+                String str = "DELETE FROM hotel_pokoje WHERE numer=" + numerString;
+                stmt = pokoje.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                returnTo();
+            }
         }catch (Exception ex){
-//            ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 

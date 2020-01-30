@@ -4,9 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import main.java.Main;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AddPracownicy {
     private Controller controller;
@@ -169,13 +171,60 @@ public class AddPracownicy {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_pracownicy WHERE pesel = \'" + peselString + "\'";
-            PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement("SELECT id_rezerwacji FROM hotel_rezerwacje WHERE pracownik = ?");
+            stmt.setString(1, pesel.getText());
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> rezerwacje = new ArrayList<>();
+            while (rs.next()){
+                rezerwacje.add(rs.getString("id_rezerwacji"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją rezerwacje (" + rezerwacje.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć pracownika?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            scrollPane.setContent(vBox);
+            scrollPane.setHmin(40);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+
+            if(!rezerwacje.isEmpty()){
+                for (String n : rezerwacje){
+                    vBox.getChildren().add(new Label("Rezerwacja numer: "+n));
+                }
+                alert.showAndWait();
+            }
+
+            if(rezerwacje.isEmpty() || alert.getResult() == ButtonType.YES) {
+                stmt = pracownicy.dataBase.getCon().prepareStatement("SELECT id_zamowienia FROM hotel_zamowienia WHERE pracownik = ?");
+                stmt.setString(1, pesel.getText());
+                rs = stmt.executeQuery();
+                ArrayList<String> zamowienia = new ArrayList<>();
+                while (rs.next()){
+                    zamowienia.add(rs.getString("id_zamowienia"));
+                }
+                rs.close();
+                alert = new Alert(Alert.AlertType.NONE, "Istnieją zamówienia (" + zamowienia.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć pracownika?", ButtonType.YES, ButtonType.NO);
+                scrollPane = new ScrollPane();
+                vBox = new VBox();
+                scrollPane.setContent(vBox);
+                scrollPane.setHmin(40);
+                alert.getDialogPane().setExpandableContent(scrollPane);
+
+                if(!zamowienia.isEmpty()){
+                    for (String n : zamowienia){
+                        vBox.getChildren().add(new Label("Zamówienie numer: "+n));
+                    }
+                    alert.showAndWait();
+                }
+                if(zamowienia.isEmpty() || alert.getResult() == ButtonType.YES) {
+                    String str = "DELETE FROM hotel_pracownicy WHERE pesel = \'" + peselString + "\'";
+                    stmt = pracownicy.dataBase.getCon().prepareStatement(str);
+                    stmt.executeQuery();
+                    stmt.close();
+                    returnTo();
+                }
+            }
         }catch (Exception ex){
-//            ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 

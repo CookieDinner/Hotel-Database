@@ -11,6 +11,7 @@ import java.sql.CallableStatement;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class AddHala {
     private Controller controller;
@@ -96,17 +97,29 @@ public class AddHala {
     @FXML
     private void delete(){
         try {
-            Alert alert = new Alert(Alert.AlertType.NONE, "Delete ?", ButtonType.YES, ButtonType.NO);
+            PreparedStatement stmt = hale.dataBase.getCon().prepareStatement("SELECT nazwa FROM hotel_konferencje WHERE hala_konferencyjna = ?");
+            stmt.setInt(1, Integer.parseInt(numer.getText()));
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> konferencje = new ArrayList<>();
+            while (rs.next()){
+                konferencje.add(rs.getString("nazwa"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją odbywające się konferencje (" + konferencje.size() + ") w tej hali, jeżeli ją usuniesz, one również zostaną usunięte.\n\nCzy nadal chcesz usunąć halę?", ButtonType.YES, ButtonType.NO);
             ScrollPane scrollPane = new ScrollPane();
             VBox vBox = new VBox();
-            Button button = new Button("halo");
-            vBox.getChildren().addAll(button);
             scrollPane.setContent(vBox);
             alert.getDialogPane().setExpandableContent(scrollPane);
-            alert.showAndWait();
-            if(alert.getResult() == ButtonType.YES) {   // TODO: gdy isnieje konferencja
+            if(!konferencje.isEmpty()){
+                for (String n : konferencje){
+                    vBox.getChildren().add(new Label(n));
+                }
+                alert.showAndWait();
+            }
+
+            if(konferencje.isEmpty() || alert.getResult() == ButtonType.YES) {   // TODO: gdy isnieje konferencja
                 String str = "DELETE FROM hotel_hale_konferencyjne WHERE numer_hali=" + numerHali;
-                PreparedStatement stmt = hale.dataBase.getCon().prepareStatement(str);
+                stmt = hale.dataBase.getCon().prepareStatement(str);
                 stmt.executeQuery();
                 stmt.close();
                 returnTo();

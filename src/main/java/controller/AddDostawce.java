@@ -1,13 +1,13 @@
 package main.java.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class AddDostawce {
     private Controller controller;
@@ -96,13 +96,37 @@ public class AddDostawce {
     @FXML
     private void delete(){
         try {
-            String str = "DELETE FROM hotel_dostawcy WHERE nip = \'" + id + "\'";
-            PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement(str);
-            stmt.executeQuery();
-            stmt.close();
-            returnTo();
+            PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement("SELECT nazwa FROM hotel_skladniki WHERE dostawca = ?");
+            stmt.setString(1, nip.getText());
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<String> skladniki = new ArrayList<>();
+            while (rs.next()){
+                skladniki.add(rs.getString("nazwa"));
+            }
+            rs.close();
+            Alert alert = new Alert(Alert.AlertType.NONE, "Istnieją składniki (" + skladniki.size() + "), one również zostaną usunięte.\n\nCzy nadal chcesz usunąć dostawcę?", ButtonType.YES, ButtonType.NO);
+            ScrollPane scrollPane = new ScrollPane();
+            VBox vBox = new VBox();
+            scrollPane.setContent(vBox);
+            scrollPane.setHmin(40);
+            alert.getDialogPane().setExpandableContent(scrollPane);
+
+            if(!skladniki.isEmpty()){
+                for (String n : skladniki){
+                    vBox.getChildren().add(new Label(n));
+                }
+                alert.showAndWait();
+            }
+
+            if(skladniki.isEmpty() || alert.getResult() == ButtonType.YES) {
+                String str = "DELETE FROM hotel_dostawcy WHERE nip = \'" + id + "\'";
+                stmt = dostawcy.dataBase.getCon().prepareStatement(str);
+                stmt.executeQuery();
+                stmt.close();
+                returnTo();
+            }
         }catch (Exception ex){
-//            ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
     @FXML
