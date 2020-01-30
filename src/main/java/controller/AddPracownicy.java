@@ -321,7 +321,7 @@ public class AddPracownicy {
             premiaTextField.getStyleClass().add("addTextWithButtonSmall");
             premiaTextField.setTooltip(null);
         }
-        if (peselCorrect)
+        if (peselCorrect && !look && edit)
             try {
                 PreparedStatement stmt = pracownicy.dataBase.getCon().prepareStatement("SELECT pesel from hotel_pracownicy");
                 ResultSet rs = stmt.executeQuery();

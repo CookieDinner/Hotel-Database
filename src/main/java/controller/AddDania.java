@@ -186,8 +186,10 @@ public class AddDania {
 
     private boolean checkCorrectness(){
         boolean correct = true;
+        boolean nazwaCorrect = true;
         if (nazwa.getText().isEmpty() || nazwa.getText().length() > 50){
             correct = false;
+            nazwaCorrect = false;
             nazwa.getStyleClass().add("wrong");
             nazwa.setTooltip(new Tooltip("Nazwa musi się składać z 0-50 znaków"));
         }else{
@@ -209,6 +211,33 @@ public class AddDania {
         }else{
             while (skladniki.getStyleClass().remove("wrong"));
             skladniki.setTooltip(null);
+        }
+        if(nazwaCorrect) {
+            try {
+                PreparedStatement stmt = dania.dataBase.getCon().prepareStatement("SELECT nazwa, id_dania from hotel_dania");
+                PreparedStatement cstmt = dania.dataBase.getCon().prepareStatement("SELECT id_dania from hotel_dania where nazwa = ?");
+                cstmt.setString(1, id);
+                ResultSet crs = cstmt.executeQuery();
+                crs.next();
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()) {
+                    if (crs.getInt("id_dania") != rs.getInt("id_dania") && rs.getString("nazwa").toUpperCase().equals(nazwa.getText().toUpperCase())) {
+                        nope = true;
+                        break;
+                    }
+                }
+                if (nope) {
+                    correct = false;
+                    nazwa.getStyleClass().add("wrong");
+                    nazwa.setTooltip(new Tooltip("Danie o takiej nazwie już istnieje"));
+                } else {
+                    while (nazwa.getStyleClass().remove("wrong")) ;
+                    nazwa.setTooltip(null);
+                }
+            } catch (Exception ex) {
+//                ex.printStackTrace();
+            }
         }
         return correct;
     }

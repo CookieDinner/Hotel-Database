@@ -32,12 +32,14 @@ public class AddSkladnik {
         this.controller = controller;
         this.magazyn = magazyn;
         this.look=false;
+        this.edit = true;
     }
     public AddSkladnik(Controller controller, Magazyn magazyn, String nazwa){
         this.controller = controller;
         this.magazyn = magazyn;
         this.nazwa=nazwa;
         this.look=true;
+        this.edit = false;
     }
     @FXML
     private void initialize(){
@@ -184,7 +186,7 @@ public class AddSkladnik {
             while (dostawca.getStyleClass().remove("wrong"));
             dostawca.setTooltip(null);
         }
-        if (nazwaCorrect)
+        if (nazwaCorrect && !look && edit)
             try {
                 PreparedStatement stmt = magazyn.dataBase.getCon().prepareStatement("SELECT nazwa from hotel_skladniki");
                 ResultSet rs = stmt.executeQuery();

@@ -13,7 +13,7 @@ public class AddDostawce {
     private Controller controller;
     private Dostawcy dostawcy;
     private String id;
-    private boolean look;
+    private boolean look, edit;
     @FXML
     private Button editButton, saveButton, delButton;
     @FXML
@@ -23,12 +23,14 @@ public class AddDostawce {
         this.controller = controller;
         this.dostawcy = dostawcy;
         this.look = false;
+        this.edit = true;
     }
     public AddDostawce(Controller controller, Dostawcy dostawcy, String id){
         this.controller = controller;
         this.dostawcy = dostawcy;
         this.id = id;
         this.look = true;
+        this.edit = false;
     }
     @FXML
     private void initialize(){
@@ -65,6 +67,7 @@ public class AddDostawce {
             enazwa.setEditable(false);
             adres.setEditable(false);
             numer_telefonu.setEditable(false);
+            edit = false;
             try{
                 CallableStatement cstmt = dostawcy.dataBase.getCon().prepareCall("{call dodajDostawce(?,?,?,?,1)}");
                 cstmt.setString(1, nip.getText());
@@ -79,13 +82,13 @@ public class AddDostawce {
         }else if(checkCorrectness()) {
             dostawcy.dataBase.addDostawce(nip.getText(), enazwa.getText(), adres.getText(), numer_telefonu.getText());
             returnTo();
-        }else{
         }
     }
     @FXML
     private void edit(){
         if(!look)
             return;
+        edit = true;
         saveButton.setVisible(true);
         saveButton.setVisible(true);
         nip.setEditable(false);
@@ -170,7 +173,7 @@ public class AddDostawce {
             while (numer_telefonu.getStyleClass().remove("wrong"));
             numer_telefonu.setTooltip(null);
         }
-        if (nipCorrect)
+        if (nipCorrect && !look && edit)
             try {
                 PreparedStatement stmt = dostawcy.dataBase.getCon().prepareStatement("SELECT nip from hotel_dostawcy");
                 ResultSet rs = stmt.executeQuery();

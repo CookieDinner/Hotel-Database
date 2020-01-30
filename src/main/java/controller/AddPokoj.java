@@ -179,7 +179,7 @@ public class AddPokoj {
             while (liczbaL.getStyleClass().remove("wrong"));
             liczbaL.setTooltip(null);
         }
-        if (numerCorrect)
+        if (numerCorrect && !look)
             try {
                 PreparedStatement stmt = pokoje.dataBase.getCon().prepareStatement("SELECT numer from hotel_pokoje");
                 ResultSet rs = stmt.executeQuery();

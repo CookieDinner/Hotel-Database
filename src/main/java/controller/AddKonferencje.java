@@ -217,8 +217,10 @@ public class AddKonferencje {
     private boolean checkCorrectness(){
         boolean correct = true;
         boolean dataCorrect = true;
+        boolean nazwaCorrect = true;
         if (enazwa.getText().isEmpty() || enazwa.getText().length() > 100){
             correct = false;
+            nazwaCorrect = false;
             enazwa.getStyleClass().add("wrong");
             enazwa.setTooltip(new Tooltip("Nazwa powininna się składać z 0-100 znaków"));
         }else{
@@ -306,6 +308,29 @@ public class AddKonferencje {
         }else{
             while (epracownicy.getStyleClass().remove("wrong"));
             epracownicy.setTooltip(null);
+        }
+        if(nazwaCorrect){
+            try{
+                PreparedStatement stmt = konferencje.dataBase.getCon().prepareStatement("SELECT nazwa, id_konferencji from hotel_konferencje");
+                ResultSet rs = stmt.executeQuery();
+                boolean nope = false;
+                while (rs.next()){
+                    if(rs.getString("nazwa").toUpperCase().equals(enazwa.getText().toUpperCase()) && !rs.getString("id_konferencji").equals(id_konf)){
+                        nope = true;
+                        break;
+                    }
+                }
+                if(nope){
+                    correct = false;
+                    enazwa.getStyleClass().add("wrong");
+                    enazwa.setTooltip(new Tooltip("Konferencja o takiej nazwie już istnieje"));
+                }else{
+                    while (enazwa.getStyleClass().remove("wrong"));
+                    enazwa.setTooltip(null);
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
         return correct;
     }

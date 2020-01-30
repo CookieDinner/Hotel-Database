@@ -110,8 +110,12 @@ public class AddZamowienia {
                 stmt.close();
                 for(String i : dania){
                     cstmt = zamowienia.dataBase.getCon().prepareCall("{call dodajZamowienieDania(?,?)}");
+                    str = "SELECT * FROM hotel_dania WHERE upper(nazwa)=upper(\'" + i + "\')";
+                    stmt = zamowienia.dataBase.getCon().prepareStatement(str);
+                    rs = stmt.executeQuery();
+                    rs.next();
                     cstmt.setInt(1, Integer.parseInt(id));
-                    cstmt.setInt(2, Integer.parseInt(i));
+                    cstmt.setInt(2, rs.getInt("id_dania"));
                     cstmt.execute();
                 }
                 cstmt.close();
@@ -203,20 +207,20 @@ public class AddZamowienia {
         if(edania.getValue() == null)
             return;
         String temp_danie = edania.getValue();
-        try {
-            String str = "SELECT * FROM hotel_dania WHERE upper(nazwa)=upper(\'" + temp_danie + "\')";
-            PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            if(!dania.contains(rs.getString("id_dania"))){
-                dania.add(rs.getString("id_dania"));
-                daniaScroll.getChildren().add(createDanieButton(temp_danie));
-            }
-            rs.close();
-            stmt.close();
-        }catch(SQLException ex) {
-//            ex.printStackTrace();
+//        try {
+//            String str = "SELECT * FROM hotel_dania WHERE upper(nazwa)=upper(\'" + temp_danie + "\')";
+//            PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
+//            ResultSet rs = stmt.executeQuery();
+//            rs.next();
+        if(!dania.contains(temp_danie)){
+            dania.add(temp_danie);
+            daniaScroll.getChildren().add(createDanieButton(temp_danie));
         }
+//            rs.close();
+//            stmt.close();
+//        }catch(SQLException ex) {
+////            ex.printStackTrace();
+//        }
 
     }
 
@@ -238,7 +242,7 @@ public class AddZamowienia {
                 PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
-                dania.add(rs.getString("id_dania"));
+                dania.add(rs.getString("nazwa"));
                 rs.close();
                 stmt.close();
             }
@@ -253,7 +257,7 @@ public class AddZamowienia {
 
     private void getDania(){
         try {
-            String str = "select d.nazwa, z.*, p.nazwisko from hotel_pracownicy p inner join hotel_zamowienia z on (p.pesel=z.pracownik) inner join hotel_zamowienie_dania zd on(zd.zamowienie=z.id_zamowienia) inner join hotel_dania d on(zd.id_dania=d.id_dania) where z.id_zamowienia=" + id;
+            String str = "select d.nazwa, d.id_dania, z.*, p.nazwisko from hotel_pracownicy p inner join hotel_zamowienia z on (p.pesel=z.pracownik) inner join hotel_zamowienie_dania zd on(zd.zamowienie=z.id_zamowienia) inner join hotel_dania d on(zd.id_dania=d.id_dania) where z.id_zamowienia=" + id;
             PreparedStatement stmt = zamowienia.dataBase.getCon().prepareStatement(str);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){

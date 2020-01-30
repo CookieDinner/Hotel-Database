@@ -193,9 +193,13 @@ public class DataBase {
             int zamId = cstmt.getInt(1);
             cstmt.close();
             for(String i : dania) {
+                String str = "SELECT * FROM hotel_dania WHERE upper(nazwa)=upper(\'" + i + "\')";
+                PreparedStatement stmt = con.prepareStatement(str);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
                 cstmt = con.prepareCall("{call dodajZamowienieDania(?,?)}");
                 cstmt.setInt(1, zamId);
-                cstmt.setInt(2, Integer.parseInt(i));
+                cstmt.setInt(2, rs.getInt("id_dania"));
                 cstmt.execute();
             }
             cstmt.close();
