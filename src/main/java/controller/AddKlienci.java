@@ -185,7 +185,7 @@ public class AddKlienci {
             while (adresZa.getStyleClass().remove("wrong"));
             adresZa.setTooltip(null);
         }
-        if (peselCorrect)
+        if (peselCorrect && !look)
             try {
                 PreparedStatement stmt = controller.dataBase.getCon().prepareStatement("SELECT pesel from hotel_klienci");
                 ResultSet rs = stmt.executeQuery();

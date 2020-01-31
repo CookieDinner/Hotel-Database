@@ -309,7 +309,7 @@ public class AddRezerwacje {
             while(peselTextField.getStyleClass().remove("wrong"));
             peselTextField.setTooltip(new Tooltip("Pesel klienta"));
         }
-        if (epracownicy.getValue() == null){
+        if (epracownicy.getValue() == null || epracownicy.getValue().equals("")){
             correct = false;
             epracownicy.getStyleClass().add("wrong");
             epracownicy.setTooltip(new Tooltip("Trzeba wybrać pracownika"));
@@ -360,11 +360,14 @@ public class AddRezerwacje {
                 int p = 1;
                 String whichPokoj = "";
                 for(String i : pokoje) {
-                    CallableStatement cstmt = rezerwacje.dataBase.getCon().prepareCall("{? = call sprawdzPokoj(?,?,?)}");
+                    CallableStatement cstmt = rezerwacje.dataBase.getCon().prepareCall("{? = call sprawdzPokoj(?,?,?,?)}");
                     cstmt.registerOutParameter(1, Types.INTEGER);
-                    cstmt.setInt(2, Integer.parseInt(i));
-                    cstmt.setDate(3, Date.valueOf(zdata.getValue()));
-                    cstmt.setDate(4, Date.valueOf(wdata.getValue()));
+                    if(id == null)
+                        id = "-1";
+                    cstmt.setInt(2, Integer.parseInt(id));
+                    cstmt.setInt(3, Integer.parseInt(i));
+                    cstmt.setDate(4, Date.valueOf(zdata.getValue()));
+                    cstmt.setDate(5, Date.valueOf(wdata.getValue()));
                     cstmt.execute();
                     p = p & cstmt.getInt(1);
                     if (cstmt.getInt(1) == 0)
@@ -381,7 +384,7 @@ public class AddRezerwacje {
             }
 
         }catch (Exception ex){
-//            ex.printStackTrace();
+            ex.printStackTrace();
         }
         if(dataCorrect && zdata.getValue().compareTo(wdata.getValue()) > 0){
             correct = false;
