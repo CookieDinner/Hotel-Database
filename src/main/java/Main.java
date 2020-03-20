@@ -21,7 +21,7 @@ public class Main extends Application {
 
     @Override
     public void stop(){
-        System.out.println("Ending app");   // TODO: dissconnect from database
+        System.out.println("Ending app");
     }
 
 
